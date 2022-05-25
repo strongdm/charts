@@ -1,0 +1,26 @@
+{{- if .Values.configMap }}
+kind: ConfigMap 
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-config
+  labels:
+{{- include "sdm.labels" . | indent 4 }}
+data:
+  {{- with .Values.configMap }}
+  {{- if .SDM_ORCHESTRATOR_PROBES  }}
+  SDM_ORCHESTRATOR_PROBES: ":{{ .SDM_ORCHESTRATOR_PROBES | default ":9090" }}"
+  {{- end }}
+  {{- if .SDM_DOCKERIZED  }}
+  SDM_DOCKERIZED: {{ quote .SDM_DOCKERIZED | default "true" }}
+  {{- end }}
+  {{- if .SDM_RELAY_LOG_FORMAT  }}
+  SDM_RELAY_LOG_FORMAT: {{ quote .SDM_RELAY_LOG_FORMAT | default "json" }}
+  {{- end }}
+  {{- if .SDM_RELAY_LOG_STORAGE  }}
+  SDM_RELAY_LOG_STORAGE: {{ quote .SDM_RELAY_LOG_STORAGE | default "stdout" }}
+  {{- end }}
+  {{- if .SDM_RELAY_LOG_ENCRYPTION  }}
+  SDM_RELAY_LOG_ENCRYPTION: {{ quote .SDM_RELAY_LOG_ENCRYPTION | default "plaintext" }}
+  {{- end }}
+  {{- end }}
+{{- end }}

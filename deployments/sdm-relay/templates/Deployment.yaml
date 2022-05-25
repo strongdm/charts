@@ -1,0 +1,74 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}-deployment
+  labels:
+    app: {{ .Release.Name }}-app
+{{- include "sdm.labels" . | indent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-app
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-app
+        image: {{ .Values.global.deployment.repository | default "quay.io/sdmrepo/relay" }}:{{ .Values.global.deployment.tag | default "latest" }}
+        imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
+        env:
+        - name: SDM_RELAY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.Release.Name }}-secret
+              key: token
+        {{- with .Values.configMap }}
+        {{- if .SDM_ORCHESTRATOR_PROBES }}
+        - name: SDM_ORCHESTRATOR_PROBES
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: SDM_ORCHESTRATOR_PROBES
+        {{- end }}
+        {{- if .SDM_DOCKERIZED }}
+        - name: SDM_DOCKERIZED
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: SDM_DOCKERIZED
+        {{- end }}
+        {{- if .SDM_RELAY_LOG_FORMAT }}
+        - name: SDM_RELAY_LOG_FORMAT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: SDM_RELAY_LOG_FORMAT
+        {{- end }}
+        {{- if .SDM_RELAY_LOG_STORAGE }}
+        - name: SDM_RELAY_LOG_STORAGE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: SDM_RELAY_LOG_STORAGE
+        {{- end }}
+        {{- if .SDM_RELAY_LOG_ENCRYPTION }}
+        - name: SDM_RELAY_LOG_ENCRYPTION
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: SDM_RELAY_LOG_ENCRYPTION
+        {{- end }}
+        {{- if .SDM_ORCHESTRATOR_PROBES }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: {{ .SDM_ORCHESTRATOR_PROBES | default 9090 }}
+          initialDelaySeconds: 25
+          timeoutSeconds: 10
+          periodSeconds: 15
+          failureThreshold: 5
+        {{- end }}
+        {{- end }}

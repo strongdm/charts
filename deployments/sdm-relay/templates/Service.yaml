@@ -1,0 +1,21 @@
+{{- if eq .Values.global.gateway.enabled "true" }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-svc
+  labels:
+{{- include "sdm.labels" . | indent 4 }}
+    app: {{ .Release.Name }}-app
+spec:
+  type: {{ .Values.global.gateway.service.type | default "NodePort" }}
+  selector:
+    app: {{ .Release.Name }}-app
+  ports:
+    - name: {{ .Release.Name }}-svc
+      port: {{ .Values.global.gateway.service.port | default "5000" }}
+      targetPort: 5000
+      {{- if eq .Values.global.gateway.service.type "NodePort" }}
+      nodePort: {{ .Values.global.gateway.service.nodePort }}
+      {{- end }}
+      protocol: TCP
+{{- end }}

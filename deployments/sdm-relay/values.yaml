@@ -1,0 +1,23 @@
+global:
+  gateway:
+    enabled:
+    service:
+      type: NodePort
+      port: 30001
+      #     External NodePort
+      nodePort: 30001
+  secret:
+    #   Use `echo -n token | base64` to base64 encode the Gateway/Relay token.
+    token:
+  deployment:
+    repository: quay.io/sdmrepo/relay
+    tag: latest
+    imagePullPolicy: Always
+
+# Optional Enviromental Values. Options can be found here(https://www.strongdm.com/docs/architecture/deployment/environment-variables).
+configMap:
+  SDM_ORCHESTRATOR_PROBES: 9090
+  #   SDM_DOCKERIZED: "true"
+  SDM_RELAY_LOG_FORMAT: 'json'
+#   SDM_RELAY_LOG_STORAGE:
+#   SDM_RELAY_LOG_ENCRYPTION:
