@@ -27,7 +27,7 @@ _**Note: In order to get a Gateway Token you'll need an external address to regi
 ## Installing the Chart
 
 ```shell
-helm repo add strongdm https://helm.strongdm.com/helm-chart/
+helm repo add strongdm https://helm.strongdm.com/stable/
 helm install [RELEASE_NAME] strongdm/sdm-relay -f values.yaml
 helm status [RELEASE_NAME]
 ```
