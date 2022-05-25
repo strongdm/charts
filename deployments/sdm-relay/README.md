@@ -64,18 +64,18 @@ _Also note that tokens can't be reused between Gateways and a replicaset of 1 is
 
 The following table lists the configurable parameters of the strongDM relay/gateway chart and their default values.
 
-| Parameter | Description | Default
-| --- | --- | --- |
-| .global.gateway.enabled | This is to enable the strongDM relay to accept incoming traffic when using a Gateway Token. | false |
-| .global.gateway.service.type | The kind of service you'd like to run for the gateway. E.G. `NodePort` or `Loadbalancer` | `NodePort` |
-| .global.gateway.service.nodePort | When service is set to `NodePort` this port needs to match what was set in the Admin UI. | 30001 |
-| .global.gateway.service.port | The port you'd like to have the service listening on. If using NodePort this can be different then the port set in the Admin UI. | 30001 |
-| .global.secret.token | The `base64` encoded value of the relay or gateway token generated in the Admin UI. | None |
-| .global.deployment.repository | The image you'd like to use for the strongDM gateway/relay. | quay.io/sdmrepo/relay |
-| .global.deployment.tag | The tag for the image you'd like to use for the strongDM gateway/relay. | latest |
-| .global.deployment.imagePullPolicy | The policy for pulling a new image from the repo. | Always |
-| .configmap.SDM_ORCHESTRATOR_PROBES | If you'd like to have a liveliness probe for the strongDM gateway/relay. | :9090 |
-| .configmap.SDM_DOCKERIZED | Setting this will automatically send logs to STDOUT overriding settings in AdminUI. | true |
-| .configmap.SDM_RELAY_LOG_FORMAT | Format for the logs when stored locally. | json |
-| .configmap.SDM_RELAY_LOG_STORAGE | If storing SDM Activites slowly you can change where they are stored. | stdout |
-| .configmap.SDM_RELAY_LOG_ENCRYPTION | Change the encryption of the logs. | plaintext |
+| Parameter | Description | Default | Required |
+| --- | --- | --- | --- |
+| .global.gateway.enabled | This is to enable the strongDM relay to accept incoming traffic when using a Gateway Token. | false | &#9744; |
+| .global.gateway.service.type | The kind of service you'd like to run for the gateway. E.G. `NodePort` or `Loadbalancer` | `NodePort` | &#9745; |
+| .global.gateway.service.nodePort | When service is set to `NodePort` this port needs to match what was set in the Admin UI. | 30001 | &#9744; |
+| .global.gateway.service.port | The port you'd like to have the service listening on. If using NodePort this can be different then the port set in the Admin UI. | 30001 | &#9745; |
+| .global.secret.token | The `base64` encoded value of the relay or gateway token generated in the Admin UI. | None | &#9745; |
+| .global.deployment.repository | The image you'd like to use for the strongDM gateway/relay. | quay.io/sdmrepo/relay | &#9745; |
+| .global.deployment.tag | The tag for the image you'd like to use for the strongDM gateway/relay. | latest | &#9745; |
+| .global.deployment.imagePullPolicy | The policy for pulling a new image from the repo. | Always | &#9745; |
+| .configmap.SDM_ORCHESTRATOR_PROBES | If you'd like to have a liveliness probe for the strongDM gateway/relay. | 9090 | &#9745; |
+| .configmap.SDM_DOCKERIZED | Setting this will automatically send logs to STDOUT overriding settings in AdminUI. | true | &#9744; |
+| .configmap.SDM_RELAY_LOG_FORMAT | Format for the logs when stored locally. | json | &#9744; |
+| .configmap.SDM_RELAY_LOG_STORAGE | If storing SDM Activites slowly you can change where they are stored. | stdout | &#9744; |
+| .configmap.SDM_RELAY_LOG_ENCRYPTION | Change the encryption of the logs. | plaintext | &#9744; |
