@@ -9,7 +9,7 @@ icon: https://assets-global.website-files.com/5ecfe3add0194393eabdf182/5f5c071d9
 home: https://github.com/strongdm/charts
 maintainers:
   - name: strongDM
-    email: support@strongdm.com
+    email: k8s+sdm@strongdm.com
 sources:
   - https://github.com/strongdm/charts/tree/main/deployments/sdm-relay
 keywords:
