@@ -3,7 +3,7 @@ entries:
   sdm-relay:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-05-25T10:57:27.485767315-04:00"
+    created: "2022-05-25T11:45:36.851082486-04:00"
     description: strongDM Relay
     digest: 3c31523e7f880707e084d48800ec837720ba1875388a4499a9c627f0d1fa2d28
     home: https://github.com/strongdm/charts
@@ -20,6 +20,6 @@ entries:
     - https://github.com/strongdm/charts/tree/main/deployments/sdm-relay
     type: application
     urls:
-    - https://charts.strongdm.com/stable/sdm-relay-0.1.0.tgz
+    - https://helm.strongdm.com/stable/sdm-relay-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-25T10:57:27.485266342-04:00"
+generated: "2022-05-25T11:45:36.850583035-04:00"
