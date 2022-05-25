@@ -74,7 +74,7 @@ The following table lists the configurable parameters of the strongDM relay/gate
 | .global.deployment.repository | The image you'd like to use for the strongDM gateway/relay. | quay.io/sdmrepo/relay | &#9745; |
 | .global.deployment.tag | The tag for the image you'd like to use for the strongDM gateway/relay. | latest | &#9745; |
 | .global.deployment.imagePullPolicy | The policy for pulling a new image from the repo. | Always | &#9745; |
-| .configmap.SDM_ORCHESTRATOR_PROBES | If you'd like to have a liveliness probe for the strongDM gateway/relay. | 9090 | &#9745; |
+| .configmap.SDM_ORCHESTRATOR_PROBES | If you'd like to have a liveliness probe for the strongDM gateway/relay. | 9090 | &#9744; |
 | .configmap.SDM_DOCKERIZED | Setting this will automatically send logs to STDOUT overriding settings in AdminUI. | true | &#9744; |
 | .configmap.SDM_RELAY_LOG_FORMAT | Format for the logs when stored locally. | json | &#9744; |
 | .configmap.SDM_RELAY_LOG_STORAGE | If storing SDM Activites slowly you can change where they are stored. | stdout | &#9744; |
