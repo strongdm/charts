@@ -3,9 +3,9 @@ entries:
   sdm-relay:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-05-25T11:47:04.029355739-04:00"
+    created: "2022-05-25T12:02:28.110675482-04:00"
     description: strongDM Relay
-    digest: 3c31523e7f880707e084d48800ec837720ba1875388a4499a9c627f0d1fa2d28
+    digest: 0b270dabf49d153cf9966e43ec475c9aee5ca9a09b82b3f49ee063690c5db4e4
     home: https://github.com/strongdm/charts
     icon: https://assets-global.website-files.com/5ecfe3add0194393eabdf182/5f5c071d917205912ebf7f0f_favicon32.png
     keywords:
@@ -13,7 +13,7 @@ entries:
     - sdm
     kubeVersion: '>= 1.16.0-0'
     maintainers:
-    - email: support@strongdm.com
+    - email: k8s+sdm@strongdm.com
       name: strongDM
     name: sdm-relay
     sources:
@@ -22,4 +22,4 @@ entries:
     urls:
     - https://helm.strongdm.com/stable/sdm-relay-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-25T11:47:04.028919889-04:00"
+generated: "2022-05-25T12:02:28.110231557-04:00"
