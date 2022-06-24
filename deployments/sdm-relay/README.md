@@ -70,6 +70,7 @@ The following table lists the configurable parameters of the strongDM relay/gate
 | .global.gateway.service.type | The kind of service you'd like to run for the gateway. E.G. `NodePort` or `Loadbalancer` | `NodePort` | &#9745; |
 | .global.gateway.service.nodePort | When service is set to `NodePort` this port needs to match what was set in the Admin UI. | 30001 | &#9744; |
 | .global.gateway.service.port | The port you'd like to have the service listening on. If using NodePort this can be different then the port set in the Admin UI. | 30001 | &#9745; |
+| .global.gateway.service.loadBalancerIP | The IP you'd like to assign to the service if using service type `LoadBalancer`. | None | &#9744; |
 | .global.secret.token | The `base64` encoded value of the relay or gateway token generated in the Admin UI. | None | &#9745; |
 | .global.deployment.repository | The image you'd like to use for the strongDM gateway/relay. | quay.io/sdmrepo/relay | &#9745; |
 | .global.deployment.tag | The tag for the image you'd like to use for the strongDM gateway/relay. | latest | &#9745; |
