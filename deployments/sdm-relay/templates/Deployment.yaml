@@ -20,6 +20,7 @@ spec:
         image: {{ .Values.global.deployment.repository | default "quay.io/sdmrepo/relay" }}:{{ .Values.global.deployment.tag | default "latest" }}
         imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
         env:
+        {{- include "sdm.extraEnvironmentVars" .Values.global | indent 8 }}
         - name: SDM_RELAY_TOKEN
           valueFrom:
             secretKeyRef:
@@ -61,7 +62,6 @@ spec:
               name: {{ $.Release.Name }}-config
               key: SDM_RELAY_LOG_ENCRYPTION
         {{- end }}
-        {{- include "sdm.extraEnvironmentVars" .Values.global | indent 8 }}
         {{- if .SDM_ORCHESTRATOR_PROBES }}
         livenessProbe:
           httpGet:

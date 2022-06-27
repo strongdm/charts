@@ -3,7 +3,7 @@ entries:
   sdm-client:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-06-27T15:15:00.052367991-04:00"
+    created: "2022-06-27T15:19:19.824605028-04:00"
     description: strongDM Client Container
     digest: f6ed0162da592f6181244ea398801758a64025ae7d177410e9219084be6faf65
     home: https://github.com/strongdm/charts
@@ -25,9 +25,9 @@ entries:
   sdm-relay:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-06-27T15:15:00.052583989-04:00"
+    created: "2022-06-27T15:19:19.82481924-04:00"
     description: strongDM Relay
-    digest: 14cebae222e553dc626aca3698c90157cef2f412a3c167c409b5280590900cb7
+    digest: 61b63246c7cfb805737ceffece4ba9b89c911363870bfd5884cb20f417979917
     home: https://github.com/strongdm/charts
     icon: https://assets-global.website-files.com/5ecfe3add0194393eabdf182/5f5c071d917205912ebf7f0f_favicon32.png
     keywords:
@@ -44,4 +44,4 @@ entries:
     urls:
     - https://helm.strongdm.com/stable/sdm-relay-0.1.1.tgz
     version: 0.1.1
-generated: "2022-06-27T15:15:00.051482222-04:00"
+generated: "2022-06-27T15:19:19.824170047-04:00"
