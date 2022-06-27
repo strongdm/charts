@@ -22,6 +22,7 @@ spec:
         ports:
         {{- range .Values.global.deployment.ports }}
         - containerPort: {{ . }}
+          name: {{ . }}-port
         {{- end }} 
         env:
         - name: SDM_SERVICE_TOKEN

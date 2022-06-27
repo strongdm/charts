@@ -8,6 +8,9 @@ metadata:
     app: {{ .Release.Name }}-app
 spec:
   type: {{ .Values.global.gateway.service.type | default "NodePort" }}
+  {{- if .Values.global.gateway.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.global.gateway.service.loadBalancerIP }}"
+  {{- end }}
   selector:
     app: {{ .Release.Name }}-app
   ports:

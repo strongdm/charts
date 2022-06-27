@@ -3,14 +3,14 @@ global:
     type: ClusterIP
   secret:
 #   Use `echo -n token | base64` to base64 encode the Service token.
-    token: 
+    token: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmxlSEFpT2pjNU5qQXlOelkyTlRRc0ltOXlaMkZ1YVhwaGRHbHZia2xrSWpveE1EVTFMQ0pqY21WaGRHOXlJam9pYW5SMWNtNWxja0JpTVhSemFYcGxaQzUwWldOb0lpd2lZM0psWVhSdmNrbGtJam8wTkRBMU1qVTNNVFF3TURZM05EVXlNakU0TENKbmRXbGtJam9pWmpZM05HSXhPV1l0Tm1abVpTMDBZbU14TFRobE5UQXRNV1V6TldKak5UTXhOR0U1SWl3aWJtRnRaU0k2SW1SdlkydGxjaTEwWlhOMEluMC5WUnltNlAtbjNMLUN0RERhUEZBaUNybUl2NVNtUkpIdGYwV2hMR1BWY2JF
   deployment:
     replicas: 1
     repository: quay.io/sdmrepo/client
-    tag: latest
+    tag: 33.47.0
     imagePullPolicy: Always
     ports:
-#     - 80
-#     - 443
+      - 15432
+      - 15433
 configMap:
   SDM_DOCKERIZED: "true"
