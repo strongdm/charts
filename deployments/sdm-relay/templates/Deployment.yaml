@@ -61,8 +61,8 @@ spec:
               name: {{ $.Release.Name }}-config
               key: SDM_RELAY_LOG_ENCRYPTION
         {{- end }}
+        {{- include "sdm.extraEnvironmentVars" .Values.global | indent 8 }}
         {{- if .SDM_ORCHESTRATOR_PROBES }}
-{{- include "sdm.extraEnvironmentVars" .Values.global | indent 8 }}
         livenessProbe:
           httpGet:
             path: /liveness
