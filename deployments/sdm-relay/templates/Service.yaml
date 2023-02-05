@@ -3,6 +3,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Release.Name }}-svc
+  annotations: {{ toYaml (.Values.global.gateway.service.annotations) | nindent 4 }}
   labels:
 {{- include "sdm.labels" . | indent 4 }}
     app: {{ .Release.Name }}-app

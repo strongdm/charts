@@ -7,6 +7,7 @@ global:
       #     External NodePort
       nodePort: 30001
       # loadBalancerIP:
+      annotations: {}
   secret:
     #   Use `echo -n token | base64` to base64 encode the Gateway/Relay token.
     token:
