@@ -7,7 +7,7 @@ entries:
     description: strongDM Client Container
     digest: 293137088409e275c169572168229988c7d42a065733982475f947186279d4f7
     home: https://github.com/strongdm/charts
-    icon: https://assets-global.website-files.com/5ecfe3add0194393eabdf182/5f5c071d917205912ebf7f0f_favicon32.png
+    icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
     keywords:
     - strongdm
     - sdm
@@ -29,7 +29,7 @@ entries:
     description: strongDM Relay
     digest: 0ed71d51bf2c88c9ce741fae599e21a0546ea71e8ee898fc673323393002bb74
     home: https://github.com/strongdm/charts
-    icon: https://assets-global.website-files.com/5ecfe3add0194393eabdf182/5f5c071d917205912ebf7f0f_favicon32.png
+    icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
     keywords:
     - strongdm
     - sdm
