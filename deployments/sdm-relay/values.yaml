@@ -23,7 +23,8 @@ configMap:
 #   SDM_RELAY_LOG_STORAGE:
 #   SDM_RELAY_LOG_ENCRYPTION:
 
-# Optional ServiceAccount. For example, when using Azure Workload Identity to grant access to an Azure Key Vault Secret Store, ServiceAccount annotations and labels are required. (https://azure.github.io/azure-workload-identity/docs/quick-start.html#5-create-a-kubernetes-service-account)
+# Optional ServiceAccount annotations and labels.
+# e.g. when using Azure Workload Identity to grant access to an Azure Key Vault Secret Store(https://azure.github.io/azure-workload-identity/docs/quick-start.html#5-create-a-kubernetes-service-account)
 # serviceAccount:
 #   annotations:
 #     foo: bar

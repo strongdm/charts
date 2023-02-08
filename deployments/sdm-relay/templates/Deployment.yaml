@@ -73,6 +73,6 @@ spec:
           failureThreshold: 5
         {{- end }}
         {{- end }}
-        {{- with .Values.serviceAccount }}
-        serviceAccountName: {{ $.Release.Name }}-svcacct
-        {{- end }}
+      {{- with .Values.serviceAccount }}
+      serviceAccountName: {{ $.Release.Name }}-svcacct
+      {{- end }}
