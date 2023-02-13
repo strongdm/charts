@@ -22,7 +22,7 @@ This repo provides an implementation of a strongDM relay or gateway inside Kuber
 
 * [A strongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways)
 
-_**Note: In order to get a Gateway Token you'll need an external address to register. This is external address is immutable after creation.**_
+_**Note: In order to get a Gateway Token you'll need an external address to register. This external address is immutable after creation.**_
 
 ## Installing the Chart
 
