@@ -4,7 +4,14 @@ metadata:
   name: {{ .Release.Name }}-deployment
   labels:
     app: {{ .Release.Name }}-app
-{{- include "sdm.labels" . | indent 4 }}
+    {{- include "sdm.labels" . | indent 4 }}
+    {{- if .Values.global.deployment.labels }}
+{{ toYaml .Values.global.deployment.labels | indent 4 }}
+    {{- end }}
+  {{- if .Values.global.deployment.annotations }}
+  annotations:
+{{ toYaml .Values.global.deployment.annotations | indent 4 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -14,6 +21,13 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-app
+        {{- if .Values.global.deployment.labels }}
+{{ toYaml .Values.global.deployment.labels | indent 8 }}
+        {{- end }}
+      {{- if .Values.global.deployment.annotations }}
+      annotations:
+{{ toYaml .Values.global.deployment.annotations | indent 8 }}
+      {{- end }}
     spec:
       containers:
       - name: {{ .Release.Name }}-app
