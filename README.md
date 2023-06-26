@@ -106,3 +106,7 @@ helm uninstall [RELEASE_NAME]
 The command removes all the Kubernetes components associated with the release and deletes the release.
 
 _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command documentation._
+
+## Contributing
+
+We welcome both Pull Requests and Issues for bugs and enhancements!
