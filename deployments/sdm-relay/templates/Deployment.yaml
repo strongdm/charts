@@ -29,6 +29,9 @@ spec:
 {{ toYaml .Values.global.deployment.annotations | indent 8 }}
       {{- end }}
     spec:
+      {{- with .Values.serviceAccount }}
+      serviceAccountName: {{ $.Release.Name }}-svcacct
+      {{- end }}
       containers:
       - name: {{ .Release.Name }}-app
         image: {{ .Values.global.deployment.repository | default "quay.io/sdmrepo/relay" }}:{{ .Values.global.deployment.tag | default "latest" }}
@@ -86,7 +89,4 @@ spec:
           periodSeconds: 15
           failureThreshold: 5
         {{- end }}
-        {{- end }}
-        {{- with .Values.serviceAccount }}
-        serviceAccountName: {{ $.Release.Name }}-svcacct
         {{- end }}
