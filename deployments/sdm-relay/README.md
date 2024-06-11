@@ -20,7 +20,7 @@ This repo provides an implementation of a strongDM relay or gateway inside Kuber
 
 * If you are going to use [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/), then you will need to manually patch your [services to allow TCP and UDP traffic](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/)
 
-* Either a [strongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways) or else an admin token with the `relay:create` permission which will be used to generate the gateway/relay token.
+* Either a [strongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways) or else an [Admin Token](https://www.strongdm.com/docs/admin/users/admin-tokens/) with the `relay:create` permission which will be used to generate the gateway/relay token.
 
 _**Note: In order to get a Gateway Token you'll need an external address to register. This external address is immutable after creation.**_
 
