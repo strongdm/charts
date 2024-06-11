@@ -9,16 +9,18 @@ global:
       # loadBalancerIP:
       annotations: {}
   secret:
-    #   Use `echo -n token | base64` to base64 encode the Gateway/Relay token.
-    token:
+    #   Use `echo -n token | base64` to base64 encode these tokens.
+    #   Operation of the relay requires at least one of these to be set.
+    token: # This is the relay token.
+    adminToken: # This is used to generate a relay token when needed.
   deployment:
-    repository: quay.io/sdmrepo/relay
+    repository: public.ecr.aws/strongdm/relay
     tag: latest
     imagePullPolicy: Always
     annotations: {} # (Optional) adds additional annotations to the deployment and pod template
     labels: {} # (Optional) adds additional labels to the deployment and pod template. These are not used as part of the selector
 
-# Optional Enviromental Values. Options can be found here(https://www.strongdm.com/docs/architecture/deployment/environment-variables).
+# Optional Enviroment Values. Options can be found here(https://www.strongdm.com/docs/architecture/deployment/environment-variables).
 configMap:
   SDM_ORCHESTRATOR_PROBES: 9090
   #   SDM_DOCKERIZED: "true"
@@ -32,3 +34,59 @@ configMap:
 #     foo: bar
 #   labels:
 #     bar: foo
+
+# This optional customizable wrapper can be used to generate the SDM_RELAY_TOKEN on the fly,
+# provided that an SDM_ADMIN_TOKEN with relay:create permission is available.
+#
+# To generate an SDM_ADMIN_TOKEN, login to the SDM CLI and run a command like this:
+# sdm admin tokens create --type admin-token --permissions relay:create --duration 9999999 my-admin-token-name
+#
+# See the script below for more details of other options.
+#
+# If the SDM_RELAY_TOKEN is already provided via the secret, this script just
+# runs the relay in the same way it would if this wrapper was not present.
+container:
+    command: ["bash", "-c"] # Container ENTRYPOINT
+    args: # Container CMD
+    - |
+      set -e;
+      SDM_CMD="/sdm.linux";
+      ensure_SDM_RELAY_TOKEN() {
+        if [ -n "${SDM_RELAY_TOKEN}" ]; then
+          export SDM_RELAY_TOKEN;
+          echo "SDM_RELAY_TOKEN is already set.";
+          return 0;
+        fi;
+        if [ -z "${SDM_ADMIN_TOKEN}" ]; then
+          echo "SDM_ADMIN_TOKEN is required to generate a new SDM_RELAY_TOKEN.  Exiting.";
+          exit 1;
+        fi;
+        echo "Logging in with SDM_ADMIN_TOKEN";
+        ${SDM_CMD} login --admin-token=${SDM_ADMIN_TOKEN};
+        if ! "${SDM_CMD}" status; then
+          echo "Not logged in.  Missing SDM_ADMIN_TOKEN?";
+          exit 2;
+        fi;
+        SDM_RELAY_MAINTENANCE_WINDOW="${SDM_RELAY_MAINTENANCE_WINDOW:-* * * * *}";
+        if [ -n "${SDM_GATEWAY_LISTEN_ADDR_PORT}" ]; then
+          echo "Generating gateway token for ${SDM_RELAY_NAME} at ${SDM_GATEWAY_LISTEN_ADDR_PORT}";
+          set -x;
+          SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" "${SDM_CMD}"  admin relays create-gateway --name "${SDM_RELAY_NAME}" --tags "${SDM_RELAY_TAGS}" --maintenance-windows "${SDM_RELAY_MAINTENANCE_WINDOW}" "${SDM_GATEWAY_LISTEN_ADDR_PORT}" "${SDM_GATEWAY_BIND_ADDR_PORT}");
+          set +x
+        else
+          echo "Generating relay token for $SDM_RELAY_NAME";
+          set -x;
+          SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" "${SDM_CMD}" admin relays create --name "${SDM_RELAY_NAME}" --tags "${SDM_RELAY_TAGS}" --maintenance-windows "${SDM_RELAY_MAINTENANCE_WINDOW}");
+          set +x;
+        fi;
+        # Verify that the response does actually look like a token.
+        if ! grep -qE "^[[:graph:]]+[.][[:graph:]]+[.][[:graph:]]+$" <<< "${SDM_RELAY_TOKEN}";  then
+          echo "Failed to set SDM_RELAY_TOKEN.";
+          echo "Response was ${SDM_RELAY_TOKEN}";
+          SDM_RELAY_TOKEN="";
+          exit 3;
+        fi;
+        export SDM_RELAY_TOKEN;
+      };
+      ensure_SDM_RELAY_TOKEN;
+      /sdm.linux relay -d;
