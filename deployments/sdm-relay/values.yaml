@@ -89,4 +89,4 @@ container:
         export SDM_RELAY_TOKEN;
       };
       ensure_SDM_RELAY_TOKEN;
-      /sdm.linux relay -d;
+      SDM_ADMIN_TOKEN="" /sdm.linux relay -d;
