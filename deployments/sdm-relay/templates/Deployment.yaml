@@ -34,8 +34,19 @@ spec:
       {{- end }}
       containers:
       - name: {{ .Release.Name }}-app
-        image: {{ .Values.global.deployment.repository | default "quay.io/sdmrepo/relay" }}:{{ .Values.global.deployment.tag | default "latest" }}
+        image: {{ .Values.global.deployment.repository | default "public.ecr.aws/strongdm/relay" }}:{{ .Values.global.deployment.tag | default "latest" }}
         imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
+        {{- if .Values.container.command }}
+        command: {{ range .Values.container.command }}
+            - {{ . }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.container.args }}
+        args:
+            {{ range .Values.container.args }}
+            - {{ quote  . }}
+            {{ end }}
+        {{- end }}
         env:
         {{- include "sdm.extraEnvironmentVars" .Values.global | indent 8 }}
         - name: SDM_RELAY_TOKEN
@@ -43,6 +54,11 @@ spec:
             secretKeyRef:
               name: {{ $.Release.Name }}-secret
               key: token
+        - name: SDM_ADMIN_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.Release.Name }}-secret
+              key: adminToken
         {{- with .Values.configMap }}
         {{- if .SDM_ORCHESTRATOR_PROBES }}
         - name: SDM_ORCHESTRATOR_PROBES
@@ -78,6 +94,41 @@ spec:
             configMapKeyRef:
               name: {{ $.Release.Name }}-config
               key: SDM_RELAY_LOG_ENCRYPTION
+        {{- end }}
+        {{- if .SDM_RELAY_NAME }}
+        -   name: SDM_RELAY_NAME
+            valueFrom:
+                configMapKeyRef:
+                    name: {{ $.Release.Name }}-config
+                    key: SDM_RELAY_NAME
+        {{- end }}
+        {{- if .SDM_RELAY_TAGS }}
+        -   name: SDM_RELAY_TAGS
+            valueFrom:
+                configMapKeyRef:
+                    name: {{ $.Release.Name }}-config
+                    key: SDM_RELAY_TAGS
+        {{- end }}
+        {{- if .SDM_RELAY_MAINTENANCE_WINDOW }}
+        -   name: SDM_RELAY_MAINTENANCE_WINDOW
+            valueFrom:
+                configMapKeyRef:
+                    name: {{ $.Release.Name }}-config
+                    key: SDM_RELAY_MAINTENANCE_WINDOW
+        {{- end }}
+        {{- if .SDM_GATEWAY_LISTEN_ADDR_PORT }}
+        -   name: SDM_GATEWAY_LISTEN_ADDR_PORT
+            valueFrom:
+                configMapKeyRef:
+                    name: {{ $.Release.Name }}-config
+                    key: SDM_GATEWAY_LISTEN_ADDR_PORT
+        {{- end }}
+        {{- if .SDM_GATEWAY_BIND_ADDR_PORT }}
+        -   name: SDM_GATEWAY_BIND_ADDR_PORT
+            valueFrom:
+                configMapKeyRef:
+                    name: {{ $.Release.Name }}-config
+                    key: SDM_GATEWAY_BIND_ADDR_PORT
         {{- end }}
         {{- if .SDM_ORCHESTRATOR_PROBES }}
         livenessProbe:
