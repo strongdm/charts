@@ -61,7 +61,7 @@ The following table lists the configurable parameters of the strongDM relay/gate
 | .global.service.type | The kind of service you'd like to run for the gateway. E.G. `ClusterIP` or `Loadbalancer` | `ClusterIP` | &#9744; |
 | .global.secret.token | The `base64` encoded value of the relay or gateway token generated in the Admin UI. | None | &#9745; |
 | .global.deployment.replicas | The number of container replicas you'd like to run for the deployment. | 1 | &#9744; |
-| .global.deployment.repository | The image you'd like to use for the strongDM client. | quay.io/sdmrepo/client | &#9745; |
+| .global.deployment.repository | The image you'd like to use for the strongDM client. | public.ecr.aws/strongdm/client | &#9745; |
 | .global.deployment.tag | The tag for the image you'd like to use for the strongDM client. | latest | &#9745; |
 | .global.deployment.imagePullPolicy | The policy for pulling a new image from the repo. | Always | &#9745; |
 | .global.deployment.ports | A list of ports you'd like to have the service listening on. The ports will coincide with the SDM port you are exposing from SDM. | None | &#9744; |

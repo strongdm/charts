@@ -17,13 +17,13 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-app
-        image: {{ .Values.global.deployment.repository | default "quay.io/sdmrepo/client" }}:{{ .Values.global.deployment.tag | default "latest" }}
+        image: {{ .Values.global.deployment.repository | default "public.ecr.aws/strongdm/client" }}:{{ .Values.global.deployment.tag | default "latest" }}
         imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
         ports:
         {{- range .Values.global.deployment.ports }}
         - containerPort: {{ . }}
           name: {{ . }}-port
-        {{- end }} 
+        {{- end }}
         env:
         - name: SDM_SERVICE_TOKEN
           valueFrom:
@@ -38,4 +38,4 @@ spec:
               name: {{ $.Release.Name }}-config
               key: SDM_DOCKERIZED
         {{- end }}
-        {{- end }}        
+        {{- end }}

@@ -5,7 +5,7 @@ global:
 #   Use `echo -n token | base64` to base64 encode the Service token.
   deployment:
     replicas: 1
-    repository: quay.io/sdmrepo/client
+    repository: public.ecr.aws/strongdm/client
     tag: 33.47.0
     imagePullPolicy: Always
     ports:
