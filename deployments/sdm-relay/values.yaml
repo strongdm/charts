@@ -70,11 +70,9 @@ container:
         SDM_RELAY_MAINTENANCE_WINDOW="${SDM_RELAY_MAINTENANCE_WINDOW:-* * * * *}";
         if [ -n "${SDM_GATEWAY_LISTEN_ADDR_PORT}" ]; then
           echo "Generating gateway token for ${SDM_RELAY_NAME} at ${SDM_GATEWAY_LISTEN_ADDR_PORT}";
-          set +x;
           SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" "${SDM_CMD}"  admin relays create-gateway --name "${SDM_RELAY_NAME}" --tags "${SDM_RELAY_TAGS}" --maintenance-windows "${SDM_RELAY_MAINTENANCE_WINDOW}" "${SDM_GATEWAY_LISTEN_ADDR_PORT}" "${SDM_GATEWAY_BIND_ADDR_PORT}");
         else
           echo "Generating relay token for $SDM_RELAY_NAME";
-          set +x;
           SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" "${SDM_CMD}" admin relays create --name "${SDM_RELAY_NAME}" --tags "${SDM_RELAY_TAGS}" --maintenance-windows "${SDM_RELAY_MAINTENANCE_WINDOW}");
         fi;
         # Verify that the response does actually look like a token.
