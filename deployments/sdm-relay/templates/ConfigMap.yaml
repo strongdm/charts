@@ -22,9 +22,6 @@ data:
   {{- if .SDM_RELAY_LOG_ENCRYPTION  }}
   SDM_RELAY_LOG_ENCRYPTION: {{ quote .SDM_RELAY_LOG_ENCRYPTION | default "plaintext" }}
   {{- end }}
-  {{- if .SDM_RELAY_LOG_ENCRYPTION  }}
-  SDM_RELAY_NAME: {{ quote .SDM_RELAY_NAME | default "plaintext" }}
-  {{- end }}
   {{- if .SDM_RELAY_NAME  }}
   SDM_RELAY_NAME: {{ quote .SDM_RELAY_NAME | default "plaintext" }}
   {{- end }}
