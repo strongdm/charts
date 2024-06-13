@@ -1,5 +1,5 @@
 {{- if .Values.configMap }}
-kind: ConfigMap 
+kind: ConfigMap
 apiVersion: v1
 metadata:
   name: {{ .Release.Name }}-config
@@ -21,6 +21,24 @@ data:
   {{- end }}
   {{- if .SDM_RELAY_LOG_ENCRYPTION  }}
   SDM_RELAY_LOG_ENCRYPTION: {{ quote .SDM_RELAY_LOG_ENCRYPTION | default "plaintext" }}
+  {{- end }}
+  {{- if .SDM_RELAY_LOG_ENCRYPTION  }}
+  SDM_RELAY_NAME: {{ quote .SDM_RELAY_NAME | default "plaintext" }}
+  {{- end }}
+  {{- if .SDM_RELAY_NAME  }}
+  SDM_RELAY_NAME: {{ quote .SDM_RELAY_NAME | default "plaintext" }}
+  {{- end }}
+  {{- if .SDM_RELAY_TAGS  }}
+  SDM_RELAY_TAGS: {{ quote .SDM_RELAY_TAGS | default "plaintext" }}
+  {{- end }}
+  {{- if .SDM_RELAY_MAINTENANCE_WINDOW  }}
+  SDM_RELAY_MAINTENANCE_WINDOW: {{ quote .SDM_RELAY_MAINTENANCE_WINDOW | default "plaintext" }}
+  {{- end }}
+  {{- if .SDM_GATEWAY_LISTEN_ADDR_PORT  }}
+  SDM_GATEWAY_LISTEN_ADDR_PORT: {{ quote .SDM_GATEWAY_LISTEN_ADDR_PORT | default "plaintext" }}
+  {{- end }}
+  {{- if .SDM_GATEWAY_BIND_ADDR_PORT  }}
+  SDM_GATEWAY_BIND_ADDR_PORT: {{ quote .SDM_GATEWAY_BIND_ADDR_PORT | default "plaintext" }}
   {{- end }}
   {{- end }}
 {{- end }}
