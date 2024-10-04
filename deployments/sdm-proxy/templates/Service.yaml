@@ -1,0 +1,24 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}
+  annotations: {{ toYaml (.Values.service.annotations) | nindent 4 }}
+  labels:
+{{- include "sdm.labels" . | indent 4 }}
+    app: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type | default "LoadBalancer" }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.service.loadBalancerIP }}"
+  {{- end }}
+  selector:
+    app: {{ .Release.Name }}
+  ports:
+    - name: https
+      targetPort: 8443
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.port | default "30443" }}
+      {{- else }}
+      port: {{ .Values.service.port | default "443" }}
+      {{- end }}
+      protocol: TCP
