@@ -1,0 +1,74 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    {{- include "sdm.labels" . | indent 4 }}
+    {{- if .Values.deployment.labels }}
+{{ toYaml .Values.deployment.labels | indent 4 }}
+    {{- end }}
+  {{- if .Values.deployment.annotations }}
+  annotations:
+{{ toYaml .Values.deployment.annotations | indent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.deployment.replicas | default 2 }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        {{- if .Values.deployment.labels }}
+{{ toYaml .Values.deployment.labels | indent 8 }}
+        {{- end }}
+      {{- if .Values.deployment.annotations }}
+      annotations:
+{{ toYaml .Values.deployment.annotations | indent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.serviceAccount }}
+      serviceAccountName: {{ $.Release.Name }}-svcacct
+      {{- end }}
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.deployment.repository | default "public.ecr.aws/strongdm/relay" }}:{{ .Values.deployment.tag | default "latest" }}
+        imagePullPolicy: {{ .Values.deployment.imagePullPolicy | default "Always" }}
+        args: ["proxy", "-d"]
+        ports:
+          - containerPort: 8443
+            name: sdm-proxy-port
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        env:
+        - name: SDM_BIND_ADDRESS
+          value: ":8443"
+        - name: SDM_DOCKERIZED
+          value: "true"
+        - name: SDM_ORCHESTRATOR_PROBES
+          value: ":9090"
+      {{- with .Values.secret -}}
+        {{- range $key, $value := . }}
+        - name: {{ $key }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.Release.Name }}-secret
+              key: {{ $key }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.deployment.env -}}
+        {{- range $key, $value := . }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 9090
+          initialDelaySeconds: 25
+          timeoutSeconds: 10
+          periodSeconds: 15
+          failureThreshold: 5
