@@ -42,22 +42,13 @@ spec:
             name: sdm-proxy-port
         resources:
 {{ toYaml .Values.resources | indent 10 }}
-        env:
-        - name: SDM_BIND_ADDRESS
-          value: ":8443"
-        - name: SDM_DOCKERIZED
-          value: "true"
-        - name: SDM_ORCHESTRATOR_PROBES
-          value: ":9090"
-      {{- with .Values.secret -}}
-        {{- range $key, $value := . }}
-        - name: {{ $key }}
-          valueFrom:
-            secretKeyRef:
-              name: {{ $.Release.Name }}-secret
-              key: {{ $key }}
-        {{- end }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.proxyClusterKeySecretRef }}
+      {{- with .Values.deployment.envFrom }}
+{{ toYaml . | indent 8 }}
       {{- end }}
+        env:
       {{- with .Values.deployment.env -}}
         {{- range $key, $value := . }}
         - name: {{ $key }}

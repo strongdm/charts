@@ -1,6 +1,7 @@
-secret:
-  SDM_PROXY_CLUSTER_ACCESS_KEY: # required. example: pk-4e172ba367007f0c
-  SDM_PROXY_CLUSTER_SECRET_KEY: # required.
+# required. specify the name of a Secret containing the following environment variables:
+#  SDM_PROXY_CLUSTER_ACCESS_KEY: e.g. pk-4e172ba367007f0c
+#  SDM_PROXY_CLUSTER_SECRET_KEY: <...>
+proxyClusterKeySecretRef: proxy-cluster-key
 
 # required resource limits
 resources:
@@ -30,12 +31,22 @@ deployment:
   # are not used as part of the selector
   labels:
 
-  # (Optional) extra environment variables. Options can be found here:
+  # Extra environment variables. Options can be found here:
   # https://www.strongdm.com/docs/architecture/deployment/environment-variables
   env: 
+    SDM_BIND_ADDRESS: ":8443"
+    SDM_DOCKERIZED: "true"
+    SDM_ORCHESTRATOR_PROBES: ":9090"
     # SDM_RELAY_LOG_FORMAT: "json"
     # SDM_RELAY_LOG_STORAGE: "stdout"
     # SDM_RELAY_LOG_ENCRYPTION: "plaintext"
+
+  # (Optional) extra Secrets or ConfigMaps to load into the environment.
+  envFrom:
+    # - configMapRef:
+    #     name: my-config
+    # - secretRef:
+    #     name: my-secret
 
 # Optional ServiceAccount. For example, when using Azure Workload Identity to
 # grant access to an Azure Key Vault Secret Store, ServiceAccount annotations
