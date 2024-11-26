@@ -3,7 +3,8 @@
 #  SDM_PROXY_CLUSTER_SECRET_KEY: <...>
 proxyClusterKeySecretRef: proxy-cluster-key
 
-# required resource limits
+# required resource limits. the limits and requests should be set to the same
+# values.
 resources:
   limits:
     cpu: 2
