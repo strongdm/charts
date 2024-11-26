@@ -49,6 +49,12 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
         env:
+        - name: GOMAXPROCS
+          valueFrom:
+            resourceFieldRef:
+              containerName: {{ .Release.Name }}
+              resource: requests.cpu
+              divisor: "1"
       {{- with .Values.deployment.env -}}
         {{- range $key, $value := . }}
         - name: {{ $key }}
