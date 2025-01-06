@@ -1,0 +1,9 @@
+agents:
+  - infra-mgmt-services
+  - releases
+
+steps:
+  - label: ":helm: package"
+    if: build.pull_request.id != null || (build.branch == "main" && build.author.email =~ /noreply.github.com/)
+    # command: .buildkite/package.sh
+    command: echo hello
