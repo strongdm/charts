@@ -3,8 +3,7 @@
 #  SDM_PROXY_CLUSTER_SECRET_KEY: <...>
 proxyClusterKeySecretRef: proxy-cluster-key
 
-# required resource limits. the limits and requests should be set to the same
-# values.
+# Pod resources. The limits and requests should be set to the same values.
 resources:
   limits:
     cpu: 2
@@ -28,13 +27,11 @@ deployment:
   # (Optional) adds additional annotations to the deployment and pod template
   annotations:
 
-  # (Optional) adds additional labels to the deployment and pod template. These
-  # are not used as part of the selector
+  # (Optional) adds additional labels to the deployment and pod template. These are not used as part of the selector.
   labels:
 
-  # Extra environment variables. Options can be found here:
-  # https://www.strongdm.com/docs/architecture/deployment/environment-variables
-  env: 
+  # Extra environment variables. Options can be found [here](https://www.strongdm.com/docs/architecture/deployment/environment-variables).
+  env:
     SDM_BIND_ADDRESS: ":8443"
     SDM_DOCKERIZED: "true"
     SDM_ORCHESTRATOR_PROBES: ":9090"
