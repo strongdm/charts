@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e -u -o pipefail
 
+if [[ "${BUILDKITE_PULL_REQUEST}" == "false" ]]; then
+    echo "Not packaging non-PR build"
+    exit 0
+fi
+
 echo "--- :git: Get PR labels"
 pr_number="$(echo "${BUILDKITE_MESSAGE}" | awk -F '#' '{print $2}' | awk '{print $1}' | tr -d '()')"
 
