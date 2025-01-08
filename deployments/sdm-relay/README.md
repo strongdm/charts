@@ -97,5 +97,3 @@ The following table lists the configurable parameters of the strongDM relay/gate
 | .configmap.SDM_RELAY_MAINTENANCE_WINDOW | Maintenance window to use if a new relay token is being generated. (See sdm admin relays create -h for description)                                                   | plaintext                     | &#9744;  |
 | .configmap.SDM_GATEWAY_LISTEN_ADDR_PORT | If a gateway token is to be generated, this is the address where it will listen, and it is required.                                                                  | plaintext                     | &#9744;  |
 | .configmap.SDM_GATEWAY_BIND_ADDR_PORT   | If a gateway token is to be generated, this is the address where it will bind.                                                                                        | plaintext                     | &#9744;  |
-
-

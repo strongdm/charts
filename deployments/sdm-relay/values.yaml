@@ -16,17 +16,27 @@ global:
   deployment:
     repository: public.ecr.aws/strongdm/relay
     tag: latest
+    digest: ""
     imagePullPolicy: Always
     annotations: {} # (Optional) adds additional annotations to the deployment and pod template
     labels: {} # (Optional) adds additional labels to the deployment and pod template. These are not used as part of the selector
 
-# Optional Enviroment Values. Options can be found here(https://www.strongdm.com/docs/architecture/deployment/environment-variables).
+    # Pod resources. The limits and requests should be set to the same values.
+    resources:
+      limits:
+        cpu: 2
+        memory: 4Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
+
+# Extra environment variables. Options can be found [here](https://www.strongdm.com/docs/architecture/deployment/environment-variables).
 configMap:
   SDM_ORCHESTRATOR_PROBES: 9090
   #   SDM_DOCKERIZED: "true"
   SDM_RELAY_LOG_FORMAT: "json"
-#   SDM_RELAY_LOG_STORAGE:
-#   SDM_RELAY_LOG_ENCRYPTION:
+  #   SDM_RELAY_LOG_STORAGE:
+  #   SDM_RELAY_LOG_ENCRYPTION:
 
 # Optional ServiceAccount. For example, when using Azure Workload Identity to grant access to an Azure Key Vault Secret Store, ServiceAccount annotations and labels are required. (https://azure.github.io/azure-workload-identity/docs/quick-start.html#5-create-a-kubernetes-service-account)
 # serviceAccount:

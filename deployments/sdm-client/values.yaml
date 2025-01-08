@@ -2,11 +2,13 @@ global:
   service:
     type: ClusterIP
   secret:
-#   Use `echo -n token | base64` to base64 encode the Service token.
+    # Use `echo -n token | base64` to base64 encode the Service token.
+    token:
   deployment:
     replicas: 1
     repository: public.ecr.aws/strongdm/client
-    tag: 33.47.0
+    tag: latest
+    digest: ""
     imagePullPolicy: Always
     ports:
       - 15432

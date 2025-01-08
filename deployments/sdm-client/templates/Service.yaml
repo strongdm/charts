@@ -12,9 +12,9 @@ spec:
     app: {{ .Release.Name }}-app
   ports:
   {{- range .Values.global.deployment.ports }}
-  - name: port-{{ . }} 
+  - name: port-{{ . }}
     port: {{ . }}
     targetPort: {{ . }}
     protocol: TCP
-  {{- end }} 
+  {{- end }}
 {{- end }}
