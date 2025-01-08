@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-app
-        image: {{ .Values.global.deployment.repository | default "public.ecr.aws/strongdm/client" }}:{{ .Values.global.deployment.tag | default "latest" }}
+        image: {{ template "sdm.imageURI" (merge (dict "name" "client") .Values.global.deployment) }}
         imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
         ports:
         {{- range .Values.global.deployment.ports }}

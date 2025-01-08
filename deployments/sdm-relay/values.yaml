@@ -16,6 +16,7 @@ global:
   deployment:
     repository: public.ecr.aws/strongdm/relay
     tag: latest
+    digest: ""
     imagePullPolicy: Always
     annotations: {} # (Optional) adds additional annotations to the deployment and pod template
     labels: {} # (Optional) adds additional labels to the deployment and pod template. These are not used as part of the selector

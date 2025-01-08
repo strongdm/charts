@@ -34,7 +34,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ .Release.Name }}-app
-        image: {{ .Values.global.deployment.repository | default "public.ecr.aws/strongdm/relay" }}:{{ .Values.global.deployment.tag | default "latest" }}
+        image: {{ template "sdm.imageURI" (merge (dict "name" "relay") .Values.global.deployment) }}
         imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
         resources:
 {{ toYaml .Values.global.deployment.resources | indent 10 }}

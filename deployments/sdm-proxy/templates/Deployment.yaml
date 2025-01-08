@@ -34,7 +34,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ .Release.Name }}
-        image: {{ .Values.deployment.repository | default "public.ecr.aws/strongdm/relay" }}:{{ .Values.deployment.tag | default "latest" }}
+        image: {{ template "sdm.imageURI" (merge (dict "name" "proxy") .Values.deployment) }}
         imagePullPolicy: {{ .Values.deployment.imagePullPolicy | default "Always" }}
         args: ["proxy", "-d"]
         ports:

@@ -24,6 +24,11 @@ service:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 
 deployment:
+  repository: public.ecr.aws/strongdm/relay
+  tag: latest
+  digest: ""
+  imagePullPolicy: Always
+
   # (Optional) adds additional annotations to the deployment and pod template
   annotations:
 
