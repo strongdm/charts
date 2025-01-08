@@ -1,0 +1,31 @@
+name: Helm template
+on:
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Helm
+        run: |
+          apt-get update -y
+          apt-get install -y curl gpg apt-transport-https
+          curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
+          apt-get update -y
+          apt-get install helm -y
+      - name: Helm template | relay | install
+        run: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+      - name: Helm template | proxy | install
+        run: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
+      - name: Helm template | client | install
+        run: helm template deployments/sdm-client -f deployments/sdm-client/values.yaml
+      - name: Helm template | relay | upgrade
+        run: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --is-upgrade
+      - name: Helm template | proxy | upgrade
+        run: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml --is-upgrade
+      - name: Helm template | client | upgrade
+        run: helm template deployments/sdm-client -f deployments/sdm-client/values.yaml --is-upgrade
+
+    
