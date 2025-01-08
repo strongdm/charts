@@ -11,5 +11,6 @@ helm package "deployments/sdm-proxy" --destination stable/
 helm repo index stable
 
 echo "--- :git: Push"
-git commit -am "#${pr_number}"
+git add stable
+git commit -m "Packaging from #${pr_number}"
 git push origin HEAD:main
