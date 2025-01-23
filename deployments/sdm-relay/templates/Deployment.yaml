@@ -54,13 +54,21 @@ spec:
         - name: SDM_RELAY_TOKEN
           valueFrom:
             secretKeyRef:
+              {{- if .Values.global.secret.tokenSecretRef }}
+{{ toYaml .Values.global.secret.tokenSecretRef | indent 14 }}
+              {{- else }}
               name: {{ $.Release.Name }}-secret
               key: token
+              {{- end }}
         - name: SDM_ADMIN_TOKEN
           valueFrom:
             secretKeyRef:
+              {{- if .Values.global.secret.adminTokenSecretRef }}
+{{ toYaml .Values.global.secret.adminTokenSecretRef | indent 14 }}
+              {{- else }}
               name: {{ $.Release.Name }}-secret
               key: adminToken
+              {{- end }}
         {{- with .Values.configMap }}
         {{- if .SDM_ORCHESTRATOR_PROBES }}
         - name: SDM_ORCHESTRATOR_PROBES

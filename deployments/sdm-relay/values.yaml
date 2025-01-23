@@ -11,8 +11,10 @@ global:
   secret:
     #   Use `echo -n token | base64` to base64 encode these tokens.
     #   Operation of the relay requires at least one of these to be set.
-    token: # This is the relay token.
-    adminToken: # This is used to generate a relay token when needed.
+    token: # This is the relay token. Specify this directly, or an existing secret to tokenSecretRef.
+    adminToken: # This is used to generate a relay token when needed. Specify this directly, or an existing secret to adminTokenSecretRef.
+    tokenSecretRef: {}
+    adminTokenSecretRef: {}
   deployment:
     repository: public.ecr.aws/strongdm/relay
     tag: latest
