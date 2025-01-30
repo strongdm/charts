@@ -1,3 +1,5 @@
+addDateLabel: true # adds timestamp label to all resources
+
 # required. specify the name of a Secret containing the following environment variables:
 #  SDM_PROXY_CLUSTER_ACCESS_KEY: e.g. pk-4e172ba367007f0c
 #  SDM_PROXY_CLUSTER_SECRET_KEY: <...>
