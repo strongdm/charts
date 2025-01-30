@@ -1,4 +1,5 @@
 global:
+  addDateLabel: true # adds timestamp label to all resources
   service:
     type: ClusterIP
   secret:
