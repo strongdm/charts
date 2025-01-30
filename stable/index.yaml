@@ -3,7 +3,28 @@ entries:
   sdm-client:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.944432247Z"
+    created: "2025-01-30T22:04:46.117172431Z"
+    description: strongDM Client Container
+    digest: cb31bd671c3ba2ead019f5e8ec617d4d2366e8dcd0d4ba37eedc188d8edfcc37
+    home: https://github.com/strongdm/charts
+    icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
+    keywords:
+    - strongdm
+    - sdm
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: support@strongdm.com
+      name: strongDM
+    name: sdm-client
+    sources:
+    - https://github.com/strongdm/charts/tree/main/deployments/sdm-client
+    type: application
+    urls:
+    - sdm-client-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-01-30T22:04:46.116802019Z"
     description: strongDM Client Container
     digest: 2c350fc1baab7d0adb817003f41f0794ab1c3b3282909c175ab366f683eaf90e
     home: https://github.com/strongdm/charts
@@ -24,7 +45,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.944091984Z"
+    created: "2025-01-30T22:04:46.11641742Z"
     description: strongDM Client Container
     digest: 1bb1859a3314d8d5c1835b1c0e6481835bb697626d2e40204057e53e9cc60cc0
     home: https://github.com/strongdm/charts
@@ -45,7 +66,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.943735664Z"
+    created: "2025-01-30T22:04:46.115900006Z"
     description: strongDM Client Container
     digest: 8d2ca77061a949f81a98977fa995d6375341a788d5f1b3ae0b8ee4cb95721363
     home: https://github.com/strongdm/charts
@@ -67,7 +88,28 @@ entries:
   sdm-proxy:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.944882986Z"
+    created: "2025-01-30T22:04:46.118201357Z"
+    description: StrongDM Proxy
+    digest: f9898c72824d2b7bc4bb53207090c8b91a1810ca9cd55a56629c50dddf3d03d2
+    home: https://github.com/strongdm/charts
+    icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
+    keywords:
+    - strongdm
+    - sdm
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: k8s+sdm@strongdm.com
+      name: strongDM
+    name: sdm-proxy
+    sources:
+    - https://github.com/strongdm/charts/tree/main/deployments/sdm-proxy
+    type: application
+    urls:
+    - sdm-proxy-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-01-30T22:04:46.117744056Z"
     description: StrongDM Proxy
     digest: 5a9fb28b8c30ccb6ce239e301e772a3522ab26e64ddded687b9cf87496657321
     home: https://github.com/strongdm/charts
@@ -88,7 +130,7 @@ entries:
     version: 0.1.10
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.945794524Z"
+    created: "2025-01-30T22:04:46.119142018Z"
     description: StrongDM Proxy
     digest: 0a9f280db2f51163c3d9fc254a5c7b13514672b96b16b9ba7c3eaeaedf3860ef
     home: https://github.com/strongdm/charts
@@ -109,7 +151,7 @@ entries:
     version: 0.1.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.945297203Z"
+    created: "2025-01-30T22:04:46.118645017Z"
     description: StrongDM Proxy
     digest: d0f26a46a3b4682770f981259cb6ab73aa89b889d3990a9b0ac6807bdb1f79a6
     home: https://github.com/strongdm/charts
@@ -131,7 +173,28 @@ entries:
   sdm-relay:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.94721279Z"
+    created: "2025-01-30T22:04:46.120400564Z"
+    description: strongDM Relay
+    digest: 2047e187a7a9a979962e61d63e9a5373119c5c9245ae336bbcdb1170680ce3c1
+    home: https://github.com/strongdm/charts
+    icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
+    keywords:
+    - strongdm
+    - sdm
+    kubeVersion: '>= 1.16.0-0'
+    maintainers:
+    - email: k8s+sdm@strongdm.com
+      name: strongDM
+    name: sdm-relay
+    sources:
+    - https://github.com/strongdm/charts/tree/main/deployments/sdm-relay
+    type: application
+    urls:
+    - sdm-relay-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-01-30T22:04:46.119729364Z"
     description: strongDM Relay
     digest: 1ccbb930bbccf9bbba9e709485abe0bf8f85be2e52fb41189c7544e475fcf74f
     home: https://github.com/strongdm/charts
@@ -152,7 +215,7 @@ entries:
     version: 0.1.10
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.954454153Z"
+    created: "2025-01-30T22:04:46.128043086Z"
     description: strongDM Relay
     digest: 6abfc72cdc1251c79f7cef594388431fc348c2147c2cd520122429db69f467f7
     home: https://github.com/strongdm/charts
@@ -173,7 +236,7 @@ entries:
     version: 0.1.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.953433392Z"
+    created: "2025-01-30T22:04:46.127110204Z"
     description: strongDM Relay
     digest: 8a5a96d34570060eac403269c586bf55ecae05bbed58e963308fa0971d334cf0
     home: https://github.com/strongdm/charts
@@ -194,7 +257,7 @@ entries:
     version: 0.1.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.952198487Z"
+    created: "2025-01-30T22:04:46.126303585Z"
     description: strongDM Relay
     digest: ea02ea05e1b52c2b27374c02595dc6acfbe56a921f3e09cb9920cd898285ce60
     home: https://github.com/strongdm/charts
@@ -215,7 +278,7 @@ entries:
     version: 0.1.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.951621264Z"
+    created: "2025-01-30T22:04:46.124593475Z"
     description: strongDM Relay
     digest: 78a78e91462c60cdbbcf92d7fc033bf7ad6855d3cb2ba4d6556bf4bc61011b70
     home: https://github.com/strongdm/charts
@@ -236,7 +299,7 @@ entries:
     version: 0.1.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.951065766Z"
+    created: "2025-01-30T22:04:46.122501872Z"
     description: strongDM Relay
     digest: d3bd61c633a9c110a26bf9f4b035045582a38669acb3dab74be13d64a2e55d52
     home: https://github.com/strongdm/charts
@@ -257,7 +320,7 @@ entries:
     version: 0.1.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.950176216Z"
+    created: "2025-01-30T22:04:46.121958199Z"
     description: strongDM Relay
     digest: 4e1d20cdbacef2f14777d455fc12e1d793ebb91ede27363d4c0fc186fca73565
     home: https://github.com/strongdm/charts
@@ -278,7 +341,7 @@ entries:
     version: 0.1.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.949165014Z"
+    created: "2025-01-30T22:04:46.121367681Z"
     description: strongDM Relay
     digest: 6ac91cf145c10c048e6ea8ce9c6f6369286710738614357ac9873830477d090c
     home: https://github.com/strongdm/charts
@@ -299,7 +362,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-01-23T23:21:08.948412633Z"
+    created: "2025-01-30T22:04:46.120916535Z"
     description: strongDM Relay
     digest: 715bd05f451c1f5f710fd7b9b8f38f2b44094171b8bfca5960df3a87bc133a91
     home: https://github.com/strongdm/charts
@@ -318,4 +381,4 @@ entries:
     urls:
     - sdm-relay-0.1.2.tgz
     version: 0.1.2
-generated: "2025-01-23T23:21:08.943194819Z"
+generated: "2025-01-30T22:04:46.115280275Z"
