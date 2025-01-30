@@ -1,6 +1,6 @@
 {{- define "sdm.labels" }}
 generator: helm
-{{- if (default true .Values.addDateLabel ) }}
+{{- if .Values.addDateLabel }}
 date: {{ now | htmlDate }}
 {{- end }}
 chart: {{ .Chart.Name }}
