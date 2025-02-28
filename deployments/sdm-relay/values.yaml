@@ -1,3 +1,5 @@
+autoRegisterCluster: false # automatically register the hosting cluster as a resource in StrongDM
+
 global:
   addDateLabel: true # adds timestamp label to all resources
   gateway:
