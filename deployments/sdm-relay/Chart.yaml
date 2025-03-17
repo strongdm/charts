@@ -1,14 +1,14 @@
 apiVersion: v2
 name: sdm-relay
 kubeVersion: ">= 1.16.0-0"
-version: 0.1.11
-appVersion: 1.0.0
-description: strongDM Relay
+version: 1.0.0
+appVersion: 46.77.0
+description: StrongDM Relay
 type: application
 icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
 home: https://github.com/strongdm/charts
 maintainers:
-  - name: strongDM
+  - name: StrongDM
     email: k8s+sdm@strongdm.com
 sources:
   - https://github.com/strongdm/charts/tree/main/deployments/sdm-relay

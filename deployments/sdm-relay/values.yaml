@@ -17,7 +17,7 @@ strongdm:
   image:
     imagePullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/relay
-    tag: latest
+    tag: ""
     digest: ""
 
   ## General configuration.
