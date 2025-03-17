@@ -1,4 +1,6 @@
-autoRegisterCluster: false # automatically register the hosting cluster as a resource in StrongDM
+cluster:
+  autoRegister: true # automatically register the hosting cluster as a resource in StrongDM
+  name: "" # name to register cluster as in StrongDM
 
 global:
   addDateLabel: true # adds timestamp label to all resources

@@ -1,0 +1,48 @@
+{{- if .Values.cluster.autoRegister }}
+apiVersion: batch/v1
+metadata:
+  name: {{ .Release.Name }}-register-job
+  labels:
+    app: {{ .Release.Name }}-app
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 600
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-register
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .Release.Name }}-register
+        image: {{ template "sdm.imageURI" (merge (dict "name" "relay") .Values.global.deployment) }}
+        imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
+        resources:
+{{ toYaml .Values.global.deployment.resources | indent 10 }}
+        command: ["sh", "-c"]
+        args:
+          - >
+              /sdm.linux admin clusters add k8spodidentity \
+              --certificate-authority "$(cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt)" \
+              --tag autoregister=true \
+              {{ .Values.cluster.name | default (printf "cluster-%s" (randAlpha 5)) }}
+        env:
+        - name: SDM_ADMIN_TOKEN
+          valueFrom:
+            secretKeyRef:
+              {{- if .Values.global.secret.adminTokenSecretRef }}
+{{ toYaml .Values.global.secret.adminTokenSecretRef | indent 14 }}
+              {{- else }}
+              name: {{ $.Release.Name }}-secret
+              key: adminToken
+              {{- end }}
+        envFrom:
+          - configMapRef:
+              name: {{ $.Release.Name }}-config
+{{- end}}
