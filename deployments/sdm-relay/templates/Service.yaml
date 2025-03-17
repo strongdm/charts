@@ -1,25 +1,22 @@
-{{- if .Values.global.gateway.enabled }}
-kind: Service
+{{- if .Values.strongdm.gateway.enabled }}
+---
 apiVersion: v1
+kind: Service
 metadata:
-  name: {{ .Release.Name }}-svc
-  annotations: {{ toYaml (.Values.global.gateway.service.annotations) | nindent 4 }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.gateway.service.annotations) .) | nindent 4 }}
   labels:
-{{- include "sdm.labels" . | indent 4 }}
-    app: {{ .Release.Name }}-app
+    {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.gateway.service.labels) .) | nindent 4 }}
 spec:
-  type: {{ .Values.global.gateway.service.type | default "NodePort" }}
-  {{- if .Values.global.gateway.service.loadBalancerIP }}
-  loadBalancerIP: "{{ .Values.global.gateway.service.loadBalancerIP }}"
-  {{- end }}
+  type: {{ .Values.strongdm.gateway.service.type }}
+  loadBalancerIP: {{ .Values.strongdm.gateway.service.loadBalancerIP }}
   selector:
-    app: {{ .Release.Name }}-app
+     {{- include "strongdm.selectorLabels" . | nindent 4 }}
   ports:
-    - name: {{ .Release.Name }}-svc
-      port: {{ .Values.global.gateway.service.port | default "5000" }}
-      targetPort: 5000
-      {{- if eq .Values.global.gateway.service.type "NodePort" }}
-      nodePort: {{ .Values.global.gateway.service.nodePort }}
-      {{- end }}
-      protocol: TCP
+    - name: sdm
+      port: {{ .Values.strongdm.gateway.listenPort }}
+      targetPort: {{ .Values.strongdm.gateway.containerPort }}
+      nodePort: {{ .Values.strongdm.gateway.service.nodePort }}
 {{- end }}

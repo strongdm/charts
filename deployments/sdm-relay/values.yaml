@@ -1,101 +1,109 @@
 global:
-  addDateLabel: true # adds timestamp label to all resources
-  gateway:
-    enabled:
-    service:
-      type: NodePort
-      port: 30001
-      #     External NodePort
-      nodePort: 30001
-      # loadBalancerIP:
-      annotations: {}
-  secret:
-    #   Use `echo -n token | base64` to base64 encode these tokens.
-    #   Operation of the relay requires at least one of these to be set.
-    token: # This is the relay token. Specify this directly, or an existing secret to tokenSecretRef.
-    adminToken: # This is used to generate a relay token when needed. Specify this directly, or an existing secret to adminTokenSecretRef.
-    tokenSecretRef: {}
-    adminTokenSecretRef: {}
-  deployment:
+  ## Metadata applied to all resources.
+  ##
+  ## @param global.addDateLabel - Adds a 'date: {{ now | htmlDate }}' label to all resources.
+  ## @param global.annotations - Map of annotations to add to all resources.
+  ## @param global.labels - Map of labels to add to all resources.
+  ##
+  addDateLabel: true
+  annotations: {}
+  labels: {}
+
+strongdm:
+  ## Image pull configuration.
+  ##
+  ## @param strongdm.image - Container repository and pull config.
+  ##
+  image:
+    imagePullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/relay
-    tag: latest
+    tag: ""
     digest: ""
-    imagePullPolicy: Always
-    annotations: {} # (Optional) adds additional annotations to the deployment and pod template
-    labels: {} # (Optional) adds additional labels to the deployment and pod template. These are not used as part of the selector
 
-    # Pod resources. The limits and requests should be set to the same values.
+  ## General configuration.
+  ##
+  ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
+  ## @param strongdm.config.configMapName - k8s ConfigMap storing additional configuration values. Please review the docs for the required format of these values.
+  ## @param strongdm.config secretName - k8s Secret storing additional configuration values. Please review the docs for the required format of these values.
+  ## @param strongdm.config.extraArgs - List of additional arguments to pass to the relay startup command. Format ["--key1 value1", "--key2 value2"].
+  ## @param strongdm.config.logOptions - Configuration for container logs.
+  ##
+  config:
+    domain: strongdm.com
+    configMapName: ""
+    secretName: ""
+    extraArgs: []
+    logOptions:
+      format: json
+      storage: stdout
+      encryption: plaintext
+
+  ## StrongDM authentication sources. At least one of the following must be provided.
+  ##
+  ## @param global.token - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.tokenSecret.
+  ## @param global.tokenSecret - Name of the k8s Secret that contains SDM_RELAY_TOKEN.
+  ##
+  auth:
+    token: ""
+    tokenSecret: ""
+
+  ## Gateway configuration.
+  ##
+  ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other strongdm.gateway values are ignored.
+  ## @param strongdm.gateway.listenPort - Port on which the gateway service is expecting traffic.
+  ## @param strongdm.gateway.containerPort - Port on which the container runs.
+  ##
+  gateway:
+    enabled: false
+    listenPort: 5000
+    containerPort: 5000
+
+    ## Service configuration. Ignored unless strongdm.gateway.enabled.
+    ##
+    ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the service.
+    ## @param strongdm.gateway.service.labels - Map of labels to apply to the service.
+    ## @param strongdm.gateway.service.type - Specify the type of service to front the deployment.
+    ## @param strongdm.gateway.service.port - Port to expose via the service. Conflicts with strongdm.gateway.service.nodePort.
+    ## @param strongdm.gateway.service.nodePort - NodePort to which to bind this service, if desired.
+    ## @param strongdm.gateway.service.loadBalancerIP - IP address to optionally pin a LoadBalancer service.
+    ##
+    service:
+      annotations: {}
+      labels: {}
+      type: ClusterIP
+      nodePort: ""
+      loadBalancerIP: ""
+
+  ## Deployment configuration.
+  ##
+  ## @param strongdm.deployment.annotations - Map of annotations to add to the Deployment.
+  ## @param strongdm.deployment.labels - Map of labels to add to the Deployment.
+  deployment:
+    annotations: {}
+    labels: {}
+
+  ## Pod configuration.
+  ##
+  ## @param strongdm.pod.resources - Set the Pod resource requests and limits.
+  ## @param strongdm.pod.annotations - Map of annotations to add to Pods.
+  ## @param strongdm.pod.labels - Map of labels to add to Pods.
+  pod:
     resources:
-      limits:
-        cpu: 2
-        memory: 4Gi
       requests:
-        cpu: 2
-        memory: 4Gi
+        memory: 1Gi
+      limits:
+        memory: 1Gi
+    annotations: {}
+    labels: {}
+    livenessPort: 9090
 
-# Extra environment variables. Options can be found [here](https://www.strongdm.com/docs/architecture/deployment/environment-variables).
-configMap:
-  SDM_ORCHESTRATOR_PROBES: 9090
-  #   SDM_DOCKERIZED: "true"
-  SDM_RELAY_LOG_FORMAT: "json"
-  #   SDM_RELAY_LOG_STORAGE:
-  #   SDM_RELAY_LOG_ENCRYPTION:
-
-# Optional ServiceAccount. For example, when using Azure Workload Identity to grant access to an Azure Key Vault Secret Store, ServiceAccount annotations and labels are required. (https://azure.github.io/azure-workload-identity/docs/quick-start.html#5-create-a-kubernetes-service-account)
-# serviceAccount:
-#   annotations:
-#     foo: bar
-#   labels:
-#     bar: foo
-
-# This optional customizable wrapper can be used to generate the SDM_RELAY_TOKEN on the fly,
-# provided that an SDM_ADMIN_TOKEN with relay:create permission is available.
-#
-# To generate an SDM_ADMIN_TOKEN, login to the SDM CLI and run a command like this:
-# sdm admin tokens create --type admin-token --permissions relay:create --duration 9999999 my-admin-token-name
-#
-# See the script below for more details of other options.
-#
-# If the SDM_RELAY_TOKEN is already provided via the secret, this script just
-# runs the relay in the same way it would if this wrapper was not present.
-container:
-    command: ["bash", "-c"] # Container ENTRYPOINT
-    args: # Container CMD
-    - |
-      set -e;
-      SDM_CMD="/sdm.linux";
-      ensure_SDM_RELAY_TOKEN() {
-        if [ -n "${SDM_RELAY_TOKEN}" ]; then
-          export SDM_RELAY_TOKEN;
-          echo "SDM_RELAY_TOKEN is already set.";
-          return 0;
-        fi;
-        if [ -z "${SDM_ADMIN_TOKEN}" ]; then
-          echo "SDM_ADMIN_TOKEN is required to generate a new SDM_RELAY_TOKEN.  Exiting.";
-          exit 1;
-        fi;
-        echo "Logging in with SDM_ADMIN_TOKEN";
-        ${SDM_CMD} login --admin-token=${SDM_ADMIN_TOKEN};
-        if ! "${SDM_CMD}" status; then
-          echo "Not logged in.  Missing SDM_ADMIN_TOKEN?";
-          exit 2;
-        fi;
-        SDM_RELAY_MAINTENANCE_WINDOW="${SDM_RELAY_MAINTENANCE_WINDOW:-* * * * *}";
-        if [ -n "${SDM_GATEWAY_LISTEN_ADDR_PORT}" ]; then
-          echo "Generating gateway token for ${SDM_RELAY_NAME} at ${SDM_GATEWAY_LISTEN_ADDR_PORT}";
-          SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" "${SDM_CMD}"  admin relays create-gateway --name "${SDM_RELAY_NAME}" --tags "${SDM_RELAY_TAGS}" --maintenance-windows "${SDM_RELAY_MAINTENANCE_WINDOW}" "${SDM_GATEWAY_LISTEN_ADDR_PORT}" "${SDM_GATEWAY_BIND_ADDR_PORT}");
-        else
-          echo "Generating relay token for $SDM_RELAY_NAME";
-          SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" "${SDM_CMD}" admin relays create --name "${SDM_RELAY_NAME}" --tags "${SDM_RELAY_TAGS}" --maintenance-windows "${SDM_RELAY_MAINTENANCE_WINDOW}");
-        fi;
-        # Verify that the response does actually look like a token.
-        if ! grep -qE "^[[:graph:]]+[.][[:graph:]]+[.][[:graph:]]+$" <<< "${SDM_RELAY_TOKEN}";  then
-          echo "Failed to set SDM_RELAY_TOKEN.";
-          echo "Response was ${SDM_RELAY_TOKEN}";
-          SDM_RELAY_TOKEN="";
-          exit 3;
-        fi;
-        export SDM_RELAY_TOKEN;
-      };
-      ensure_SDM_RELAY_TOKEN;
-      SDM_ADMIN_TOKEN="" /sdm.linux relay -d;
+  ## Service account configuration. Required when this deployment must interact with external APIs, like AWS Secrets Manager, Azure Key Vault, etc.
+  ##
+  ## @param strongdm.serviceAccount - Configuration for the k8s service account if chosen to be created by this Chart.
+  ##
+  serviceAccount:
+    create: false
+    name: strongdm
+    automountToken: true
+    annotations: {}
+    labels: {}

@@ -1,153 +1,55 @@
-kind: Deployment
+---
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-deployment
-  labels:
-    app: {{ .Release.Name }}-app
-    {{- include "sdm.labels" . | indent 4 }}
-    {{- if .Values.global.deployment.labels }}
-{{ toYaml .Values.global.deployment.labels | indent 4 }}
-    {{- end }}
-  {{- if .Values.global.deployment.annotations }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
   annotations:
-{{ toYaml .Values.global.deployment.annotations | indent 4 }}
-  {{- end }}
+    {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.deployment.annotations) .) | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.deployment.labels) .) | nindent 4 }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-app
+      {{- include "strongdm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-app
-        {{- if .Values.global.deployment.labels }}
-{{ toYaml .Values.global.deployment.labels | indent 8 }}
-        {{- end }}
-      {{- if .Values.global.deployment.annotations }}
+        {{- include "strongdm.labels" . | nindent 8 }}
       annotations:
-{{ toYaml .Values.global.deployment.annotations | indent 8 }}
-      {{- end }}
+        checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- range $k, $v := .Values.strongdm.pod.annotations }}
+        {{ $k }}: {{ $v | quote }}
+        {{- end }}
     spec:
-      {{- with .Values.serviceAccount }}
-      serviceAccountName: {{ $.Release.Name }}-svcacct
+      restartPolicy: Always
+      {{- if .Values.strongdm.serviceAccount.create }}
+      serviceAccountName: {{ .Values.strongdm.serviceAccount.name }}
       {{- end }}
+      terminationGracePeriodSeconds: 10
       containers:
-      - name: {{ .Release.Name }}-app
-        image: {{ template "sdm.imageURI" (merge (dict "name" "relay") .Values.global.deployment) }}
-        imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
-        resources:
-{{ toYaml .Values.global.deployment.resources | indent 10 }}
-        {{- if .Values.container.command }}
-        command: {{ range .Values.container.command }}
-            - {{ . }}
-        {{- end }}
-        {{- end }}
-        {{- if .Values.container.args }}
-        args:
-            {{ range .Values.container.args }}
-            - {{ quote  . }}
-            {{ end }}
-        {{- end }}
-        env:
-        {{- include "sdm.extraEnvironmentVars" .Values.global | indent 8 }}
-        - name: SDM_RELAY_TOKEN
-          valueFrom:
-            secretKeyRef:
-              {{- if .Values.global.secret.tokenSecretRef }}
-{{ toYaml .Values.global.secret.tokenSecretRef | indent 14 }}
-              {{- else }}
-              name: {{ $.Release.Name }}-secret
-              key: token
-              {{- end }}
-        - name: SDM_ADMIN_TOKEN
-          valueFrom:
-            secretKeyRef:
-              {{- if .Values.global.secret.adminTokenSecretRef }}
-{{ toYaml .Values.global.secret.adminTokenSecretRef | indent 14 }}
-              {{- else }}
-              name: {{ $.Release.Name }}-secret
-              key: adminToken
-              {{- end }}
-        {{- with .Values.configMap }}
-        {{- if .SDM_ORCHESTRATOR_PROBES }}
-        - name: SDM_ORCHESTRATOR_PROBES
-          valueFrom:
-            configMapKeyRef:
-              name: {{ $.Release.Name }}-config
-              key: SDM_ORCHESTRATOR_PROBES
-        {{- end }}
-        {{- if .SDM_DOCKERIZED }}
-        - name: SDM_DOCKERIZED
-          valueFrom:
-            configMapKeyRef:
-              name: {{ $.Release.Name }}-config
-              key: SDM_DOCKERIZED
-        {{- end }}
-        {{- if .SDM_RELAY_LOG_FORMAT }}
-        - name: SDM_RELAY_LOG_FORMAT
-          valueFrom:
-            configMapKeyRef:
-              name: {{ $.Release.Name }}-config
-              key: SDM_RELAY_LOG_FORMAT
-        {{- end }}
-        {{- if .SDM_RELAY_LOG_STORAGE }}
-        - name: SDM_RELAY_LOG_STORAGE
-          valueFrom:
-            configMapKeyRef:
-              name: {{ $.Release.Name }}-config
-              key: SDM_RELAY_LOG_STORAGE
-        {{- end }}
-        {{- if .SDM_RELAY_LOG_ENCRYPTION }}
-        - name: SDM_RELAY_LOG_ENCRYPTION
-          valueFrom:
-            configMapKeyRef:
-              name: {{ $.Release.Name }}-config
-              key: SDM_RELAY_LOG_ENCRYPTION
-        {{- end }}
-        {{- if .SDM_RELAY_NAME }}
-        -   name: SDM_RELAY_NAME
-            valueFrom:
-                configMapKeyRef:
-                    name: {{ $.Release.Name }}-config
-                    key: SDM_RELAY_NAME
-        {{- end }}
-        {{- if .SDM_RELAY_TAGS }}
-        -   name: SDM_RELAY_TAGS
-            valueFrom:
-                configMapKeyRef:
-                    name: {{ $.Release.Name }}-config
-                    key: SDM_RELAY_TAGS
-        {{- end }}
-        {{- if .SDM_RELAY_MAINTENANCE_WINDOW }}
-        -   name: SDM_RELAY_MAINTENANCE_WINDOW
-            valueFrom:
-                configMapKeyRef:
-                    name: {{ $.Release.Name }}-config
-                    key: SDM_RELAY_MAINTENANCE_WINDOW
-        {{- end }}
-        {{- if .SDM_GATEWAY_LISTEN_ADDR_PORT }}
-        -   name: SDM_GATEWAY_LISTEN_ADDR_PORT
-            valueFrom:
-                configMapKeyRef:
-                    name: {{ $.Release.Name }}-config
-                    key: SDM_GATEWAY_LISTEN_ADDR_PORT
-        {{- end }}
-        {{- if .SDM_GATEWAY_BIND_ADDR_PORT }}
-        -   name: SDM_GATEWAY_BIND_ADDR_PORT
-            valueFrom:
-                configMapKeyRef:
-                    name: {{ $.Release.Name }}-config
-                    key: SDM_GATEWAY_BIND_ADDR_PORT
-        {{- end }}
-        {{- if .SDM_ORCHESTRATOR_PROBES }}
-        livenessProbe:
-          httpGet:
-            path: /liveness
-            port: {{ .SDM_ORCHESTRATOR_PROBES | default 9090 }}
-          initialDelaySeconds: 25
-          timeoutSeconds: 10
-          periodSeconds: 15
-          failureThreshold: 5
-        {{- end }}
-        {{- end }}
+        - name: sdm
+          image: {{ template "strongdm.imageURI" . }}
+          imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
+          {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
+          {{- include "strongdm.envFrom" . | nindent 10 }}
+          {{- if .Values.strongdm.gateway.enabled }}
+          ports:
+            - name: gateway
+              containerPort: {{ .Values.strongdm.gateway.containerPort }}
+              protocol: TCP
+          {{- end }}
+          {{- range $k, $v := .Values.strongdm.config.extraArgs }}
+          {{ $k }}: {{ $v | quote }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: {{ .Values.strongdm.pod.livenessPort }}
+            initialDelaySeconds: 25
+            timeoutSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 5
