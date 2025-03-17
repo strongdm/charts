@@ -40,41 +40,38 @@ strongdm:
 
   ## StrongDM authentication sources. At least one of the following must be provided.
   ##
-  ## @param global.token - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @global.tokenSecretRef.
-  ## @param global.adminToken - The SDM_ADMIN_TOKEN with which to create this relay. Specify this directly, or provide an existing secret to @global.adminTokenSecretRef.
+  ## @param global.token - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.tokenSecret.
   ## @param global.tokenSecret - Name of the k8s Secret that contains SDM_RELAY_TOKEN.
-  ## @param global.adminTokenSecret - Name of the k8s Secret that contains SDM_ADMIN_TOKEN.
   ##
   auth:
     token: ""
-    adminToken: ""
     tokenSecret: ""
-    adminTokenSecret: ""
 
   ## Gateway configuration.
   ##
   ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other strongdm.gateway values are ignored.
   ## @param strongdm.gateway.listenAddress - Address to which to register this gateway. Generally should be reachable from outside the cluster.
-  ## @param strongdm.gateway.listenPort - Port on which strongdm.gateway.listenAddress is listening for connections.
   ##
   gateway:
-    enabled: true
+    enabled: false
     listenAddress: ""
-    listenPort: 443
-    bindPort: 5000
 
-  ## Service configuration. Ignored unless strongdm.gateway.enabled.
-  ##
-  ## @param strongdm.gateway.service.type - Specify the type of service to front the deployment.
-  ## @param strongdm.gateway.service.nodePort - NodePort to which to bind this service, if desired.
-  ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the service.
-  ## @param strongdm.gateway.service.labels - Map of labels to apply to the service.
-  ##
-  service:
-    type: ClusterIP
-    nodePort: ""
-    annotations: {}
-    labels: {}
+    ## Service configuration.
+    ##
+    ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the service.
+    ## @param strongdm.gateway.service.labels - Map of labels to apply to the service.
+    ## @param strongdm.gateway.service.type - Specify the type of service to front the deployment.
+    ## @param strongdm.gateway.service.port - Port on which the container runs.
+    ## @param strongdm.gateway.service.listenPort - Port to expose via the service.
+    ## @param strongdm.gateway.service.nodePort - NodePort to which to bind this service, if desired.
+    ##
+    service:
+      annotations: {}
+      labels: {}
+      type: ClusterIP
+      port: 5000
+      listenPort: 5000
+      nodePort: ""
 
   ## Deployment configuration.
   ##

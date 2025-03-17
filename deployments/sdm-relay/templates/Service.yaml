@@ -1,0 +1,21 @@
+{{- if .Values.strongdm.gateway.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.gateway.service.annotations) .) | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.gateway.service.labels) .) | nindent 4 }}
+spec:
+  type: {{ .Values.strongdm.gateway.service.type }}
+  selector:
+     {{- include "strongdm.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: sdm
+      port: {{ .Values.strongdm.gateway.service.port }}
+      targetPort: {{ .Values.strongdm.gateway.service.listenPort }}
+      nodePort: {{ .Values.strongdm.gateway.service.nodePort }}
+{{- end }}

@@ -41,25 +41,30 @@ app.kubernetes.io/name: {{ .Chart.Name }}
 envFrom:
   - configMapRef:
       name: {{ .Release.Name }}-config
+
   {{- if .Values.strongdm.config.configMapName }}
   - configMapRef:
       name: {{ .Values.strongdm.config.configMapName }}
   {{- end}}
+
+  {{- if or .Values.strongdm.auth.token .Values.strongdm.auth.adminToken }}
+  - secretRef:
+      name: {{ .Release.Name }}-secrets
+  {{- end }}
+
   {{- if .Values.strongdm.config.secretName }}
   - secretRef:
       name: {{ .Values.strongdm.config.secretName }}
   {{- end}}
+
   {{- if .Values.strongdm.auth.tokenSecret }}
-  - name: SDM_RELAY_TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.strongdm.auth.tokenSecret }}
+  - secretRef:
+      name: {{ .Values.strongdm.auth.tokenSecret }}
   {{- end }}
+
   {{- if .Values.strongdm.auth.adminTokenSecret }}
-  - name: SDM_ADMIN_TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.strongdm.auth.adminTokenSecret }}
+  - secretKeyRef:
+      name: {{ .Values.strongdm.auth.adminTokenSecret }}
   {{- end }}
 {{- end }}
 
@@ -78,12 +83,11 @@ resources:
 {{- end }}
 
 # Args:
-# - name: (optional) image tag
 # - digest: (optional) image digest
 {{- define "strongdm.imageURI" -}}
-{{- if .digest -}}
-{{ printf "%s@sha256:%s" (.repository | default (printf "public.ecr.aws/strongdm/%s" .name)) .digest }}
+{{- if .Values.strongdm.image.digest -}}
+{{ printf "%s@sha256:%s" (.repository | default "public.ecr.aws/strongdm/relay") .Values.strongdm.image.digest }}
 {{- else -}}
-{{ printf "%s:%s" (.repository | default (printf "public.ecr.aws/strongdm/%s" .name)) .tag }}
+{{ printf "%s:%s" (.repository | default "public.ecr.aws/strongdm/relay") .Values.strongdm.image.tag }}
 {{- end -}}
 {{- end }}

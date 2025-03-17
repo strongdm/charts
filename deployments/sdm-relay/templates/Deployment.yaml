@@ -10,7 +10,6 @@ metadata:
     {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.deployment.labels) .) | nindent 4 }}
 spec:
   replicas: 1
-  revisionHistoryLimit: 2
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -29,49 +28,27 @@ spec:
         {{- end }}
     spec:
       restartPolicy: Always
+      {{- if .Values.strongdm.serviceAccount.create }}
       serviceAccountName: {{ .Values.strongdm.serviceAccount.name }}
+      {{- end }}
       terminationGracePeriodSeconds: 10
       containers:
         - name: sdm
-          image: {{ template "strongdm.imageURI" (merge (dict "name" "relay") .) }}
+          image: {{ template "strongdm.imageURI" . }}
           imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
           {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
           {{- include "strongdm.envFrom" . | nindent 10 }}
-          command: ["/bin/bash", "-c"]
-          args: |-
-            set -e -o pipefail
-
-            if [[ -z "${SDM_RELAY_TOKEN}" ]]; then
-              /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
-          {{- if .Values.strongdm.gateway.enabled }}
-              SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" /sdm.linux admin relays create-gateway {{ .Values.strongdm.config.extraCommandLineArgs }} {{ .Values.strongdm.gateway.listenAddress }} 0.0.0.0:{{ .Values.strongdm.gateway.bindPort }})
-          {{- else }}
-              SDM_RELAY_TOKEN=$(SDM_DOCKERIZED="" /sdm.linux admin relays create {{ .Values.strongdm.config.extraCommandLineArgs }})
-          {{- end }}
-              export SDM_RELAY_TOKEN
-            fi
-
-            SDM_ADMIN_TOKEN="" /sdm.linux relay -d
-
           {{- if .Values.strongdm.gateway.enabled }}
           ports:
             - name: gateway
               containerPort: {{ .Values.strongdm.gateway.bindPort }}
               protocol: TCP
           {{- end }}
-
           livenessProbe:
             httpGet:
               path: /liveness
               port: {{ .Values.strongdm.pod.livenessPort }}
-            timeoutSeconds: 5
-            periodSeconds: 10
-            failureThreshold: 2
-          readinessProbe:
-            httpGet:
-              path: /liveness
-              port: {{ .Values.strongdm.pod.livenessPort }}
             initialDelaySeconds: 25
-            timeoutSeconds: 5
-            periodSeconds: 10
-            failureThreshold: 2
+            timeoutSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 5
