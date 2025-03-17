@@ -21,6 +21,11 @@ repos:
         entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
         language: system
         pass_filenames: false
+    -   id: template-install-gateway
+        name: Helm template | install | gateway
+        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --set strongdm.gateway.enabled=true
+        language: system
+        pass_filenames: false
     -   id: template-install-proxy
         name: Helm template | install | proxy
         entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
@@ -33,20 +38,22 @@ repos:
         pass_filenames: false
     -   id: template-upgrade-relay
         name: Helm template | upgrade | relay
-        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
-          --is-upgrade
+        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --is-upgrade
+        language: system
+        pass_filenames: false
+    -   id: template-upgrade-gateway
+        name: Helm template | upgrade | gateway
+        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --is-upgrade --set strongdm.gateway.enabled=true
         language: system
         pass_filenames: false
     -   id: template-upgrade-proxy
         name: Helm template | upgrade | proxy
-        entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
-          --is-upgrade
+        entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml --is-upgrade
         language: system
         pass_filenames: false
     -   id: template-upgrade-client
         name: Helm template | upgrade | client
-        entry: helm template deployments/sdm-client -f deployments/sdm-client/values.yaml
-          --is-upgrade
+        entry: helm template deployments/sdm-client -f deployments/sdm-client/values.yaml --is-upgrade
         language: system
         pass_filenames: false
 
