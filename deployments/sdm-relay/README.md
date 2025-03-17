@@ -18,7 +18,8 @@ This repo provides an implementation of a StrongDM relay or gateway inside Kuber
 * If you are going to use [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/), then you will need to manually patch your [services to allow TCP and UDP traffic](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/)
 * Either a [StrongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways) or else an [Admin Token](https://www.strongdm.com/docs/admin/users/admin-tokens/) with the `relay:create` permission which will be used to generate the gateway/relay token.
 
-_**Note: In order to get a Gateway Token you'll need an external address to register. You may change this external address after creation with the StrongDM CLI.**_
+> [!NOTE]
+> To get a Gateway Token you'll need an external address to register. You may change this external address after creation with the StrongDM CLI.
 
 ## Installing the Chart
 
@@ -54,7 +55,8 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 
 If you are running multiple StrongDM Gateways it is recommended having multiple points of ingress rather than using the same ingress point with different points. Our recommendation is using a one to one ratio with Loadbalancer to Gateway.
 
-_Note that tokens can't be reused between Gateways. To prevent conflicts during updates, this deployment hard-codes a `replicaCount` of 1 and a deployment strategy of `Recreate`. ._
+> [!NOTE]
+> Tokens can't be reused between Gateways. To prevent conflicts during updates, this deployment hard-codes a `replicaCount` of 1 and a deployment strategy of `Recreate`.
 
 ## Configuration
 
