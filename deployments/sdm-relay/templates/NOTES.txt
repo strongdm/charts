@@ -3,3 +3,6 @@ Thank you for installing {{ .Chart.Name }}. If you run into any errors please re
 Your release is named {{ .Release.Name }}. To learn more about the release, try:
   $ helm status {{ .Release.Name }}
   $ helm get all {{ .Release.Name }}
+
+Tail the application logs:
+  $ kubectl logs -n {{ .Release.Namespace }} -f -l app.kubernetes.io/name={{ .Chart.Name }} -l app.kubernetes.io/component={{ .Values.strongdm.gateway.enabled | ternary "gateway" "relay" }}

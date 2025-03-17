@@ -11,11 +11,12 @@ metadata:
     {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.gateway.service.labels) .) | nindent 4 }}
 spec:
   type: {{ .Values.strongdm.gateway.service.type }}
+  loadBalancerIP: {{ .Values.strongdm.gateway.service.loadBalancerIP }}
   selector:
      {{- include "strongdm.selectorLabels" . | nindent 4 }}
   ports:
     - name: sdm
-      port: {{ .Values.strongdm.gateway.service.port }}
-      targetPort: {{ .Values.strongdm.gateway.service.listenPort }}
+      port: {{ .Values.strongdm.gateway.listenPort }}
+      targetPort: {{ .Values.strongdm.gateway.containerPort }}
       nodePort: {{ .Values.strongdm.gateway.service.nodePort }}
 {{- end }}

@@ -11,9 +11,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    rollingUpdate:
-      maxSurge: 100%
-      maxUnavailable: 0%
+    type: Recreate
   selector:
     matchLabels:
       {{- include "strongdm.selectorLabels" . | nindent 6 }}
@@ -41,9 +39,13 @@ spec:
           {{- if .Values.strongdm.gateway.enabled }}
           ports:
             - name: gateway
-              containerPort: {{ .Values.strongdm.gateway.bindPort }}
+              containerPort: {{ .Values.strongdm.gateway.containerPort }}
               protocol: TCP
           {{- end }}
+          {{- range $k, $v := .Values.strongdm.config.extraArgs }}
+          {{ $k }}: {{ $v | quote }}
+          {{- end }}
+
           livenessProbe:
             httpGet:
               path: /liveness

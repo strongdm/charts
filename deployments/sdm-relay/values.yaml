@@ -25,14 +25,14 @@ strongdm:
   ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
   ## @param strongdm.config.configMapName - k8s ConfigMap storing additional configuration values. Please review the docs for the required format of these values.
   ## @param strongdm.config secretName - k8s Secret storing additional configuration values. Please review the docs for the required format of these values.
-  ## @param strongdm.config.extraCommandLineArgs - Space-separated string of additional args to pass to the relay startup command. Format `--key1=value1 --key2 value2`.
+  ## @param strongdm.config.extraArgs - List of additional arguments to pass to the relay startup command. Format ["--key1 value1", "--key2 value2"].
   ## @param strongdm.config.logOptions - Configuration for container logs.
   ##
   config:
     domain: strongdm.com
     configMapName: ""
     secretName: ""
-    extraCommandLineArgs: ""
+    extraArgs: []
     logOptions:
       format: json
       storage: stdout
@@ -50,28 +50,29 @@ strongdm:
   ## Gateway configuration.
   ##
   ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other strongdm.gateway values are ignored.
-  ## @param strongdm.gateway.listenAddress - Address to which to register this gateway. Generally should be reachable from outside the cluster.
+  ## @param strongdm.gateway.listenPort - Port on which the gateway service is expecting traffic.
+  ## @param strongdm.gateway.containerPort - Port on which the container runs.
   ##
   gateway:
     enabled: false
-    listenAddress: ""
+    listenPort: 5000
+    containerPort: 5000
 
-    ## Service configuration.
+    ## Service configuration. Ignored unless strongdm.gateway.enabled.
     ##
     ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the service.
     ## @param strongdm.gateway.service.labels - Map of labels to apply to the service.
     ## @param strongdm.gateway.service.type - Specify the type of service to front the deployment.
-    ## @param strongdm.gateway.service.port - Port on which the container runs.
-    ## @param strongdm.gateway.service.listenPort - Port to expose via the service.
+    ## @param strongdm.gateway.service.port - Port to expose via the service. Conflicts with strongdm.gateway.service.nodePort.
     ## @param strongdm.gateway.service.nodePort - NodePort to which to bind this service, if desired.
+    ## @param strongdm.gateway.service.loadBalancerIP - IP address to optionally pin a LoadBalancer service.
     ##
     service:
       annotations: {}
       labels: {}
       type: ClusterIP
-      port: 5000
-      listenPort: 5000
       nodePort: ""
+      loadBalancerIP: ""
 
   ## Deployment configuration.
   ##
@@ -87,7 +88,11 @@ strongdm:
   ## @param strongdm.pod.annotations - Map of annotations to add to Pods.
   ## @param strongdm.pod.labels - Map of labels to add to Pods.
   pod:
-    resources: {}
+    resources:
+      requests:
+        memory: 1Gi
+      limits:
+        memory: 1Gi
     annotations: {}
     labels: {}
     livenessPort: 9090

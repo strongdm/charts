@@ -2,10 +2,10 @@
 # - addtl: (optional) map of annotations to add
 {{- define "strongdm.annotations" -}}
 {{- range $k, $v := .Values.global.annotations }}
-{{ $k }}: {{ $v }}
+{{ $k }}: {{ $v | quote }}
 {{- end }}
 {{- range $k, $v := .addtl }}
-{{ $k }}: {{ $v }}
+{{ $k }}: {{ $v | quote }}
 {{- end }}
 {{- end }}
 
@@ -25,10 +25,10 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 date: {{ now | htmlDate }}
 {{- end }}
 {{- range $k, $v := .Values.global.labels }}
-{{ $k }}: {{ $v }}
+{{ $k }}: {{ $v | quote }}
 {{- end }}
 {{- range $k, $v := .addtl }}
-{{ $k }}: {{ $v }}
+{{ $k }}: {{ $v | quote }}
 {{- end }}
 {{- end }}
 
@@ -46,22 +46,18 @@ envFrom:
   - configMapRef:
       name: {{ .Values.strongdm.config.configMapName }}
   {{- end}}
-
   {{- if or .Values.strongdm.auth.token .Values.strongdm.auth.adminToken }}
   - secretRef:
       name: {{ .Release.Name }}-secrets
   {{- end }}
-
   {{- if .Values.strongdm.config.secretName }}
   - secretRef:
       name: {{ .Values.strongdm.config.secretName }}
   {{- end}}
-
   {{- if .Values.strongdm.auth.tokenSecret }}
   - secretRef:
       name: {{ .Values.strongdm.auth.tokenSecret }}
   {{- end }}
-
   {{- if .Values.strongdm.auth.adminTokenSecret }}
   - secretKeyRef:
       name: {{ .Values.strongdm.auth.adminTokenSecret }}
