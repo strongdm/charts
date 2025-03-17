@@ -20,7 +20,7 @@ spec:
       labels:
         {{- include "strongdm.labels" . | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print .Template.BasePath "/ConfigMap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- range $k, $v := .Values.strongdm.pod.annotations }}
         {{ $k }}: {{ $v | quote }}
         {{- end }}
@@ -45,7 +45,6 @@ spec:
           {{- range $k, $v := .Values.strongdm.config.extraArgs }}
           {{ $k }}: {{ $v | quote }}
           {{- end }}
-
           livenessProbe:
             httpGet:
               path: /liveness
