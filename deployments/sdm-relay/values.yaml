@@ -15,7 +15,7 @@ strongdm:
   ## @param strongdm.image - Container repository and pull config.
   ##
   image:
-    imagePullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/relay
     tag: ""
     digest: ""
@@ -23,25 +23,25 @@ strongdm:
   ## General configuration.
   ##
   ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
-  ## @param strongdm.config.configMapName - k8s ConfigMap storing additional configuration values. Please review the docs for the required format of these values.
-  ## @param strongdm.config secretName - k8s Secret storing additional configuration values. Please review the docs for the required format of these values.
-  ## @param strongdm.config.extraArgs - List of additional arguments to pass to the relay startup command. Format ["--key1 value1", "--key2 value2"].
+  ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates.
+  ## @param strongdm.config.maintenanceWindowStart - Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
+  ## @param strongdm.config.enableMetrics - Enable Prometheus metrics on port 9999.
   ## @param strongdm.config.logOptions - Configuration for container logs.
   ##
   config:
     domain: strongdm.com
-    configMapName: ""
-    secretName: ""
-    extraArgs: []
+    disableAutoUpdate: false
+    maintenanceWindowStart: 0
+    enableMetrics: false
     logOptions:
       format: json
       storage: stdout
       encryption: plaintext
 
-  ## StrongDM authentication sources. At least one of the following must be provided.
+  ## StrongDM authentication sources. Exactly one of the following must be provided.
   ##
-  ## @param global.token - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.tokenSecret.
-  ## @param global.tokenSecret - Name of the k8s Secret that contains SDM_RELAY_TOKEN.
+  ## @param strongdm.auth.token - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.tokenSecret.
+  ## @param strongdm.auth.tokenSecret - Name of the k8s Secret that contains SDM_RELAY_TOKEN.
   ##
   auth:
     token: ""
@@ -84,26 +84,27 @@ strongdm:
 
   ## Pod configuration.
   ##
-  ## @param strongdm.pod.resources - Set the Pod resource requests and limits.
   ## @param strongdm.pod.annotations - Map of annotations to add to Pods.
   ## @param strongdm.pod.labels - Map of labels to add to Pods.
+  ## @param strongdm.pod.resources - Set the Pod resource requests and limits.
   pod:
+    annotations: {}
+    labels: {}
     resources:
       requests:
         memory: 1Gi
       limits:
         memory: 1Gi
-    annotations: {}
-    labels: {}
-    livenessPort: 9090
 
-  ## Service account configuration. Required when this deployment must interact with external APIs, like AWS Secrets Manager, Azure Key Vault, etc.
+  ## Service account configuration.
   ##
-  ## @param strongdm.serviceAccount - Configuration for the k8s service account if chosen to be created by this Chart.
+  ## @param strongdm.serviceAccount.create - Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
+  ## @param strongdm.serviceAccount.name - Name of an existing ServiceAccount to use.
+  ## @param strongdm.serviceAccount.annotations - Map of annotations to add to the ServiceAccount, should one be created.
+  ## @param strongdm.serviceAccount.labels - Map of labels to add to the ServiceAccount, should one be created.
   ##
   serviceAccount:
     create: false
-    name: strongdm
-    automountToken: true
+    name: ""
     annotations: {}
     labels: {}

@@ -26,8 +26,8 @@ spec:
         {{- end }}
     spec:
       restartPolicy: Always
-      {{- if .Values.strongdm.serviceAccount.create }}
-      serviceAccountName: {{ .Values.strongdm.serviceAccount.name }}
+      {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
+      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
       {{- end }}
       terminationGracePeriodSeconds: 10
       containers:
@@ -35,20 +35,31 @@ spec:
           image: {{ template "strongdm.imageURI" . }}
           imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
           {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
-          {{- include "strongdm.envFrom" . | nindent 10 }}
-          {{- if .Values.strongdm.gateway.enabled }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+            {{- if .Values.strongdm.auth.token }}
+            - secretRef:
+                name: {{ .Release.Name }}-secrets
+            {{- else if .Values.strongdm.auth.tokenSecret }}
+            - secretRef:
+                name: {{ .Values.strongdm.auth.tokenSecret }}
+            {{- end }}
           ports:
+            {{- if .Values.strongdm.gateway.enabled }}
             - name: gateway
               containerPort: {{ .Values.strongdm.gateway.containerPort }}
               protocol: TCP
-          {{- end }}
-          {{- range $k, $v := .Values.strongdm.config.extraArgs }}
-          {{ $k }}: {{ $v | quote }}
-          {{- end }}
+            {{- end }}
+            {{- if .Values.strongdm.config.enableMetrics }}
+            - name: metrics
+              containerPort: 9999
+              protocol: TCP
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /liveness
-              port: {{ .Values.strongdm.pod.livenessPort }}
+              port: 9090
             initialDelaySeconds: 25
             timeoutSeconds: 10
             periodSeconds: 15

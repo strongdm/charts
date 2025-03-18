@@ -10,7 +10,10 @@ metadata:
     {{- include "strongdm.labels" . | nindent 4 }}
 data:
   SDM_DOMAIN: {{ .Values.strongdm.config.domain }}
+  SDM_DISABLE_UPDATE: {{ .Values.strongdm.config.disableAutoUpdate | quote }}
+  SDM_MAINTENANCE_WINDOW_START: {{ .Values.strongdm.config.maintenanceWindowStart | quote }}
   SDM_RELAY_LOG_FORMAT: {{ .Values.strongdm.config.logOptions.format }}
   SDM_RELAY_LOG_STORAGE: {{ .Values.strongdm.config.logOptions.storage }}
   SDM_RELAY_LOG_ENCRYPTION: {{ .Values.strongdm.config.logOptions.encryption }}
-  SDM_ORCHESTRATOR_PROBES: :{{ .Values.strongdm.pod.livenessPort }}
+  SDM_ORCHESTRATOR_PROBES: :9999
+  SDM_METRICS_LISTEN_ADDRESS: {{ .Values.strongdm.config.enableMetrics | ternary ":9999" "" }}
