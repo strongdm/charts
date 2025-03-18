@@ -1,0 +1,51 @@
+{{- if .Values.strongdm.autoRegisterCluster.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-register-cluster
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-weight: "-1"
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      annotations:
+        {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.pod.annotations) .) | nindent 8 }}
+      labels:
+        {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.pod.labels) .) | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: sdm
+          image: {{ template "strongdm.imageURI" . }}
+          imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 256m
+            limits:
+              memory: 256Mi
+          env:
+            - name: SDM_ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name) }}
+                  key: SDM_ADMIN_TOKEN
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+          command:
+            - /bin/bash
+            - -c
+            - |
+              /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
+              /sdm.linux admin clusters add k8spodidentity --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt {{ .Values.strongdm.autoRegisterCluster.extraArgs }} {{ .Values.strongdm.autoRegisterCluster.resourceName | default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) }}
+{{- end}}

@@ -1,0 +1,9 @@
+## Test file to be merged with values.yaml.
+##
+## Set all "create" flags to true to exhaust as many config options as possible.
+##
+strongdm:
+  serviceAccount:
+    create: true
+  autoRegisterCluster:
+    enabled: true
