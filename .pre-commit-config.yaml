@@ -14,21 +14,30 @@ repos:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 
+-   repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.26
+    hooks:
+    -   id: helmlint
+    -   id: shellcheck
+
 -   repo: local
     hooks:
     -   id: template-install-relay
         name: Helm template | install | relay
         entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+          -f deployments/sdm-relay/values.test.yaml
         language: system
         pass_filenames: false
     -   id: template-install-gateway
         name: Helm template | install | gateway
-        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --set strongdm.gateway.enabled=true
+        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+          -f deployments/sdm-relay/values.test.yaml --set strongdm.gateway.enabled=true
         language: system
         pass_filenames: false
     -   id: template-install-proxy
         name: Helm template | install | proxy
         entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
+          -f deployments/sdm-proxy/values.test.yaml
         language: system
         pass_filenames: false
     -   id: template-install-client
@@ -38,27 +47,38 @@ repos:
         pass_filenames: false
     -   id: template-upgrade-relay
         name: Helm template | upgrade | relay
-        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --is-upgrade
+        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+          -f deployments/sdm-relay/values.test.yaml --is-upgrade
         language: system
         pass_filenames: false
     -   id: template-upgrade-gateway
         name: Helm template | upgrade | gateway
-        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml --is-upgrade --set strongdm.gateway.enabled=true
+        entry: helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+          -f deployments/sdm-relay/values.test.yaml --is-upgrade --set strongdm.gateway.enabled=true
         language: system
         pass_filenames: false
     -   id: template-upgrade-proxy
         name: Helm template | upgrade | proxy
-        entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml --is-upgrade
+        entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
+          --is-upgrade -f deployments/sdm-proxy/values.test.yaml
         language: system
         pass_filenames: false
     -   id: template-upgrade-client
         name: Helm template | upgrade | client
-        entry: helm template deployments/sdm-client -f deployments/sdm-client/values.yaml --is-upgrade
+        entry: helm template deployments/sdm-client -f deployments/sdm-client/values.yaml
+          --is-upgrade
         language: system
         pass_filenames: false
 
--   repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.26
+-   repo: https://github.com/losisin/helm-values-schema-json
+    rev: v1.8.0
     hooks:
-    -   id: helmlint
-    -   id: shellcheck
+    -   id: helm-schema
+        name: helm-schema | relay
+        args: ["-input", "deployments/sdm-relay/values.yaml", "-output", "deployments/sdm-relay/values.schema.json"]
+    -   id: helm-schema
+        name: helm-schema | proxy
+        args: ["-input", "deployments/sdm-proxy/values.yaml", "-output", "deployments/sdm-proxy/values.schema.json"]
+    -   id: helm-schema
+        name: helm-schema | client
+        args: ["-input", "deployments/sdm-client/values.yaml", "-output", "deployments/sdm-client/values.schema.json"]

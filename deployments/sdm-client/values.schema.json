@@ -1,0 +1,64 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+        "configMap": {
+            "properties": {
+                "SDM_DOCKERIZED": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "global": {
+            "properties": {
+                "addDateLabel": {
+                    "type": "boolean"
+                },
+                "deployment": {
+                    "properties": {
+                        "digest": {
+                            "type": "string"
+                        },
+                        "imagePullPolicy": {
+                            "type": "string"
+                        },
+                        "ports": {
+                            "items": {
+                                "type": "integer"
+                            },
+                            "type": "array"
+                        },
+                        "replicas": {
+                            "type": "integer"
+                        },
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "secret": {
+                    "properties": {
+                        "token": {
+                            "type": "null"
+                        }
+                    },
+                    "type": "object"
+                },
+                "service": {
+                    "properties": {
+                        "type": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "type": "object"
+}

@@ -1,0 +1,211 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+        "global": {
+            "properties": {
+                "addDateLabel": {
+                    "type": "boolean"
+                },
+                "annotations": {
+                    "properties": {},
+                    "type": "object"
+                },
+                "labels": {
+                    "properties": {},
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "strongdm": {
+            "properties": {
+                "auth": {
+                    "properties": {
+                        "adminToken": {
+                            "type": "string"
+                        },
+                        "authSecretName": {
+                            "type": "string"
+                        },
+                        "relayToken": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "autoRegisterCluster": {
+                    "properties": {
+                        "adminToken": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "extraArgs": {
+                            "type": "string"
+                        },
+                        "resourceName": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "config": {
+                    "properties": {
+                        "disableAutoUpdate": {
+                            "type": "boolean"
+                        },
+                        "domain": {
+                            "type": "string"
+                        },
+                        "enableMetrics": {
+                            "type": "boolean"
+                        },
+                        "logOptions": {
+                            "properties": {
+                                "encryption": {
+                                    "type": "string"
+                                },
+                                "format": {
+                                    "type": "string"
+                                },
+                                "storage": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "maintenanceWindowStart": {
+                            "type": "integer"
+                        }
+                    },
+                    "type": "object"
+                },
+                "deployment": {
+                    "properties": {
+                        "annotations": {
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "labels": {
+                            "properties": {},
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "gateway": {
+                    "properties": {
+                        "containerPort": {
+                            "type": "integer"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "listenPort": {
+                            "type": "integer"
+                        },
+                        "service": {
+                            "properties": {
+                                "annotations": {
+                                    "properties": {},
+                                    "type": "object"
+                                },
+                                "labels": {
+                                    "properties": {},
+                                    "type": "object"
+                                },
+                                "loadBalancerIP": {
+                                    "type": "string"
+                                },
+                                "nodePort": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "image": {
+                    "properties": {
+                        "digest": {
+                            "type": "string"
+                        },
+                        "pullPolicy": {
+                            "type": "string"
+                        },
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "pod": {
+                    "properties": {
+                        "annotations": {
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "labels": {
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "resources": {
+                            "properties": {
+                                "limits": {
+                                    "properties": {
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "requests": {
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "serviceAccount": {
+                    "properties": {
+                        "annotations": {
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "create": {
+                            "type": "boolean"
+                        },
+                        "labels": {
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "type": "object"
+}
