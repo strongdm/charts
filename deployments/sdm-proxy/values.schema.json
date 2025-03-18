@@ -24,13 +24,13 @@
                         "adminToken": {
                             "type": "string"
                         },
-                        "authSecretName": {
-                            "type": "string"
-                        },
                         "clusterKey": {
                             "type": "string"
                         },
                         "clusterSecret": {
+                            "type": "string"
+                        },
+                        "secretName": {
                             "type": "string"
                         }
                     },
@@ -38,9 +38,6 @@
                 },
                 "autoRegisterCluster": {
                     "properties": {
-                        "adminToken": {
-                            "type": "string"
-                        },
                         "enabled": {
                             "type": "boolean"
                         },

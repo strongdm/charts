@@ -37,7 +37,7 @@ spec:
             - name: SDM_ADMIN_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.strongdm.auth.authSecretName | default (printf "%s-secrets" .Release.Name) }}
+                  name: {{ .Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name) }}
                   key: SDM_ADMIN_TOKEN
           envFrom:
             - configMapRef:

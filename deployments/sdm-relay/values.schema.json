@@ -24,10 +24,10 @@
                         "adminToken": {
                             "type": "string"
                         },
-                        "authSecretName": {
+                        "relayToken": {
                             "type": "string"
                         },
-                        "relayToken": {
+                        "secretName": {
                             "type": "string"
                         }
                     },
@@ -35,9 +35,6 @@
                 },
                 "autoRegisterCluster": {
                     "properties": {
-                        "adminToken": {
-                            "type": "string"
-                        },
                         "enabled": {
                             "type": "boolean"
                         },

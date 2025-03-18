@@ -48,18 +48,17 @@ strongdm:
     enabled: false
     resourceName: ""
     extraArgs: ""
-    adminToken: ""
 
   ## StrongDM authentication sources.
   ##
   ## @param strongdm.auth.relayToken - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
-  ## @param strongdm.auth.adminToken - The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.adminTokenSecret.
-  ## @param strongdm.auth.authSecretName - Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.
+  ## @param strongdm.auth.adminToken - The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+  ## @param strongdm.auth.secretName - Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.
   ##
   auth:
     relayToken: ""
     adminToken: ""
-    authSecretName: ""
+    secretName: ""
 
   ## Gateway configuration.
   ##

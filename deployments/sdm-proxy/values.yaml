@@ -48,19 +48,18 @@ strongdm:
     enabled: false
     resourceName: ""
     extraArgs: ""
-    adminToken: ""
 
   ## StrongDM authentication sources.
   ##
-  ## @param strongdm.auth.clusterKey - The SDM_PROXY_CLUSTER_ACCESS_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.authSecretName.
-  ## @param strongdm.auth.clusterSecret - The SDM_PROXY_CLUSTER_SECRET_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.authSecretName.
-  ## @param strongdm.auth.adminToken - The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.authSecretName.
-  ## @param strongdm.auth.authSecretName - Name of the k8s Secret that contains SDM_PROXY_CLUSTER_ACCESS_KEY and SDM_PROXY_CLUSTER_SECRET_KEY, and/or SDM_ADMIN_TOKEN.
+  ## @param strongdm.auth.clusterKey - The SDM_PROXY_CLUSTER_ACCESS_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+  ## @param strongdm.auth.clusterSecret - The SDM_PROXY_CLUSTER_SECRET_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+  ## @param strongdm.auth.adminToken - The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+  ## @param strongdm.auth.secretName - Name of the k8s Secret that contains SDM_PROXY_CLUSTER_ACCESS_KEY and SDM_PROXY_CLUSTER_SECRET_KEY, and/or SDM_ADMIN_TOKEN.
   auth:
     clusterKey: ""
     clusterSecret: ""
     adminToken: ""
-    authSecretName: ""
+    secretName: ""
 
   ## Service configuration.
   ##
