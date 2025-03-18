@@ -38,7 +38,7 @@ strongdm:
       storage: stdout
       encryption: plaintext
 
-  ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the support @strongdm.auth methods.
+  ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
   ##
   ## @param strongdm.config.autoRegisterCluster.enabled - Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
   ## @param strongdm.config.autoRegisterCluster.resourceName - Name of the StrongDM Pod Identity Cluster resource to create.
