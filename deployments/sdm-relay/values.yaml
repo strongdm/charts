@@ -50,7 +50,7 @@ strongdm:
   ## Gateway configuration.
   ##
   ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other strongdm.gateway values are ignored.
-  ## @param strongdm.gateway.listenPort - Port on which the gateway service is expecting traffic.
+  ## @param strongdm.gateway.listenPort - Port on which the Service is expecting traffic.
   ## @param strongdm.gateway.containerPort - Port on which the container runs.
   ##
   gateway:
@@ -60,12 +60,11 @@ strongdm:
 
     ## Service configuration. Ignored unless strongdm.gateway.enabled.
     ##
-    ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the service.
-    ## @param strongdm.gateway.service.labels - Map of labels to apply to the service.
-    ## @param strongdm.gateway.service.type - Specify the type of service to front the deployment.
-    ## @param strongdm.gateway.service.port - Port to expose via the service. Conflicts with strongdm.gateway.service.nodePort.
+    ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the Service.
+    ## @param strongdm.gateway.service.labels - Map of labels to apply to the Service.
+    ## @param strongdm.gateway.service.type - Specify the type of Service to front the deployment.
     ## @param strongdm.gateway.service.nodePort - NodePort to which to bind this service, if desired.
-    ## @param strongdm.gateway.service.loadBalancerIP - IP address to optionally pin a LoadBalancer service.
+    ## @param strongdm.gateway.service.loadBalancerIP - IP address to which to pin a LoadBalancer Service.
     ##
     service:
       annotations: {}

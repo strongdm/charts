@@ -46,6 +46,9 @@ spec:
                 name: {{ .Values.strongdm.auth.tokenSecret }}
             {{- end }}
           ports:
+            - name: healthcheck
+              containerPort: 9090
+              protocol: TCP
             {{- if .Values.strongdm.gateway.enabled }}
             - name: gateway
               containerPort: {{ .Values.strongdm.gateway.containerPort }}

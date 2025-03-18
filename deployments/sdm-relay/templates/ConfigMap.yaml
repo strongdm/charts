@@ -15,5 +15,5 @@ data:
   SDM_RELAY_LOG_FORMAT: {{ .Values.strongdm.config.logOptions.format }}
   SDM_RELAY_LOG_STORAGE: {{ .Values.strongdm.config.logOptions.storage }}
   SDM_RELAY_LOG_ENCRYPTION: {{ .Values.strongdm.config.logOptions.encryption }}
-  SDM_ORCHESTRATOR_PROBES: :9999
+  SDM_ORCHESTRATOR_PROBES: :9090
   SDM_METRICS_LISTEN_ADDRESS: {{ .Values.strongdm.config.enableMetrics | ternary ":9999" "" }}
