@@ -19,13 +19,11 @@ spec:
       {{- include "strongdm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        {{- include "strongdm.labels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
-        {{- range $k, $v := .Values.strongdm.pod.annotations }}
-        {{ $k }}: {{ $v | quote }}
-        {{- end }}
+        {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.pod.annotations) .) | nindent 8 }}
+      labels:
+        {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.pod.labels) .) | nindent 8 }}
     spec:
       restartPolicy: Always
       {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
@@ -56,16 +54,19 @@ spec:
                   containerName: sdm
                   resource: requests.cpu
                   divisor: "1"
+            - name: SDM_PROXY_CLUSTER_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.strongdm.auth.authSecretName | default (printf "%s-secrets" .Release.Name) }}
+                  key: SDM_PROXY_CLUSTER_ACCESS_KEY
+            - name: SDM_PROXY_CLUSTER_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.strongdm.auth.authSecretName | default (printf "%s-secrets" .Release.Name) }}
+                  key: SDM_PROXY_CLUSTER_SECRET_KEY
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-config
-            {{- if and .Values.strongdm.auth.clusterKey .Values.strongdm.auth.clusterSecret  }}
-            - secretRef:
-                name: {{ .Release.Name }}-secrets
-            {{- else if .Values.strongdm.auth.secret }}
-            - secretRef:
-                name: {{ .Values.strongdm.auth.secret }}
-            {{- end }}
           ports:
             - name: healthcheck
               containerPort: 9090

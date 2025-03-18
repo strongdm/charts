@@ -38,18 +38,32 @@ strongdm:
       storage: stdout
       encryption: plaintext
 
-  ## StrongDM authentication sources. Exactly one of the following must be provided.
+  ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the support strongdm.auth methods.
   ##
-  ## @param strongdm.auth.token - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.tokenSecret.
-  ## @param strongdm.auth.tokenSecret - Name of the k8s Secret that contains SDM_RELAY_TOKEN.
+  ## @param strongdm.config.autoRegisterCluster.enabled - Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
+  ## @param strongdm.config.autoRegisterCluster.resourceName - Name of the StrongDM Pod Identity Cluster resource to create.
+  ## @param strongdm.config.autoRegisterCluster.extraArgs - Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
+  ##
+  autoRegisterCluster:
+    enabled: false
+    resourceName: ""
+    extraArgs: ""
+    adminToken: ""
+
+  ## StrongDM authentication sources.
+  ##
+  ## @param strongdm.auth.relayToken - The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+  ## @param strongdm.auth.adminToken - The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.adminTokenSecret.
+  ## @param strongdm.auth.authSecretName - Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.
   ##
   auth:
-    token: ""
-    tokenSecret: ""
+    relayToken: ""
+    adminToken: ""
+    authSecretName: ""
 
   ## Gateway configuration.
   ##
-  ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other strongdm.gateway values are ignored.
+  ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.
   ## @param strongdm.gateway.listenPort - Port on which the Service is expecting traffic.
   ## @param strongdm.gateway.containerPort - Port on which the container runs.
   ##
@@ -58,7 +72,7 @@ strongdm:
     listenPort: 5000
     containerPort: 5000
 
-    ## Service configuration. Ignored unless strongdm.gateway.enabled.
+    ## Service configuration. Ignored unless @strongdm.gateway.enabled.
     ##
     ## @param strongdm.gateway.service.annotations - Map of annotations to apply to the Service.
     ## @param strongdm.gateway.service.labels - Map of labels to apply to the Service.
@@ -98,7 +112,7 @@ strongdm:
 
   ## Service account configuration.
   ##
-  ## @param strongdm.serviceAccount.create - Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
+  ## @param strongdm.serviceAccount.create - Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
   ## @param strongdm.serviceAccount.name - Name of an existing ServiceAccount to use.
   ## @param strongdm.serviceAccount.annotations - Map of annotations to add to the ServiceAccount, should one be created.
   ## @param strongdm.serviceAccount.labels - Map of labels to add to the ServiceAccount, should one be created.
