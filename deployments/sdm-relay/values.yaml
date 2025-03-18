@@ -111,7 +111,8 @@ strongdm:
 
   ## Service account configuration.
   ##
-  ## @param strongdm.serviceAccount.create - Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
+  ## @param strongdm.serviceAccount.create - Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount, falling back to the default ServiceAccount for that namespace.
+
   ## @param strongdm.serviceAccount.name - Name of an existing ServiceAccount to use.
   ## @param strongdm.serviceAccount.annotations - Map of annotations to add to the ServiceAccount, should one be created.
   ## @param strongdm.serviceAccount.labels - Map of labels to add to the ServiceAccount, should one be created.
