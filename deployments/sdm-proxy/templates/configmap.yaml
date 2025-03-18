@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+data:
+  SDM_DOMAIN: {{ .Values.strongdm.config.domain }}
+  SDM_DISABLE_UPDATE: {{ .Values.strongdm.config.disableAutoUpdate | quote }}
+  SDM_MAINTENANCE_WINDOW_START: {{ .Values.strongdm.config.maintenanceWindowStart | quote }}
+  SDM_RELAY_LOG_FORMAT: {{ .Values.strongdm.config.logOptions.format }}
+  SDM_RELAY_LOG_STORAGE: {{ .Values.strongdm.config.logOptions.storage }}
+  SDM_RELAY_LOG_ENCRYPTION: {{ .Values.strongdm.config.logOptions.encryption }}
+  SDM_ORCHESTRATOR_PROBES: :9090
+  SDM_METRICS_LISTEN_ADDRESS: {{ .Values.strongdm.config.enableMetrics | ternary ":9999" "" }}

@@ -35,6 +35,13 @@ spec:
           image: {{ template "strongdm.imageURI" . }}
           imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
           {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
+          env:
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  containerName: sdm
+                  resource: requests.cpu
+                  divisor: "1"
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-config

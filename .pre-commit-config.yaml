@@ -28,8 +28,7 @@ repos:
         pass_filenames: false
     -   id: template-install-proxy
         name: Helm template | install | proxy
-        # entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
-        entry: echo foo
+        entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
         language: system
         pass_filenames: false
     -   id: template-install-client
@@ -49,8 +48,7 @@ repos:
         pass_filenames: false
     -   id: template-upgrade-proxy
         name: Helm template | upgrade | proxy
-        # entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml --is-upgrade
-        entry: echo foo
+        entry: helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml --is-upgrade
         language: system
         pass_filenames: false
     -   id: template-upgrade-client

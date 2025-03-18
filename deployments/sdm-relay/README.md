@@ -19,7 +19,7 @@ This repo provides an implementation of a StrongDM relay or gateway inside Kuber
 * A [StrongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways)
 
 > [!NOTE]
-> To get a Gateway Token you'll need an external address to register. You may change this external address after creation with the StrongDM CLI.
+> To get a Gateway token, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a Gateway in the Admin UI with a placeholder name. You may change this value after creation with the StrongDM CLI.
 
 ## Installing the Chart
 
