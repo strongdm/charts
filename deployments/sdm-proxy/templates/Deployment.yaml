@@ -1,71 +1,88 @@
-kind: Deployment
+---
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: {{ .Release.Name }}
-  labels:
-    app: {{ .Release.Name }}
-    {{- include "sdm.labels" . | indent 4 }}
-    {{- if .Values.deployment.labels }}
-{{ toYaml .Values.deployment.labels | indent 4 }}
-    {{- end }}
-  {{- if .Values.deployment.annotations }}
+  namespace: {{ .Release.Namespace }}
   annotations:
-{{ toYaml .Values.deployment.annotations | indent 4 }}
-  {{- end }}
+    {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.deployment.annotations) .) | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.deployment.labels) .) | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replicas | default 2 }}
+  replicas: {{ .Values.strongdm.deployment.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 200%
+      maxUnavailable: 0%
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      {{- include "strongdm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
-        {{- if .Values.deployment.labels }}
-{{ toYaml .Values.deployment.labels | indent 8 }}
-        {{- end }}
-      {{- if .Values.deployment.annotations }}
+        {{- include "strongdm.labels" . | nindent 8 }}
       annotations:
-{{ toYaml .Values.deployment.annotations | indent 8 }}
-      {{- end }}
-    spec:
-      {{- with .Values.serviceAccount }}
-      serviceAccountName: {{ $.Release.Name }}-svcacct
-      {{- end }}
-      containers:
-      - name: {{ .Release.Name }}
-        image: {{ template "sdm.imageURI" (merge (dict "name" "proxy") .Values.deployment) }}
-        imagePullPolicy: {{ .Values.deployment.imagePullPolicy | default "Always" }}
-        args: ["proxy", "-d"]
-        ports:
-          - containerPort: 8443
-            name: sdm-proxy-port
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        envFrom:
-        - secretRef:
-            name: {{ .Values.proxyClusterKeySecretRef }}
-      {{- with .Values.deployment.envFrom }}
-{{ toYaml . | indent 8 }}
-      {{- end }}
-        env:
-        - name: GOMAXPROCS
-          valueFrom:
-            resourceFieldRef:
-              containerName: {{ .Release.Name }}
-              resource: requests.cpu
-              divisor: "1"
-      {{- with .Values.deployment.env -}}
-        {{- range $key, $value := . }}
-        - name: {{ $key }}
-          value: {{ $value | quote }}
+        checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- range $k, $v := .Values.strongdm.pod.annotations }}
+        {{ $k }}: {{ $v | quote }}
         {{- end }}
+    spec:
+      restartPolicy: Always
+      {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
+      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
       {{- end }}
-        livenessProbe:
-          httpGet:
-            path: /liveness
-            port: 9090
-          initialDelaySeconds: 25
-          timeoutSeconds: 10
-          periodSeconds: 15
-          failureThreshold: 5
+      terminationGracePeriodSeconds: 10
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.strongdm.deployment.topologySpreadConstraints.maxSkew }}
+          topologyKey: {{ .Values.strongdm.deployment.topologySpreadConstraints.topologyKey }}
+          whenUnsatisfiable: {{ .Values.strongdm.deployment.topologySpreadConstraints.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              {{- include "strongdm.selectorLabels" . | nindent 14 }}
+            {{- if semverCompare ">=1.27.0" .Capabilities.KubeVersion.Version }}
+            matchLabelKeys:
+              - pod-template-hash
+            {{- end }}
+      containers:
+        - name: sdm
+          image: {{ template "strongdm.imageURI" . }}
+          imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
+          {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
+          args: ["proxy", "-d"]
+          env:
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  containerName: sdm
+                  resource: requests.cpu
+                  divisor: "1"
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-config
+            {{- if and .Values.strongdm.auth.clusterKey .Values.strongdm.auth.clusterSecret  }}
+            - secretRef:
+                name: {{ .Release.Name }}-secrets
+            {{- else if .Values.strongdm.auth.secret }}
+            - secretRef:
+                name: {{ .Values.strongdm.auth.secret }}
+            {{- end }}
+          ports:
+            - name: healthcheck
+              containerPort: 9090
+              protocol: TCP
+            - name: proxy
+              containerPort: {{ .Values.strongdm.service.containerPort }}
+              protocol: TCP
+            {{- if .Values.strongdm.config.enableMetrics }}
+            - name: metrics
+              containerPort: 9999
+              protocol: TCP
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 9090
+            initialDelaySeconds: 25
+            timeoutSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 5

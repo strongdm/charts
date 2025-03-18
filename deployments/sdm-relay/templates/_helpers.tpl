@@ -37,33 +37,6 @@ app.kubernetes.io/name: {{ .Chart.Name }}
 {{ include "strongdm.componentLabel" . }}
 {{- end }}
 
-{{- define "strongdm.envFrom" -}}
-envFrom:
-  - configMapRef:
-      name: {{ .Release.Name }}-config
-
-  {{- if .Values.strongdm.config.configMapName }}
-  - configMapRef:
-      name: {{ .Values.strongdm.config.configMapName }}
-  {{- end}}
-  {{- if or .Values.strongdm.auth.token .Values.strongdm.auth.adminToken }}
-  - secretRef:
-      name: {{ .Release.Name }}-secrets
-  {{- end }}
-  {{- if .Values.strongdm.config.secretName }}
-  - secretRef:
-      name: {{ .Values.strongdm.config.secretName }}
-  {{- end}}
-  {{- if .Values.strongdm.auth.tokenSecret }}
-  - secretRef:
-      name: {{ .Values.strongdm.auth.tokenSecret }}
-  {{- end }}
-  {{- if .Values.strongdm.auth.adminTokenSecret }}
-  - secretKeyRef:
-      name: {{ .Values.strongdm.auth.adminTokenSecret }}
-  {{- end }}
-{{- end }}
-
 # Args:
 # - resources: map of limits and requests
 {{- define "strongdm.resources" -}}

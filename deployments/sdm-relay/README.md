@@ -16,10 +16,10 @@ This repo provides an implementation of a StrongDM relay or gateway inside Kuber
 * Helm 3.0+
 * Git
 * If you are going to use [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/), then you will need to manually patch your [services to allow TCP and UDP traffic](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/)
-* Either a [StrongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways) or else an [Admin Token](https://www.strongdm.com/docs/admin/users/admin-tokens/) with the `relay:create` permission which will be used to generate the gateway/relay token.
+* A [StrongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways)
 
 > [!NOTE]
-> To get a Gateway Token you'll need an external address to register. You may change this external address after creation with the StrongDM CLI.
+> To get a Gateway token, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a Gateway in the Admin UI with a placeholder name. You may change this value after creation with the StrongDM CLI.
 
 ## Installing the Chart
 

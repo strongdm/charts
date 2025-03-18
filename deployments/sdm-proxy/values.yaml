@@ -1,65 +1,112 @@
-addDateLabel: true # adds timestamp label to all resources
+global:
+  ## Metadata applied to all resources.
+  ##
+  ## @param global.addDateLabel - Adds a 'date: {{ now | htmlDate }}' label to all resources.
+  ## @param global.annotations - Map of annotations to add to all resources.
+  ## @param global.labels - Map of labels to add to all resources.
+  ##
+  addDateLabel: true
+  annotations: {}
+  labels: {}
 
-# required. specify the name of a Secret containing the following environment variables:
-#  SDM_PROXY_CLUSTER_ACCESS_KEY: e.g. pk-4e172ba367007f0c
-#  SDM_PROXY_CLUSTER_SECRET_KEY: <...>
-proxyClusterKeySecretRef: proxy-cluster-key
+strongdm:
+  ## Image pull configuration.
+  ##
+  ## @param strongdm.image - Container repository and pull config.
+  ##
+  image:
+    pullPolicy: IfNotPresent
+    repository: public.ecr.aws/strongdm/relay
+    tag: ""
+    digest: ""
 
-# Pod resources. The limits and requests should be set to the same values.
-resources:
-  limits:
-    cpu: 2
-    memory: 4Gi
-  requests:
-    cpu: 2
-    memory: 4Gi
+  ## General configuration.
+  ##
+  ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
+  ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates.
+  ## @param strongdm.config.maintenanceWindowStart - Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
+  ## @param strongdm.config.enableMetrics - Enable Prometheus metrics on port 9999.
+  ## @param strongdm.config.logOptions - Configuration for container logs.
+  ##
+  config:
+    domain: strongdm.com
+    disableAutoUpdate: false
+    maintenanceWindowStart: 0
+    enableMetrics: false
+    logOptions:
+      format: json
+      storage: stdout
+      encryption: plaintext
 
-service:
-  type: LoadBalancer
-  port: 443
-  # loadBalancerIP:
-  annotations:
-    # Example annotations for AWS. For more info see https://github.com/kubernetes-sigs/aws-load-balancer-controller
-    service.beta.kubernetes.io/aws-load-balancer-type: external
-    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
-    service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=true
-    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+  ## StrongDM authentication sources. Exactly one of the following must be provided.
+  ##
+  ## @param strongdm.auth.clusterKey - The SDM_PROXY_CLUSTER_ACCESS_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.secret.
+  ## @param strongdm.auth.clusterSecret - The SDM_PROXY_CLUSTER_SECRET_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to strongdm.auth.secret.
+  ## @param strongdm.auth.secret - Name of the k8s Secret that contains SDM_PROXY_CLUSTER_ACCESS_KEY and SDM_PROXY_CLUSTER_SECRET_KEY.
+  ##
+  auth:
+    clusterKey: ""
+    clusterSecret: ""
+    secret: ""
 
-deployment:
-  repository: public.ecr.aws/strongdm/relay
-  tag: latest
-  digest: ""
-  imagePullPolicy: Always
+  ## Service configuration.
+  ##
+  ## @param strongdm.service.annotations - Map of annotations to apply to the Service.
+  ## @param strongdm.service.labels - Map of labels to apply to the Service.
+  ## @param strongdm.service.type - Specify the type of Service to front the deployment.
+  ## @param strongdm.containerPort - Port on which the container runs.
+  ## @param strongdm.listenPort - Port on which the Service is expecting traffic.
+  ## @param strongdm.service.nodePort - NodePort to which to bind this service, if desired.
+  ## @param strongdm.service.loadBalancerIP - IP address to which to pin a LoadBalancer Service.
+  ##
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    listenPort: 443
+    containerPort: 8443
+    nodePort: ""
+    loadBalancerIP: ""
 
-  # (Optional) adds additional annotations to the deployment and pod template
-  annotations:
+  ## Deployment configuration.
+  ##
+  ## @param strongdm.deployment.annotations - Map of annotations to add to the Deployment.
+  ## @param strongdm.deployment.labels - Map of labels to add to the Deployment.
+  ## @param strongdm.compute.replicaCount - Number of Pods to run in the deployment.
+  ## @param strongdm.compute.topologySpreadConstraints - Pod spread constraints. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.
+  deployment:
+    annotations: {}
+    labels: {}
+    replicaCount: 2
+    topologySpreadConstraints:
+      maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: ScheduleAnyway
 
-  # (Optional) adds additional labels to the deployment and pod template. These are not used as part of the selector.
-  labels:
+  ## Pod configuration.
+  ##
+  ## @param strongdm.pod.annotations - Map of annotations to add to Pods.
+  ## @param strongdm.pod.labels - Map of labels to add to Pods.
+  ## @param strongdm.pod.resources - Set the Pod resource requests and limits.
+  pod:
+    annotations: {}
+    labels: {}
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1024m
+      limits:
+        memory: 1Gi
 
-  # Extra environment variables. Options can be found [here](https://www.strongdm.com/docs/architecture/deployment/environment-variables).
-  env:
-    SDM_BIND_ADDRESS: ":8443"
-    SDM_DOCKERIZED: "true"
-    SDM_ORCHESTRATOR_PROBES: ":9090"
-    # SDM_RELAY_LOG_FORMAT: "json"
-    # SDM_RELAY_LOG_STORAGE: "stdout"
-    # SDM_RELAY_LOG_ENCRYPTION: "plaintext"
-
-  # (Optional) extra Secrets or ConfigMaps to load into the environment.
-  envFrom:
-    # - configMapRef:
-    #     name: my-config
-    # - secretRef:
-    #     name: my-secret
-
-# Optional ServiceAccount. For example, when using Azure Workload Identity to
-# grant access to an Azure Key Vault Secret Store, ServiceAccount annotations
-# and labels are required.
-# (https://azure.github.io/azure-workload-identity/docs/quick-start.html#5-create-a-kubernetes-service-account)
-
-# serviceAccount:
-#   annotations:
-#     foo: bar
-#   labels:
-#     bar: foo
+  ## Service account configuration.
+  ##
+  ## @param strongdm.serviceAccount.create - Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
+  ## @param strongdm.serviceAccount.name - Name of an existing ServiceAccount to use.
+  ## @param strongdm.serviceAccount.annotations - Map of annotations to add to the ServiceAccount, should one be created.
+  ## @param strongdm.serviceAccount.labels - Map of labels to add to the ServiceAccount, should one be created.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    annotations: {}
+    labels: {}
