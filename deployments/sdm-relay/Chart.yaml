@@ -1,7 +1,7 @@
 apiVersion: v2
 name: sdm-relay
 kubeVersion: ">= 1.16.0-0"
-version: 1.0.5
+version: 1.0.4
 appVersion: 46.77.0
 description: StrongDM Relay
 type: application
