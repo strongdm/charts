@@ -3,6 +3,10 @@
 ## Set all "create" flags to true to exhaust as many config options as possible.
 ##
 strongdm:
+  auth:
+    adminToken: foo
+    clusterKey: foo
+    clusterSecret: foo
   serviceAccount:
     create: true
   autoRegisterCluster:
