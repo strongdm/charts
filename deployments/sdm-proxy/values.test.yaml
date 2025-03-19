@@ -5,6 +5,8 @@
 strongdm:
   auth:
     adminToken: foo
+    clusterKey: foo
+    clusterSecret: foo
   serviceAccount:
     create: true
   autoRegisterCluster:
