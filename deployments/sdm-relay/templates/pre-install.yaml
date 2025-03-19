@@ -1,9 +1,53 @@
 {{- if .Values.strongdm.autoRegisterCluster.enabled }}
+{{ $name := printf "%s-create-relay" .Release.Name }}
+---
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: true
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-4"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-3"
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-2"
+subjects:
+  - kind: ServiceAccount
+    name: {{ $name }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ $name }}
+  apiGroup: rbac.authorization.k8s.io
+
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-create-relay
+  name: {{ $name }}
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-install
@@ -23,6 +67,7 @@ spec:
       labels:
         {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.pod.labels) .) | nindent 8 }}
     spec:
+      serviceAccountName: {{ $name }}
       restartPolicy: Never
       volumes:
         - name: data
@@ -77,5 +122,5 @@ spec:
           command:
             - /bin/bash
             - -c
-            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /data/token)
-{{- end}}
+            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /data/token) --namespace {{ .Release.Namespace }}
+{{- end }}
