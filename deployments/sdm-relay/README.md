@@ -63,14 +63,14 @@ Please view [values.yaml](./values.yaml) for descriptions on supported Helm valu
 
 ## Examples
 
-Use an `SDM_ADMIN_TOKEN` to create this node during installation:
+Provide `SDM_ADMIN_TOKEN` directly to create this node during installation:
 ```yaml
 strongdm:
   auth:
     adminToken: foo.bar.baz # take care when setting this value directly
 ```
 
-Use an existing secret that contains `SDM_ADMIN_TOKEN` to create this node and also register this k8s cluster in StrongDM:
+Use an existing secret that contains `SDM_ADMIN_TOKEN`, create this node during installation, and also register this cluster in StrongDM:
 ```yaml
 strongdm:
   auth:
@@ -79,11 +79,11 @@ strongdm:
     enabled: true
 ```
 
-Use an externally created `SDM_RELAY_TOKEN`:
+Provide `SDM_RELAY_TOKEN` directly:
 ```yaml
 strongdm:
   auth:
-    relayToken: my-admin-token-secret
+    relayToken: my-relay-token # take care when setting this value directly
   autoCreateNode:
     enabled: false
 ```

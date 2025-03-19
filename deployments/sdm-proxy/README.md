@@ -55,21 +55,20 @@ Please view [values.yaml](./values.yaml) for descriptions on supported Helm valu
 
 ## Examples
 
-Use an `SDM_ADMIN_TOKEN` to register this k8s cluster in StrongDM:
+Provide `SDM_PROXY_CLUSTER_ACCESS_KEY` and `SDM_PROXY_CLUSTER_SECRET_KEY` directly:
 ```yaml
 strongdm:
   auth:
     # take care when setting these values directly
     clusterKey: foo.bar.baz
     clusterSecret: foo.bar.baz
-    adminToken: foo.bar.baz
-  autoRegisterCluster:
-    enabled: true
 ```
 
-Use an existing secret that contains `SDM_ADMIN_TOKEN`, `SDM_PROXY_CLUSTER_ACCESS_KEY` and `SDM_PROXY_CLUSTER_SECRET_KEY`:
+Use an existing secret that contains `SDM_ADMIN_TOKEN`, `SDM_PROXY_CLUSTER_ACCESS_KEY`, and `SDM_PROXY_CLUSTER_SECRET_KEY`, and also register this cluster in StrongDM:
 ```yaml
 strongdm:
   auth:
     secretName: my-secret
+  autoRegisterCluster:
+    enabled: true
 ```
