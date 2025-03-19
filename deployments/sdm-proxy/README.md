@@ -17,7 +17,7 @@ This repo provides an implementation of a StrongDM proxy service inside Kubernet
 * A StrongDM Proxy Cluster key and secret.
 
 > [!NOTE]
-> To get a Proxy Cluster key and secret, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a cluster in the Admin UI with a placeholder name. You may change this value after creation with the StrongDM CLI.
+> To get a Proxy Cluster key and secret, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a cluster in the Admin UI with a placeholder name. You may change that value after creation with the StrongDM CLI.
 
 ## Installing the Chart
 
@@ -52,3 +52,24 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 ## Configuration
 
 Please view [values.yaml](./values.yaml) for descriptions on supported Helm values.
+
+## Examples
+
+Use an `SDM_ADMIN_TOKEN` to register this k8s cluster in StrongDM:
+```yaml
+strongdm:
+  auth:
+    # take care when setting these values directly
+    clusterKey: foo.bar.baz
+    clusterSecret: foo.bar.baz
+    adminToken: foo.bar.baz
+  autoRegisterCluster:
+    enabled: true
+```
+
+Use an existing secret that contains `SDM_ADMIN_TOKEN`, `SDM_PROXY_CLUSTER_ACCESS_KEY` and `SDM_PROXY_CLUSTER_SECRET_KEY`:
+```yaml
+strongdm:
+  auth:
+    secretName: my-secret
+```

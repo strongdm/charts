@@ -58,7 +58,7 @@ strongdm:
   ## @param strongdm.autoCreateNode.tags - Tags to add to the created Node. Format 'key=value,key2=value2'.
   ##
   autoCreateNode:
-    enabled: false
+    enabled: true
     name: ""
     tags: ""
 

@@ -1,4 +1,7 @@
-{{- if .Values.strongdm.autoRegisterCluster.enabled }}
+{{- if and .Values.strongdm.autoRegisterCluster.enabled .Release.IsInstall }}
+{{- if not (or .Values.strongdm.auth.secretName .Values.strongdm.auth.adminToken) }}
+{{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoRegisterCluster.enabled during installation." }}
+{{- end }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -8,6 +11,7 @@ metadata:
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: hook-succeeded
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
     {{- include "strongdm.labels" . | nindent 4 }}
@@ -48,5 +52,8 @@ spec:
             - -c
             - |
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
-              /sdm.linux admin clusters add k8spodidentity --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt {{ .Values.strongdm.autoRegisterCluster.extraArgs }} {{ .Values.strongdm.autoRegisterCluster.resourceName | default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) }}
+              /sdm.linux admin clusters add k8spodidentity \
+                --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+                {{ .Values.strongdm.autoRegisterCluster.extraArgs }} \
+                {{ .Values.strongdm.autoRegisterCluster.resourceName | default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) }}
 {{- end}}

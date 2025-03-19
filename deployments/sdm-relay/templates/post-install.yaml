@@ -1,4 +1,7 @@
-{{- if .Values.strongdm.autoRegisterCluster.enabled }}
+{{- if and .Values.strongdm.autoRegisterCluster.enabled .Release.IsInstall }}
+{{- if not (or .Values.strongdm.auth.secretName .Values.strongdm.auth.adminToken) }}
+{{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoRegisterCluster.enabled during installation." }}
+{{- end }}
 ---
 apiVersion: batch/v1
 kind: Job

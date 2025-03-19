@@ -1,4 +1,7 @@
-{{- if .Values.strongdm.autoRegisterCluster.enabled }}
+{{- if and .Values.strongdm.autoCreateNode.enabled .Release.IsInstall }}
+{{- if not (or .Values.strongdm.auth.secretName .Values.strongdm.auth.adminToken) }}
+{{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoCreateNode.enabled during installation." }}
+{{- end }}
 {{ $name := printf "%s-auto-create-node-%s" .Release.Name (randAlpha 5 | lower) }}
 ---
 apiVersion: v1
@@ -71,7 +74,7 @@ metadata:
 spec:
   completions: 1
   parallelism: 1
-  backoffLimit: 0 # avoid crash looping and creating many orphaned relays
+  backoffLimit: 0 # avoid crash looping and creating multiple orphaned relays
   ttlSecondsAfterFinished: 300
   template:
     metadata:
@@ -83,7 +86,7 @@ spec:
       serviceAccountName: {{ $name }}
       restartPolicy: Never
       volumes:
-        - name: data
+        - name: secrets
           emptyDir: {}
       initContainers:
         - name: sdm
@@ -96,8 +99,8 @@ spec:
             limits:
               memory: 256Mi
           volumeMounts:
-            - name: data
-              mountPath: /data
+            - name: secrets
+              mountPath: /secrets
           env:
             # Reference these directly because we don't yet have access to the created Secret nor ConfigMap
             - name: SDM_DOMAIN
@@ -118,9 +121,9 @@ spec:
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
             {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.config.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
             {{- if .Values.strongdm.gateway.enabled }}
-              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create-gateway {{ $commonArgs }} {{ .Values.strongdm.gateway.listenAddress }}:{{ .Values.strongdm.gateway.listenPort }})" > /data/token
+              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create-gateway {{ $commonArgs }} {{ .Values.strongdm.gateway.listenAddress }}:{{ .Values.strongdm.gateway.listenPort }})" > /secrets/token
             {{- else }}
-              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create {{ $commonArgs }})" > /data/token
+              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create {{ $commonArgs }})" > /secrets/token
             {{- end }}
       containers:
         - name: kubectl
@@ -134,11 +137,11 @@ spec:
             limits:
               memory: 256Mi
           volumeMounts:
-            - name: data
-              mountPath: /data
+            - name: secrets
+              mountPath: /secrets
               readOnly: true
           command:
             - /bin/bash
             - -c
-            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /data/token) --namespace {{ .Release.Namespace }}
+            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /secrets/token) --namespace {{ .Release.Namespace }}
 {{- end }}

@@ -19,7 +19,7 @@ This repo provides an implementation of a StrongDM relay or gateway inside Kuber
 * A [StrongDM Gateway/Relay Token](https://www.strongdm.com/docs/admin-ui-guide/network/gateways)
 
 > [!NOTE]
-> To get a Gateway token, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a Gateway in the Admin UI with a placeholder name. You may change this value after creation with the StrongDM CLI.
+> To get a Gateway token, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a Gateway in the Admin UI with a placeholder name. You may change that value after creation with the StrongDM CLI.
 
 ## Installing the Chart
 
@@ -53,11 +53,37 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 
 ## Running Multiple Gateways
 
-If you are running multiple StrongDM Gateways it is recommended having multiple points of ingress rather than using the same ingress point with different points. Our recommendation is using a one to one ratio with Loadbalancer to Gateway.
+A single `SDM_RELAY_TOKEN` token can't be reused between nodes. To prevent conflicts during updates, this deployment hard-codes a `replicaCount` of 1 and a deployment strategy of `Recreate`.
 
-> [!NOTE]
-> Tokens can't be reused between Gateways. To prevent conflicts during updates, this deployment hard-codes a `replicaCount` of 1 and a deployment strategy of `Recreate`.
+This also implies that running multiple nodes requires multiple installations of this Helm chart. The [SDM proxy](../sdm-proxy) Helm chart supports multiple replicas with a single installation, should this functionality be desired.
 
 ## Configuration
 
 Please view [values.yaml](./values.yaml) for descriptions on supported Helm values.
+
+## Examples
+
+Use an `SDM_ADMIN_TOKEN` to create this node during installation:
+```yaml
+strongdm:
+  auth:
+    adminToken: foo.bar.baz # take care when setting this value directly
+```
+
+Use an existing secret that contains `SDM_ADMIN_TOKEN` to create this node and also register this k8s cluster in StrongDM:
+```yaml
+strongdm:
+  auth:
+    secretName: my-admin-token-secret
+  autoRegisterCluster:
+    enabled: true
+```
+
+Use an externally created `SDM_RELAY_TOKEN`:
+```yaml
+strongdm:
+  auth:
+    relayToken: my-admin-token-secret
+  autoCreateNode:
+    enabled: false
+```
