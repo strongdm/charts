@@ -1,5 +1,5 @@
 {{- if .Values.strongdm.autoRegisterCluster.enabled }}
-{{ $name := printf "%s-create-relay" .Release.Name }}
+{{ $name := printf "%s-auto-create-node-%s" .Release.Name (randAlpha 5 | lower) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -9,7 +9,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-install
-    helm.sh/hook-weight: "-4"
+    helm.sh/hook-weight: "-3"
     helm.sh/hook-delete-policy: hook-succeeded
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
@@ -64,7 +64,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-weight: "-1"
-    helm.sh/hook-delete-policy: hook-succeeded
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
     {{- include "strongdm.labels" . | nindent 4 }}
@@ -116,7 +116,12 @@ spec:
             - -c
             - |
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
-              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create --maintenance-windows {{ .Values.strongdm.config.maintenanceWindows | squote }} --name {{ .Values.strongdm.autoCreateNode.name | squote }} --tags {{ .Values.strongdm.autoCreateNode.tags | squote }})" > /data/token
+            {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.config.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
+            {{- if .Values.strongdm.gateway.enabled }}
+              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create-gateway {{ $commonArgs }} {{ .Values.strongdm.gateway.listenAddress }}:{{ .Values.strongdm.gateway.listenPort }})" > /data/token
+            {{- else }}
+              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create {{ $commonArgs }})" > /data/token
+            {{- end }}
       containers:
         - name: kubectl
           {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}

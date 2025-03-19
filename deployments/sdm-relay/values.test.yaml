@@ -7,3 +7,5 @@ strongdm:
     create: true
   autoRegisterCluster:
     enabled: true
+  autoCreateNode:
+    enabled: true
