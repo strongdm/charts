@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e -u -o pipefail
 
-echo "--- :git: Get PR labels"
+echo "--- :git: Get PR number"
 pr_number="$(echo "${BUILDKITE_MESSAGE}" | awk -F '#' '{print $2}' | awk '{print $1}' | tr -d '()')"
 
 echo "--- :helm: Package"
