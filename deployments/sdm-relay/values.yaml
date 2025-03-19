@@ -119,10 +119,10 @@ strongdm:
     labels: {}
     resources:
       requests:
-        memory: 1Gi
+        memory: 2560Mi
         cpu: 1024m
       limits:
-        memory: 1Gi
+        memory: 2560Mi
 
   ## Service account configuration.
   ##

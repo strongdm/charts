@@ -71,7 +71,7 @@ metadata:
 spec:
   completions: 1
   parallelism: 1
-  backoffLimit: 3
+  backoffLimit: 0 # avoid crash looping and creating many orphaned relays
   ttlSecondsAfterFinished: 300
   template:
     metadata:
