@@ -1,4 +1,5 @@
 {{- if .Values.strongdm.autoRegisterCluster.enabled }}
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -47,5 +48,8 @@ spec:
             - -c
             - |
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
-              /sdm.linux admin clusters add k8spodidentity --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt {{ .Values.strongdm.autoRegisterCluster.extraArgs }} {{ .Values.strongdm.autoRegisterCluster.resourceName | default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) }}
+              /sdm.linux admin clusters add k8spodidentity \
+                --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+                {{ .Values.strongdm.autoRegisterCluster.extraArgs }} \
+                {{ .Values.strongdm.autoRegisterCluster.resourceName | default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) }}
 {{- end}}

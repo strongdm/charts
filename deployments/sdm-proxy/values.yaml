@@ -24,6 +24,7 @@ strongdm:
   ##
   ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
   ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates.
+  ## @param strongdm.config.maintenanceWindows - Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
   ## @param strongdm.config.maintenanceWindowStart - Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
   ## @param strongdm.config.enableMetrics - Enable Prometheus metrics on port 9999.
   ## @param strongdm.config.logOptions - Configuration for container logs.
@@ -31,6 +32,7 @@ strongdm:
   config:
     domain: strongdm.com
     disableAutoUpdate: false
+    maintenanceWindows: '* * * * *'
     maintenanceWindowStart: 0
     enableMetrics: false
     logOptions:
@@ -40,9 +42,9 @@ strongdm:
 
   ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
   ##
-  ## @param strongdm.config.autoRegisterCluster.enabled - Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
-  ## @param strongdm.config.autoRegisterCluster.resourceName - Name of the StrongDM Pod Identity Cluster resource to create.
-  ## @param strongdm.config.autoRegisterCluster.extraArgs - Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
+  ## @param strongdm.autoRegisterCluster.enabled - Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
+  ## @param strongdm.autoRegisterCluster.resourceName - Name of the StrongDM Pod Identity Cluster resource to create.
+  ## @param strongdm.autoRegisterCluster.extraArgs - Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
   ##
   autoRegisterCluster:
     enabled: false
@@ -77,7 +79,7 @@ strongdm:
     type: ClusterIP
     listenPort: 443
     containerPort: 8443
-    nodePort: ""
+    nodePort: 0
     loadBalancerIP: ""
 
   ## Deployment configuration.

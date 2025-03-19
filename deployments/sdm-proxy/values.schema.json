@@ -77,6 +77,9 @@
                         },
                         "maintenanceWindowStart": {
                             "type": "integer"
+                        },
+                        "maintenanceWindows": {
+                            "type": "string"
                         }
                     },
                     "type": "object"
@@ -185,7 +188,7 @@
                             "type": "string"
                         },
                         "nodePort": {
-                            "type": "string"
+                            "type": "integer"
                         },
                         "type": {
                             "type": "string"

@@ -33,6 +33,20 @@
                     },
                     "type": "object"
                 },
+                "autoCreateNode": {
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "tags": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
                 "autoRegisterCluster": {
                     "properties": {
                         "enabled": {
@@ -74,6 +88,9 @@
                         },
                         "maintenanceWindowStart": {
                             "type": "integer"
+                        },
+                        "maintenanceWindows": {
+                            "type": "string"
                         }
                     },
                     "type": "object"
@@ -99,6 +116,9 @@
                         "enabled": {
                             "type": "boolean"
                         },
+                        "listenAddress": {
+                            "type": "string"
+                        },
                         "listenPort": {
                             "type": "integer"
                         },
@@ -116,7 +136,7 @@
                                     "type": "string"
                                 },
                                 "nodePort": {
-                                    "type": "string"
+                                    "type": "integer"
                                 },
                                 "type": {
                                     "type": "string"

@@ -1,0 +1,81 @@
+{{- if .Values.strongdm.autoRegisterCluster.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-create-relay
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-1"
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      annotations:
+        {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.pod.annotations) .) | nindent 8 }}
+      labels:
+        {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.pod.labels) .) | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: data
+          emptyDir: {}
+      initContainers:
+        - name: sdm
+          image: {{ template "strongdm.imageURI" . }}
+          imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 256m
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          env:
+            # Reference these directly because we don't yet have access to the created Secret nor ConfigMap
+            - name: SDM_DOMAIN
+              value: {{ .Values.strongdm.config.domain }}
+            - name: SDM_ADMIN_TOKEN
+              {{- if .Values.strongdm.auth.secretName }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.strongdm.auth.secretName }}
+                  key: SDM_ADMIN_TOKEN
+              {{- else }}
+              value: {{ .Values.strongdm.auth.adminToken }}
+              {{- end }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
+              echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create --maintenance-windows {{ .Values.strongdm.config.maintenanceWindows | squote }} --name {{ .Values.strongdm.autoCreateNode.name | squote }} --tags {{ .Values.strongdm.autoCreateNode.tags | squote }})" > /data/token
+      containers:
+        - name: kubectl
+          {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
+          image: public.ecr.aws/bitnami/kubectl:{{ $kubeVersion.Major }}.{{ $kubeVersion.Minor }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 256m
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+              readOnly: true
+          command:
+            - /bin/bash
+            - -c
+            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /data/token)
+{{- end}}

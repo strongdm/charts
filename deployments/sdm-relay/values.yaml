@@ -24,6 +24,7 @@ strongdm:
   ##
   ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
   ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates.
+  ## @param strongdm.config.maintenanceWindows - Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
   ## @param strongdm.config.maintenanceWindowStart - Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
   ## @param strongdm.config.enableMetrics - Enable Prometheus metrics on port 9999.
   ## @param strongdm.config.logOptions - Configuration for container logs.
@@ -31,6 +32,7 @@ strongdm:
   config:
     domain: strongdm.com
     disableAutoUpdate: false
+    maintenanceWindows: '* * * * *'
     maintenanceWindowStart: 0
     enableMetrics: false
     logOptions:
@@ -38,16 +40,27 @@ strongdm:
       storage: stdout
       encryption: plaintext
 
-  ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the support strongdm.auth methods.
+  ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the support @strongdm.auth methods.
   ##
-  ## @param strongdm.config.autoRegisterCluster.enabled - Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
-  ## @param strongdm.config.autoRegisterCluster.resourceName - Name of the StrongDM Pod Identity Cluster resource to create.
-  ## @param strongdm.config.autoRegisterCluster.extraArgs - Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
+  ## @param strongdm.autoRegisterCluster.enabled - Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
+  ## @param strongdm.autoRegisterCluster.resourceName - Name of the StrongDM Pod Identity Cluster resource to create.
+  ## @param strongdm.autoRegisterCluster.extraArgs - Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
   ##
   autoRegisterCluster:
     enabled: false
     resourceName: ""
     extraArgs: ""
+
+  ## Auto creation configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
+  ##
+  ## @param strongdm.autoCreateNode.enabled - Create this StrongDM Relay or Gateway automatically.
+  ## @param strongdm.autoCreateNode.name - Name of the Node as it should appear in StrongDM.
+  ## @param strongdm.autoCreateNode.tags - Tags to add to the created Node. Format 'key=value,key2=value2'.
+  ##
+  autoCreateNode:
+    enabled: false
+    name: ""
+    tags: ""
 
   ## StrongDM authentication sources.
   ##
@@ -63,11 +76,13 @@ strongdm:
   ## Gateway configuration.
   ##
   ## @param strongdm.gateway.enabled - Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.
+  ## @param strongdm.gateway.listenAddress - Address at which the Gateway expects traffic. Ignored unless @strongdm.autoCreateNode.enabled.
   ## @param strongdm.gateway.listenPort - Port on which the Service is expecting traffic.
   ## @param strongdm.gateway.containerPort - Port on which the container runs.
   ##
   gateway:
     enabled: false
+    listenAddress: ""
     listenPort: 5000
     containerPort: 5000
 
@@ -83,7 +98,7 @@ strongdm:
       annotations: {}
       labels: {}
       type: ClusterIP
-      nodePort: ""
+      nodePort: 0
       loadBalancerIP: ""
 
   ## Deployment configuration.
