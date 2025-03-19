@@ -1,4 +1,4 @@
-{{- if and .Values.strongdm.autoCreateNode.enabled .Release.IsInstall }}
+{{- if .Values.strongdm.autoCreateNode.enabled }}
 {{- if not (or .Values.strongdm.auth.secretName .Values.strongdm.auth.adminToken) }}
 {{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoCreateNode.enabled during installation." }}
 {{- end }}
@@ -34,7 +34,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
-    verbs: ["create"]
+    verbs: ["get", "create", "patch", "update"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -67,7 +67,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-weight: "-1"
-    helm.sh/hook-delete-policy: hook-succeeded,hook-failed
+    helm.sh/hook-delete-policy: hook-succeeded
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
     {{- include "strongdm.labels" . | nindent 4 }}
@@ -143,5 +143,5 @@ spec:
           command:
             - /bin/bash
             - -c
-            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /secrets/token) --namespace {{ .Release.Namespace }}
+            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /secrets/token) --namespace {{ .Release.Namespace }} --dry-run=client -o yaml | kubectl apply -f -
 {{- end }}
