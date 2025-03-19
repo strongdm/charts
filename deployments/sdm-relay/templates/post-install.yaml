@@ -8,6 +8,7 @@ metadata:
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: hook-succeeded
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
     {{- include "strongdm.labels" . | nindent 4 }}

@@ -43,8 +43,8 @@ spec:
             - name: SDM_RELAY_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name) }}
                   key: SDM_RELAY_TOKEN
+                  name: {{ .Values.strongdm.autoRegisterCluster.enabled | ternary (printf "%s-relay-token" .Release.Name) (.Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name)) }}
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-config
