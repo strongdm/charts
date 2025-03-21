@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-config
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "strongdm.name" . }}-config
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:

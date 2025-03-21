@@ -38,6 +38,9 @@
                         "enabled": {
                             "type": "boolean"
                         },
+                        "maintenanceWindows": {
+                            "type": "string"
+                        },
                         "name": {
                             "type": "string"
                         },
@@ -88,9 +91,6 @@
                         },
                         "maintenanceWindowStart": {
                             "type": "integer"
-                        },
-                        "maintenanceWindows": {
-                            "type": "string"
                         }
                     },
                     "type": "object"
@@ -163,6 +163,12 @@
                         }
                     },
                     "type": "object"
+                },
+                "nameOverride": {
+                    "type": "string"
+                },
+                "namespaceOverride": {
+                    "type": "string"
                 },
                 "pod": {
                     "properties": {

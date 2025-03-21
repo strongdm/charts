@@ -5,4 +5,4 @@ Your release is named {{ .Release.Name }}. To learn more about the release, try:
   $ helm get all {{ .Release.Name }}
 
 Tail the application logs:
-  $ kubectl logs -n {{ .Release.Namespace }} -f -l app.kubernetes.io/name={{ .Chart.Name }} -l app.kubernetes.io/component=proxy
+  $ kubectl logs -n {{ include "strongdm.namespace" . }} -f -l app.kubernetes.io/name={{ .Chart.Name }} -l app.kubernetes.io/component=proxy

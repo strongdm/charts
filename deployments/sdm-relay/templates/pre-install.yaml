@@ -2,14 +2,14 @@
 {{- if not (or .Values.strongdm.auth.secretName .Values.strongdm.auth.adminToken) }}
 {{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoCreateNode.enabled during installation." }}
 {{- end }}
-{{ $name := printf "%s-auto-create-node-%s" .Release.Name (randAlpha 5 | lower) }}
+{{ $name := printf "%s-auto-create-node-%s" (include "strongdm.name" .) (randAlpha 5 | lower) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   name: {{ $name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-weight: "-3"
@@ -23,7 +23,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ $name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-weight: "-3"
@@ -41,7 +41,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ $name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-weight: "-2"
@@ -52,7 +52,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ $name }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ include "strongdm.namespace" . }}
 roleRef:
   kind: Role
   name: {{ $name }}
@@ -63,7 +63,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-weight: "-1"
@@ -119,7 +119,7 @@ spec:
             - -c
             - |
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
-            {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.config.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
+            {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.autoCreateNode.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
             {{- if .Values.strongdm.gateway.enabled }}
               echo "SDM_RELAY_TOKEN=$(/sdm.linux admin node create-gateway {{ $commonArgs }} {{ .Values.strongdm.gateway.listenAddress }}:{{ .Values.strongdm.gateway.listenPort }})" > /secrets/token
             {{- else }}
@@ -143,5 +143,5 @@ spec:
           command:
             - /bin/bash
             - -c
-            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /secrets/token) --namespace {{ .Release.Namespace }} --dry-run=client -o yaml | kubectl apply -f -
+            - kubectl create secret generic {{ .Release.Name }}-relay-token --from-literal=$(cat /secrets/token) --namespace {{ include "strongdm.namespace" . }} --dry-run=client -o yaml | kubectl apply -f -
 {{- end }}

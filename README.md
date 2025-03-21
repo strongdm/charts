@@ -10,5 +10,5 @@
 This repo contains the following packaged Helm charts provided by StrongDM:
 
 * [StrongDM Relay/Gateway](https://github.com/strongdm/charts/blob/main/deployments/sdm-relay/README.md)
-* [StrongDM Proxy Cluster](https://github.com/strongdm/charts/blob/main/deployments/sdm-proxy/README.md)
+* [StrongDM Proxy Worker](https://github.com/strongdm/charts/blob/main/deployments/sdm-proxy/README.md)
 * [StrongDM Client Container](https://github.com/strongdm/charts/blob/main/deployments/sdm-client/README.md)

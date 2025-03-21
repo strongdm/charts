@@ -10,6 +10,14 @@ global:
   labels: {}
 
 strongdm:
+  ## Allow some overrides. Useful when installing as a subchart.
+  ##
+  ## @param strongdm.nameOverride - Override resource names.
+  ## @param strongdm.namespaceOverride - Override the release namespace.
+  ##
+  nameOverride: ""
+  namespaceOverride: ""
+
   ## Image pull configuration.
   ##
   ## @param strongdm.image - Container repository and pull config.
@@ -24,7 +32,6 @@ strongdm:
   ##
   ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
   ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates.
-  ## @param strongdm.config.maintenanceWindows - Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
   ## @param strongdm.config.maintenanceWindowStart - Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
   ## @param strongdm.config.enableMetrics - Enable Prometheus metrics on port 9999.
   ## @param strongdm.config.logOptions - Configuration for container logs.
@@ -32,7 +39,6 @@ strongdm:
   config:
     domain: strongdm.com
     disableAutoUpdate: false
-    maintenanceWindows: '* * * * *'
     maintenanceWindowStart: 0
     enableMetrics: false
     logOptions:

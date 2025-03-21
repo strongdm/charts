@@ -2,8 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "strongdm.name" . }}
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.deployment.annotations) .) | nindent 4 }}
   labels:
