@@ -20,7 +20,7 @@ strongdm:
 
   ## Image pull configuration.
   ##
-  ## @param strongdm.image - Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, @strongdm.config.disableAutoUpdate is automatically set to `true`.
+  ## @param strongdm.image - Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.
   ##
   image:
     pullPolicy: IfNotPresent
