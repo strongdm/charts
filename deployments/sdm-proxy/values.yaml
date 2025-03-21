@@ -20,7 +20,7 @@ strongdm:
 
   ## Image pull configuration.
   ##
-  ## @param strongdm.image - Container repository and pull config.
+  ## @param strongdm.image - Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, @strongdm.config.disableAutoUpdate is automatically set to `true`.
   ##
   image:
     pullPolicy: IfNotPresent
@@ -31,7 +31,7 @@ strongdm:
   ## General configuration.
   ##
   ## @param strongdm.config.domain - Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
-  ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates.
+  ## @param strongdm.config.disableAutoUpdate - Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.
   ## @param strongdm.config.maintenanceWindowStart - Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
   ## @param strongdm.config.enableMetrics - Enable Prometheus metrics on port 9999.
   ## @param strongdm.config.logOptions - Configuration for container logs.
