@@ -42,7 +42,7 @@ spec:
             - name: SDM_ADMIN_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name) }}
+                  name: {{ default (printf "%s-secrets" .Release.Name) .Values.strongdm.auth.secretName }}
                   key: SDM_ADMIN_TOKEN
           envFrom:
             - configMapRef:
@@ -55,5 +55,5 @@ spec:
               /sdm.linux admin clusters add k8spodidentity \
                 --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
                 {{ .Values.strongdm.autoRegisterCluster.extraArgs }} \
-                {{ .Values.strongdm.autoRegisterCluster.resourceName | default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) }}
+                {{ default (printf "%s-cluster-%s" .Release.Name (randAlpha 5)) .Values.strongdm.autoRegisterCluster.resourceName }}
 {{- end}}

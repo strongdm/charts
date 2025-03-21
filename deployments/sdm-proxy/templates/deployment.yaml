@@ -57,12 +57,12 @@ spec:
             - name: SDM_PROXY_CLUSTER_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name) }}
+                  name: {{ default (printf "%s-secrets" .Release.Name) .Values.strongdm.auth.secretName }}
                   key: SDM_PROXY_CLUSTER_ACCESS_KEY
             - name: SDM_PROXY_CLUSTER_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.strongdm.auth.secretName | default (printf "%s-secrets" .Release.Name) }}
+                  name: {{ default (printf "%s-secrets" .Release.Name) .Values.strongdm.auth.secretName }}
                   key: SDM_PROXY_CLUSTER_SECRET_KEY
           envFrom:
             - configMapRef:

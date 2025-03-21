@@ -1,1 +1,1 @@
-If you would like to suggest changes, please file a Pull Request in this repository. Our team will review and communicate via the Pull Request.
+If you would like to suggest changes, please create an issue in this project. We also accept Pull Requests.

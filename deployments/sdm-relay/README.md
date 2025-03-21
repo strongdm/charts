@@ -8,8 +8,6 @@
 
 This repo provides an implementation of a StrongDM relay or gateway inside Kubernetes using Helm.
 
-[Learn more about deploying StrongDM inside Kubernetes on our docs site.](https://www.strongdm.com/docs/installation/install-your-gateway/kubernetes-gateways)
-
 ## Prerequisites
 
 * A Kubernetes Cluster v1.16+
