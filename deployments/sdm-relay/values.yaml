@@ -25,7 +25,7 @@ strongdm:
   image:
     pullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/relay
-    tag: ""
+    tag: latest
     digest: ""
 
   ## General configuration.

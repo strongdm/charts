@@ -14,7 +14,7 @@ This repo provides an implementation of a StrongDM proxy service inside Kubernet
 * Helm 3.0+
 * Git
 * If you are going to use [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/), then you will need to manually patch your [services to allow TCP and UDP traffic](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/)
-* A StrongDM Proxy Cluster key and secret.
+* A [StrongDM Proxy Cluster key and secret](https://www.strongdm.com/docs/admin/proxy-clusters)
 
 > [!NOTE]
 > To get a Proxy Cluster key and secret, you'll need an external address to register. If you don't have such an address during installation of this chart, you may create a cluster in the Admin UI with a placeholder name. You may change that value after creation with the StrongDM CLI.
