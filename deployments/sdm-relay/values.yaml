@@ -60,15 +60,15 @@ strongdm:
   ## Auto creation configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
   ##
   ## @param strongdm.autoCreateNode.enabled - Create this StrongDM Relay or Gateway automatically.
-  ## @param strongdm.autoCreateNode.maintenanceWindows - Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
   ## @param strongdm.autoCreateNode.name - Name of the Node as it should appear in StrongDM.
   ## @param strongdm.autoCreateNode.tags - Tags to add to the created Node. Format 'key=value,key2=value2'.
+  ## @param strongdm.autoCreateNode.maintenanceWindows - Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
   ##
   autoCreateNode:
     enabled: true
-    maintenanceWindows: '* * * * *'
     name: ""
     tags: ""
+    maintenanceWindows: '* * * * *'
 
   ## StrongDM authentication sources.
   ##
