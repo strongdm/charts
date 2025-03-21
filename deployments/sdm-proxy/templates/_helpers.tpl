@@ -1,3 +1,10 @@
+{{- define "strongdm.name" -}}
+{{- default .Release.Name .Values.strongdm.nameOverride }}
+{{- end }}
+{{- define "strongdm.namespace" -}}
+{{- default .Release.Namespace .Values.strongdm.namespaceOverride }}
+{{- end }}
+
 # Args:
 # - addtl: (optional) map of annotations to add
 {{- define "strongdm.annotations" -}}

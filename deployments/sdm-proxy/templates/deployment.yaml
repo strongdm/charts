@@ -2,8 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "strongdm.name" . }}
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.deployment.annotations) .) | nindent 4 }}
   labels:
@@ -66,7 +66,7 @@ spec:
                   key: SDM_PROXY_CLUSTER_SECRET_KEY
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-config
+                name: {{ include "strongdm.name" . }}-config
           ports:
             - name: healthcheck
               containerPort: 9090

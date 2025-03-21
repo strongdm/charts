@@ -6,8 +6,8 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-register-cluster
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "strongdm.name" . }}-register-cluster
+  namespace: {{ include "strongdm.namespace" . }}
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-weight: "-1"

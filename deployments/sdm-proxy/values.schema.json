@@ -77,9 +77,6 @@
                         },
                         "maintenanceWindowStart": {
                             "type": "integer"
-                        },
-                        "maintenanceWindows": {
-                            "type": "string"
                         }
                     },
                     "type": "object"
@@ -130,6 +127,12 @@
                         }
                     },
                     "type": "object"
+                },
+                "nameOverride": {
+                    "type": "string"
+                },
+                "namespaceOverride": {
+                    "type": "string"
                 },
                 "pod": {
                     "properties": {

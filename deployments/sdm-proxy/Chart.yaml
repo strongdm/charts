@@ -1,7 +1,7 @@
 apiVersion: v2
 name: sdm-proxy
 kubeVersion: ">= 1.16.0-0"
-version: 1.0.4
+version: 1.0.5
 appVersion: 46.77.0
 description: StrongDM Proxy
 type: application
