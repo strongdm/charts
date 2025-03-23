@@ -52,6 +52,9 @@
                 },
                 "config": {
                     "properties": {
+                        "bridgeMode": {
+                            "type": "boolean"
+                        },
                         "disableAutoUpdate": {
                             "type": "boolean"
                         },
