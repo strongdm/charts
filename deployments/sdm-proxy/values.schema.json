@@ -23,6 +23,7 @@
         "strongdm": {
             "properties": {
                 "auth": {
+                    "description": "StrongDM authentication sources.",
                     "properties": {
                         "adminToken": {
                             "description": "The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
@@ -44,6 +45,7 @@
                     "type": "object"
                 },
                 "autoRegisterCluster": {
+                    "description": "Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.",
                     "properties": {
                         "enabled": {
                             "description": "Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.",
@@ -61,6 +63,7 @@
                     "type": "object"
                 },
                 "config": {
+                    "description": "General application configuration.",
                     "properties": {
                         "disableAutoUpdate": {
                             "description": "Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.",
@@ -74,29 +77,36 @@
                             "description": "Enable Prometheus metrics on port 9999.",
                             "type": "boolean"
                         },
-                        "logOptions": {
-                            "description": "Configuration for container logs.",
+                        "maintenanceWindowStart": {
+                            "description": "Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.",
+                            "type": "integer"
+                        },
+                        "queryLogs": {
                             "properties": {
-                                "encryption": {
+                                "encoding": {
+                                    "description": "Query log encoding",
                                     "type": "string"
                                 },
                                 "format": {
+                                    "description": "Query log format",
                                     "type": "string"
                                 },
                                 "storage": {
+                                    "description": "Query log storage location",
                                     "type": "string"
                                 }
                             },
                             "type": "object"
                         },
-                        "maintenanceWindowStart": {
-                            "description": "Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.",
-                            "type": "integer"
+                        "verboseLogs": {
+                            "description": "Toggle debug logging.",
+                            "type": "boolean"
                         }
                     },
                     "type": "object"
                 },
                 "deployment": {
+                    "description": "Deployment configuration.",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to add to the Deployment.",
@@ -157,6 +167,7 @@
                     "type": "string"
                 },
                 "pod": {
+                    "description": "Pod configuration.",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to add to Pods.",
@@ -197,6 +208,7 @@
                     "type": "object"
                 },
                 "service": {
+                    "description": "Service configuration.",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to apply to the Service.",
@@ -240,6 +252,7 @@
                     "type": "object"
                 },
                 "serviceAccount": {
+                    "description": "ServiceAccount configuration.",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to add to the ServiceAccount, should one be created.",
