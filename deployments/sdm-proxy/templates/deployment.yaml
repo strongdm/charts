@@ -41,6 +41,12 @@ spec:
             matchLabelKeys:
               - pod-template-hash
             {{- end }}
+      {{- if .Values.strongdm.service.tlsSecretName }}
+      volumes:
+        - name: {{ .Release.Name }}-tls
+          secret:
+            secretName: {{ .Values.strongdm.service.tlsSecretName }}
+      {{- end }}
       containers:
         - name: sdm
           image: {{ template "strongdm.imageURI" . }}
@@ -79,6 +85,12 @@ spec:
               containerPort: 9999
               protocol: TCP
             {{- end }}
+          {{- if .Values.strongdm.service.tlsSecretName }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-tls
+              mountPath: /etc/sdm
+              readOnly: true
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /liveness
