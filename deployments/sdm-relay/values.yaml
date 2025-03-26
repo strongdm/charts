@@ -19,8 +19,8 @@ strongdm:
     maintenanceWindowStart: 0 # @schema; description: Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
     enableMetrics: false # @schema; description: Enable Prometheus metrics on port 9999.
     verboseLogs: false # @schema; description: Toggle debug logging.
-    queryLogs:
-      storage: "" # @schema; description: Query log storage location; options: 'stdout', 'tcp', 'syslog', 'socket', 'file'. The default is to disable the additional audit logs.
+    queryLogs: # @schema; description: Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.
+      storage: "" # @schema; description: Query log storage location; options: 'stdout', 'tcp', 'syslog', 'socket', 'file'.
       format: "" # @schema; description: Query log format; options: 'json', 'csv'.
       encoding: "" # @schema; description: Query log encoding; options: 'plaintext', 'publickey'
 

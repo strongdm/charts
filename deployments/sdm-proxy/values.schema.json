@@ -82,6 +82,7 @@
                             "type": "integer"
                         },
                         "queryLogs": {
+                            "description": "Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.",
                             "properties": {
                                 "encoding": {
                                     "description": "Query log encoding",
