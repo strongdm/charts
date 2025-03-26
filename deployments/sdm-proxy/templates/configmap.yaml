@@ -1,3 +1,6 @@
+{{- if and (eq .Values.strongdm.service.tlsSource "file") (not .Values.strongdm.service.tlsSecretName) }}
+{{- fail "@strongdm.service.tlsSecretName must be set when @strongdm.service.tlsSource is 'file'." }}
+{{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap

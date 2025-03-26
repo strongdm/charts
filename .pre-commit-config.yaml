@@ -82,6 +82,11 @@ repos:
         entry: /bin/bash -c '! helm template deployments/sdm-proxy'
         language: system
         pass_filenames: false
+    -   id: template-invalid-tls-proxy-failure
+        name: Helm template | invalid TLS fail | proxy
+        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.service.tlsSource=file'
+        language: system
+        pass_filenames: false
 
     # Check version pin paths
     -   id: template-tag-pin-relay
