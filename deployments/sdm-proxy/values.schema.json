@@ -4,13 +4,16 @@
         "global": {
             "properties": {
                 "addDateLabel": {
+                    "description": "Adds a `date: {{ now | htmlDate }}` label to all resources.",
                     "type": "boolean"
                 },
                 "annotations": {
+                    "description": "Map of annotations to add to all resources.",
                     "properties": {},
                     "type": "object"
                 },
                 "labels": {
+                    "description": "Map of labels to add to all resources.",
                     "properties": {},
                     "type": "object"
                 }
@@ -22,15 +25,19 @@
                 "auth": {
                     "properties": {
                         "adminToken": {
+                            "description": "The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
                             "type": "string"
                         },
                         "clusterKey": {
+                            "description": "The SDM_PROXY_CLUSTER_ACCESS_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
                             "type": "string"
                         },
                         "clusterSecret": {
+                            "description": "The SDM_PROXY_CLUSTER_SECRET_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
                             "type": "string"
                         },
                         "secretName": {
+                            "description": "Name of the k8s Secret that contains SDM_PROXY_CLUSTER_ACCESS_KEY and SDM_PROXY_CLUSTER_SECRET_KEY, and/or SDM_ADMIN_TOKEN.",
                             "type": "string"
                         }
                     },
@@ -39,12 +46,15 @@
                 "autoRegisterCluster": {
                     "properties": {
                         "enabled": {
+                            "description": "Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.",
                             "type": "boolean"
                         },
                         "extraArgs": {
+                            "description": "Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.",
                             "type": "string"
                         },
                         "resourceName": {
+                            "description": "Name of the StrongDM Pod Identity Cluster resource to create.",
                             "type": "string"
                         }
                     },
@@ -53,15 +63,19 @@
                 "config": {
                     "properties": {
                         "disableAutoUpdate": {
+                            "description": "Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.",
                             "type": "boolean"
                         },
                         "domain": {
+                            "description": "Control plane domain to which to connect. Format `uk.strongdm.com`, etc.",
                             "type": "string"
                         },
                         "enableMetrics": {
+                            "description": "Enable Prometheus metrics on port 9999.",
                             "type": "boolean"
                         },
                         "logOptions": {
+                            "description": "Configuration for container logs.",
                             "properties": {
                                 "encryption": {
                                     "type": "string"
@@ -76,6 +90,7 @@
                             "type": "object"
                         },
                         "maintenanceWindowStart": {
+                            "description": "Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.",
                             "type": "integer"
                         }
                     },
@@ -84,17 +99,21 @@
                 "deployment": {
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to add to the Deployment.",
                             "properties": {},
                             "type": "object"
                         },
                         "labels": {
+                            "description": "Map of labels to add to the Deployment.",
                             "properties": {},
                             "type": "object"
                         },
                         "replicaCount": {
+                            "description": "Number of Pods to run in the deployment.",
                             "type": "integer"
                         },
                         "topologySpreadConstraints": {
+                            "description": "Pod spread constraints. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.",
                             "properties": {
                                 "maxSkew": {
                                     "type": "integer"
@@ -112,6 +131,7 @@
                     "type": "object"
                 },
                 "image": {
+                    "description": "Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.",
                     "properties": {
                         "digest": {
                             "type": "string"
@@ -129,22 +149,27 @@
                     "type": "object"
                 },
                 "nameOverride": {
+                    "description": "Override resource names.",
                     "type": "string"
                 },
                 "namespaceOverride": {
+                    "description": "Override the release namespace.",
                     "type": "string"
                 },
                 "pod": {
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to add to Pods.",
                             "properties": {},
                             "type": "object"
                         },
                         "labels": {
+                            "description": "Map of labels to add to Pods.",
                             "properties": {},
                             "type": "object"
                         },
                         "resources": {
+                            "description": "Set the Pod resource requests and limits.",
                             "properties": {
                                 "limits": {
                                     "properties": {
@@ -174,26 +199,41 @@
                 "service": {
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to apply to the Service.",
                             "properties": {},
                             "type": "object"
                         },
                         "containerPort": {
+                            "description": "Port on which the Service is expecting traffic.",
                             "type": "integer"
                         },
                         "labels": {
+                            "description": "Map of labels to apply to the Service.",
                             "properties": {},
                             "type": "object"
                         },
                         "listenPort": {
+                            "description": "Port on which the container runs.",
                             "type": "integer"
                         },
                         "loadBalancerIP": {
+                            "description": "IP address to which to pin a LoadBalancer Service.",
                             "type": "string"
                         },
                         "nodePort": {
+                            "description": "NodePort to which to bind this service, if desired.",
                             "type": "integer"
                         },
+                        "tlsSecretName": {
+                            "description": "kubernetes.io/tls Secret with which containers will terminate TLS.",
+                            "type": "string"
+                        },
+                        "tlsSource": {
+                            "description": "How this service is expected to terminate TLS, if at all. Set to `file` and supply @strongdm.service.tlsSecretName to terminate with a user-provided certificate. Set to `none` if terminating TLS before these containers, e.g. with a load balancer. Leave empty to terminate TLS with a StrongDM-signed certificate built into the software.",
+                            "type": "string"
+                        },
                         "type": {
+                            "description": "Specify the type of Service to front the deployment.",
                             "type": "string"
                         }
                     },
@@ -202,17 +242,21 @@
                 "serviceAccount": {
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to add to the ServiceAccount, should one be created.",
                             "properties": {},
                             "type": "object"
                         },
                         "create": {
+                            "description": "Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.",
                             "type": "boolean"
                         },
                         "labels": {
+                            "description": "Map of labels to add to the ServiceAccount, should one be created.",
                             "properties": {},
                             "type": "object"
                         },
                         "name": {
+                            "description": "Name of an existing ServiceAccount to use.",
                             "type": "string"
                         }
                     },

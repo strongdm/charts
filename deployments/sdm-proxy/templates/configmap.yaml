@@ -17,3 +17,8 @@ data:
   SDM_RELAY_LOG_ENCRYPTION: {{ .Values.strongdm.config.logOptions.encryption }}
   SDM_ORCHESTRATOR_PROBES: :9090
   SDM_METRICS_LISTEN_ADDRESS: {{ .Values.strongdm.config.enableMetrics | ternary ":9999" "" }}
+  SDM_TLS_CERT_SOURCE: {{ .Values.strongdm.service.tlsSource }}
+  {{- if .Values.strongdm.service.tlsSecretName }}
+  SDM_TLS_CERT_FILE: /etc/sdm/tls.crt
+  SDM_TLS_KEY_FILE: /etc/sdm/tls.key
+  {{- end }}
