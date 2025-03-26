@@ -40,7 +40,7 @@ strongdm:
     adminToken: "" # @schema; description: The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
     secretName: "" # @schema; description: Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.
 
-  gateway: # @schema; description: StrongDM Gateway configuration.
+  gateway: # @schema; description: StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.
     enabled: false # @schema; description: Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.
     listenAddress: "" # @schema; description: Address at which the Gateway expects traffic. Ignored unless @strongdm.autoCreateNode.enabled.
     listenPort: 5000 # @schema; description: Port on which the Service is expecting traffic.

@@ -141,7 +141,7 @@
                     "type": "object"
                 },
                 "gateway": {
-                    "description": "StrongDM Gateway configuration.",
+                    "description": "StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.",
                     "properties": {
                         "containerPort": {
                             "description": "Port on which the container runs.",
