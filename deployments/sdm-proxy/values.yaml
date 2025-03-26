@@ -1,54 +1,41 @@
 global:
-  ## Metadata applied to all resources.
-  ##
   addDateLabel: true # @schema; description: Adds a `date: {{ now | htmlDate }}` label to all resources.
   annotations: {} # @schema; description: Map of annotations to add to all resources.
   labels: {} # @schema; description: Map of labels to add to all resources.
 
 strongdm:
-  ## Allow some overrides. Useful when installing as a subchart.
-  ##
   nameOverride: "" # @schema; description: Override resource names.
   namespaceOverride: "" # @schema; description: Override the release namespace.
 
-  ## Image pull configuration.
-  ##
   image: # @schema; description: Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.
     pullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/relay
     tag: latest
     digest: ""
 
-  ## General configuration.
-  ##
-  config:
+  config: # @schema; description: General application configuration.
     domain: strongdm.com # @schema; description: Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
     disableAutoUpdate: false # @schema; description: Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.
     maintenanceWindowStart: 0 # @schema; description: Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
     enableMetrics: false # @schema; description: Enable Prometheus metrics on port 9999.
-    logOptions: # @schema; description: Configuration for container logs.
-      format: json
-      storage: stdout
-      encryption: plaintext
+    verboseLogs: false # @schema; description: Toggle debug logging.
+    queryLogs: # @schema; description: Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.
+      storage: "" # @schema; description: Query log storage location; options: 'stdout', 'tcp', 'syslog', 'socket', 'file'. The default is to disable the additional audit logs.
+      format: "" # @schema; description: Query log format; options: 'json', 'csv'.
+      encoding: "" # @schema; description: Query log encoding; options: 'plaintext', 'publickey'
 
-  ## Auto registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
-  ##
-  autoRegisterCluster:
+  autoRegisterCluster: # @schema; description: Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
     enabled: false # @schema; description: Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
     resourceName: "" # @schema; description: Name of the StrongDM Pod Identity Cluster resource to create.
     extraArgs: "" # @schema; description: Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
 
-  ## StrongDM authentication sources.
-  ##
-  auth:
+  auth: # @schema; description: StrongDM authentication sources.
     clusterKey: "" # @schema; description: The SDM_PROXY_CLUSTER_ACCESS_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
     clusterSecret: "" # @schema; description: The SDM_PROXY_CLUSTER_SECRET_KEY with which this proxy should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
     adminToken: "" # @schema; description: The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
     secretName: "" # @schema; description: Name of the k8s Secret that contains SDM_PROXY_CLUSTER_ACCESS_KEY and SDM_PROXY_CLUSTER_SECRET_KEY, and/or SDM_ADMIN_TOKEN.
 
-  ## Service configuration.
-  ##
-  service:
+  service: # @schema; description: Service configuration.
     annotations: {} # @schema; description: Map of annotations to apply to the Service.
     labels: {} # @schema; description: Map of labels to apply to the Service.
     type: ClusterIP # @schema; description: Specify the type of Service to front the deployment.
@@ -59,9 +46,7 @@ strongdm:
     tlsSource: "" # @schema; description: How this service is expected to terminate TLS, if at all. Set to `file` and supply @strongdm.service.tlsSecretName to terminate with a user-provided certificate. Set to `none` if terminating TLS before these containers, e.g. with a load balancer. Leave empty to terminate TLS with a StrongDM-signed certificate built into the software.
     tlsSecretName: "" # @schema; description: kubernetes.io/tls Secret with which containers will terminate TLS.
 
-  ## Deployment configuration.
-  ##
-  deployment:
+  deployment: # @schema; description: Deployment configuration.
     annotations: {} # @schema; description: Map of annotations to add to the Deployment.
     labels: {} # @schema; description: Map of labels to add to the Deployment.
     replicaCount: 2 # @schema; description: Number of Pods to run in the deployment.
@@ -70,9 +55,7 @@ strongdm:
       topologyKey: topology.kubernetes.io/zone
       whenUnsatisfiable: ScheduleAnyway
 
-  ## Pod configuration.
-  ##
-  pod:
+  pod: # @schema; description: Pod configuration.
     annotations: {} # @schema; description: Map of annotations to add to Pods.
     labels: {} # @schema; description: Map of labels to add to Pods.
     resources: # @schema; description: Set the Pod resource requests and limits.
@@ -82,9 +65,7 @@ strongdm:
       limits:
         memory: 2560Mi
 
-  ## Service account configuration.
-  ##
-  serviceAccount:
+  serviceAccount: # @schema; description: ServiceAccount configuration.
     create: false # @schema; description: Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
     name: "" # @schema; description: Name of an existing ServiceAccount to use.
     annotations: {} # @schema; description: Map of annotations to add to the ServiceAccount, should one be created.

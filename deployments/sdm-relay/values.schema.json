@@ -4,13 +4,16 @@
         "global": {
             "properties": {
                 "addDateLabel": {
+                    "description": "Adds a `date: {{ now | htmlDate }}` label to all resources.",
                     "type": "boolean"
                 },
                 "annotations": {
+                    "description": "Map of annotations to add to all resources.",
                     "properties": {},
                     "type": "object"
                 },
                 "labels": {
+                    "description": "Map of labels to add to all resources.",
                     "properties": {},
                     "type": "object"
                 }
@@ -20,88 +23,117 @@
         "strongdm": {
             "properties": {
                 "auth": {
+                    "description": "StrongDM authentication sources.",
                     "properties": {
                         "adminToken": {
+                            "description": "The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
                             "type": "string"
                         },
                         "relayToken": {
+                            "description": "The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
                             "type": "string"
                         },
                         "secretName": {
+                            "description": "Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.",
                             "type": "string"
                         }
                     },
                     "type": "object"
                 },
                 "autoCreateNode": {
+                    "description": "Auto creation configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.",
                     "properties": {
                         "enabled": {
+                            "description": "Create this StrongDM Relay or Gateway automatically.",
                             "type": "boolean"
                         },
                         "maintenanceWindows": {
+                            "description": "Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6",
                             "type": "string"
                         },
                         "name": {
+                            "description": "Name of the Node as it should appear in StrongDM.",
                             "type": "string"
                         },
                         "tags": {
+                            "description": "Tags to add to the created Node. Format 'key=value,key2=value2'.",
                             "type": "string"
                         }
                     },
                     "type": "object"
                 },
                 "autoRegisterCluster": {
+                    "description": "Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.",
                     "properties": {
                         "enabled": {
+                            "description": "Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.",
                             "type": "boolean"
                         },
                         "extraArgs": {
+                            "description": "Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.",
                             "type": "string"
                         },
                         "resourceName": {
+                            "description": "Name of the StrongDM Pod Identity Cluster resource to create.",
                             "type": "string"
                         }
                     },
                     "type": "object"
                 },
                 "config": {
+                    "description": "General application configuration.",
                     "properties": {
                         "disableAutoUpdate": {
+                            "description": "Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.",
                             "type": "boolean"
                         },
                         "domain": {
+                            "description": "Control plane domain to which to connect. Format `uk.strongdm.com`, etc.",
                             "type": "string"
                         },
                         "enableMetrics": {
+                            "description": "Enable Prometheus metrics on port 9999.",
                             "type": "boolean"
                         },
-                        "logOptions": {
+                        "maintenanceWindowStart": {
+                            "description": "Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.",
+                            "type": "integer"
+                        },
+                        "queryLogs": {
+                            "description": "Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.",
                             "properties": {
-                                "encryption": {
+                                "encoding": {
+                                    "description": "Query log encoding",
                                     "type": "string"
                                 },
                                 "format": {
+                                    "description": "Query log format",
                                     "type": "string"
                                 },
                                 "storage": {
+                                    "description": "Query log storage location",
                                     "type": "string"
                                 }
                             },
                             "type": "object"
                         },
-                        "maintenanceWindowStart": {
-                            "type": "integer"
+                        "verboseLogs": {
+                            "description": "Toggle debug logging.",
+                            "type": "boolean"
                         }
                     },
                     "type": "object"
                 },
                 "deployment": {
+                    "description": "Deployment configuration.",
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to add to the Deployment.",
                             "properties": {},
                             "type": "object"
                         },
                         "labels": {
+                            "description": "Map of labels to add to the Deployment.",
                             "properties": {},
                             "type": "object"
                         }
@@ -109,36 +141,51 @@
                     "type": "object"
                 },
                 "gateway": {
+                    "description": "StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.",
                     "properties": {
                         "containerPort": {
+                            "description": "Port on which the container runs.",
                             "type": "integer"
                         },
                         "enabled": {
+                            "description": "Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.",
                             "type": "boolean"
                         },
                         "listenAddress": {
+                            "description": "Address at which the Gateway expects traffic. Ignored unless @strongdm.autoCreateNode.enabled.",
                             "type": "string"
                         },
                         "listenPort": {
+                            "description": "Port on which the Service is expecting traffic.",
                             "type": "integer"
                         },
                         "service": {
+                            "description": "Service configuration. Ignored unless @strongdm.gateway.enabled.",
                             "properties": {
                                 "annotations": {
+                                    "description": "Map of annotations to apply to the Service.",
                                     "properties": {},
                                     "type": "object"
+                                },
+                                "containerPort": {
+                                    "description": "Port on which the Service is expecting traffic.",
+                                    "type": "integer"
                                 },
                                 "labels": {
+                                    "description": "Map of labels to apply to the Service.",
                                     "properties": {},
                                     "type": "object"
                                 },
-                                "loadBalancerIP": {
-                                    "type": "string"
+                                "listenPort": {
+                                    "description": "Port on which the container runs.",
+                                    "type": "integer"
                                 },
                                 "nodePort": {
+                                    "description": "NodePort to which to bind this service, if desired.",
                                     "type": "integer"
                                 },
                                 "type": {
+                                    "description": "Specify the type of Service to front the deployment.",
                                     "type": "string"
                                 }
                             },
@@ -148,6 +195,7 @@
                     "type": "object"
                 },
                 "image": {
+                    "description": "Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.",
                     "properties": {
                         "digest": {
                             "type": "string"
@@ -165,22 +213,28 @@
                     "type": "object"
                 },
                 "nameOverride": {
+                    "description": "Override resource names.",
                     "type": "string"
                 },
                 "namespaceOverride": {
+                    "description": "Override the release namespace.",
                     "type": "string"
                 },
                 "pod": {
+                    "description": "Pod configuration.",
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to add to Pods.",
                             "properties": {},
                             "type": "object"
                         },
                         "labels": {
+                            "description": "Map of labels to add to Pods.",
                             "properties": {},
                             "type": "object"
                         },
                         "resources": {
+                            "description": "Set the Pod resource requests and limits.",
                             "properties": {
                                 "limits": {
                                     "properties": {
@@ -208,19 +262,24 @@
                     "type": "object"
                 },
                 "serviceAccount": {
+                    "description": "ServiceAccount configuration.",
                     "properties": {
                         "annotations": {
+                            "description": "Map of annotations to add to the ServiceAccount, should one be created.",
                             "properties": {},
                             "type": "object"
                         },
                         "create": {
+                            "description": "Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.",
                             "type": "boolean"
                         },
                         "labels": {
+                            "description": "Map of labels to add to the ServiceAccount, should one be created.",
                             "properties": {},
                             "type": "object"
                         },
                         "name": {
+                            "description": "Name of an existing ServiceAccount to use.",
                             "type": "string"
                         }
                     },
