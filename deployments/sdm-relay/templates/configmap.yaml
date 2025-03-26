@@ -13,7 +13,7 @@ data:
   SDM_DISABLE_UPDATE: {{ (or .Values.strongdm.config.disableAutoUpdate (not (empty .Values.strongdm.image.digest)) (ne .Values.strongdm.image.tag "latest")) | quote }}
   SDM_MAINTENANCE_WINDOW_START: {{ .Values.strongdm.config.maintenanceWindowStart | quote }}
   SDM_VERBOSE: {{ .Values.strongdm.config.verboseLogs | quote }}
-  SDM_DOCKERIZED: {{ eq .Values.strongdm.config.queryLogs.storage "stdout" | ternary "stderr" "true" }}
+  SDM_DOCKERIZED: {{ eq .Values.strongdm.config.queryLogs.storage "stdout" | ternary "stderr" "true" | quote }}
   SDM_RELAY_LOG_FORMAT: {{ .Values.strongdm.config.queryLogs.format }}
   SDM_RELAY_LOG_STORAGE: {{ .Values.strongdm.config.queryLogs.storage }}
   SDM_RELAY_LOG_ENCRYPTION: {{ .Values.strongdm.config.queryLogs.encryption }}
