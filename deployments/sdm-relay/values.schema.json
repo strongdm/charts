@@ -83,12 +83,16 @@
                 "config": {
                     "description": "General application configuration.",
                     "properties": {
+                        "appDomain": {
+                            "description": "Control plane to which to connect. Format `uk.strongdm.com`, etc.",
+                            "type": "string"
+                        },
                         "disableAutoUpdate": {
                             "description": "Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.",
                             "type": "boolean"
                         },
                         "domain": {
-                            "description": "Control plane domain to which to connect. Format `uk.strongdm.com`, etc.",
+                            "description": "(DEPRECATED) control plane to which to connect. Format `uk.strongdm.com`, etc.",
                             "type": "string"
                         },
                         "enableMetrics": {
@@ -183,6 +187,11 @@
                                 "nodePort": {
                                     "description": "NodePort to which to bind this service, if desired.",
                                     "type": "integer"
+                                },
+                                "selectorLabels": {
+                                    "description": "Map of additional selector labels to apply to Pods and the Service.",
+                                    "properties": {},
+                                    "type": "object"
                                 },
                                 "type": {
                                     "description": "Specify the type of Service to front the deployment.",

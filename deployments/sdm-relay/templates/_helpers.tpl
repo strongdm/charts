@@ -41,7 +41,11 @@ date: {{ now | htmlDate }}
 
 {{- define "strongdm.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{ include "strongdm.componentLabel" . }}
+{{- range $k, $v := .Values.strongdm.gateway.service.selectorLabels }}
+{{ $k }}: {{ $v | quote }}
+{{- end }}
 {{- end }}
 
 # Args:
