@@ -14,7 +14,8 @@ strongdm:
     digest: ""
 
   config: # @schema; description: General application configuration.
-    domain: strongdm.com # @schema; description: Control plane domain to which to connect. Format `uk.strongdm.com`, etc.
+    domain: strongdm.com # @schema; description: (DEPRECATED) control plane to which to connect. Format `uk.strongdm.com`, etc.
+    appDomain: app.strongdm.com # @schema; description: Control plane to which to connect. Format `uk.strongdm.com`, etc.
     disableAutoUpdate: false # @schema; description: Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.
     maintenanceWindowStart: 0 # @schema; description: Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
     enableMetrics: false # @schema; description: Enable Prometheus metrics on port 9999.
@@ -48,6 +49,7 @@ strongdm:
     service: # @schema; description: Service configuration. Ignored unless @strongdm.gateway.enabled.
       annotations: {} # @schema; description: Map of annotations to apply to the Service.
       labels: {} # @schema; description: Map of labels to apply to the Service.
+      selectorLabels: {} # @schema; description: Map of additional selector labels to apply to Pods and the Service.
       type: ClusterIP # @schema; description: Specify the type of Service to front the deployment.
       listenPort: 443 # @schema; description: Port on which the container runs.
       containerPort: 8443 # @schema; description: Port on which the Service is expecting traffic.

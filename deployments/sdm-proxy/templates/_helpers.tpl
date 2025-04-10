@@ -38,6 +38,9 @@ date: {{ now | htmlDate }}
 {{- define "strongdm.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/component: proxy
+{{- range $k, $v := .Values.strongdm.service.selectorLabels }}
+{{ $k }}: {{ $v | quote }}
+{{- end }}
 {{- end }}
 
 # Args:
