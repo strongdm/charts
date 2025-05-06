@@ -1,6 +1,6 @@
 repos:
 -   repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
-    rev: v0.6.1
+    rev: v0.7.0
     hooks:
     -   id: pre-commit-update
 
@@ -15,7 +15,7 @@ repos:
     -   id: trailing-whitespace
 
 -   repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.28
+    rev: v0.1.29
     hooks:
     -   id: helmlint
     -   id: shellcheck
@@ -84,7 +84,8 @@ repos:
         pass_filenames: false
     -   id: template-invalid-tls-proxy-failure
         name: Helm template | invalid TLS fail | proxy
-        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.service.tlsSource=file'
+        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml
+          --set strongdm.service.tlsSource=file'
         language: system
         pass_filenames: false
 
@@ -92,25 +93,37 @@ repos:
     -   id: template-tag-pin-relay
         name: Helm template | tag pin | relay
         entry: >
-            bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml -f deployments/sdm-relay/values.test.yaml --set strongdm.image.tag=100.10.0 | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")" == "true" ]]'
+          bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+          -f deployments/sdm-relay/values.test.yaml --set strongdm.image.tag=100.10.0
+          | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
+          == "true" ]]'
         language: system
         pass_filenames: false
     -   id: template-tag-pin-proxy
         name: Helm template | tag pin | proxy
         entry: >
-            bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml -f deployments/sdm-proxy/values.test.yaml --set strongdm.image.tag=100.10.0 | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")" == "true" ]]'
+          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
+          -f deployments/sdm-proxy/values.test.yaml --set strongdm.image.tag=100.10.0
+          | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
+          == "true" ]]'
         language: system
         pass_filenames: false
     -   id: template-digest-pin-relay
         name: Helm template | digest pin | relay
         entry: >
-            bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml -f deployments/sdm-relay/values.test.yaml --set strongdm.image.digest=aaa | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")" == "true" ]]'
+          bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.yaml
+          -f deployments/sdm-relay/values.test.yaml --set strongdm.image.digest=aaa
+          | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
+          == "true" ]]'
         language: system
         pass_filenames: false
     -   id: template-digest-pin-proxy
         name: Helm template | digest pin | proxy
         entry: >
-            bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml -f deployments/sdm-proxy/values.test.yaml --set strongdm.image.digest=aaa | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")" == "true" ]]'
+          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.yaml
+          -f deployments/sdm-proxy/values.test.yaml --set strongdm.image.digest=aaa
+          | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
+          == "true" ]]'
         language: system
         pass_filenames: false
 
