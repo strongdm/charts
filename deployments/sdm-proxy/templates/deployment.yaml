@@ -30,17 +30,27 @@ spec:
       serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
       {{- end }}
       terminationGracePeriodSeconds: 10
+      nodeSelectors:
+        {{- with .Values.strongdm.deployment.nodeSelector }}
+        {{- toYaml . | nindent 2 }}
+        {{- end }}
+      tolerations:
+        {{- with .Values.strongdm.deployment.tolerations }}
+        {{- toYaml . | nindent 2 }}
+        {{- end }}
       topologySpreadConstraints:
-        - maxSkew: {{ .Values.strongdm.deployment.topologySpreadConstraints.maxSkew }}
-          topologyKey: {{ .Values.strongdm.deployment.topologySpreadConstraints.topologyKey }}
-          whenUnsatisfiable: {{ .Values.strongdm.deployment.topologySpreadConstraints.whenUnsatisfiable }}
+        {{- range $k, $v := .Values.strongdm.deployment.topologySpreadConstraints }}
+        - topologyKey: {{ $k }}
+          maxSkew: {{ $v.maxSkew }}
+          whenUnsatisfiable: {{ $v.whenUnsatisfiable }}
           labelSelector:
             matchLabels:
-              {{- include "strongdm.selectorLabels" . | nindent 14 }}
-            {{- if semverCompare ">=1.27.0" .Capabilities.KubeVersion.Version }}
+              {{- include "strongdm.selectorLabels" $ | nindent 14 }}
+            {{- if semverCompare ">=1.27.0" $.Capabilities.KubeVersion.Version }}
             matchLabelKeys:
               - pod-template-hash
             {{- end }}
+        {{- end }}
       {{- if .Values.strongdm.service.tlsSecretName }}
       volumes:
         - name: {{ .Release.Name }}-tls

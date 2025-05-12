@@ -145,6 +145,15 @@
                             "description": "Map of labels to add to the Deployment.",
                             "properties": {},
                             "type": "object"
+                        },
+                        "nodeSelector": {
+                            "description": "Pod node selectors.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "tolerations": {
+                            "description": "Pod node tolerations.",
+                            "type": "array"
                         }
                     },
                     "type": "object"
