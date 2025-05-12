@@ -65,6 +65,11 @@
                 "config": {
                     "description": "General application configuration.",
                     "properties": {
+                        "additionalEnvVars": {
+                            "description": "Additional environment variables to add to the ConfigMap.",
+                            "properties": {},
+                            "type": "object"
+                        },
                         "appDomain": {
                             "description": "Control plane to which to connect. Format `uk.strongdm.com`, etc.",
                             "type": "string"
