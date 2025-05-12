@@ -24,7 +24,7 @@ strongdm:
       storage: "" # @schema; description: Query log storage location; options: 'stdout', 'tcp', 'syslog', 'socket', 'file'.
       format: "" # @schema; description: Query log format; options: 'json', 'csv'.
       encoding: "" # @schema; description: Query log encoding; options: 'plaintext', 'publickey'
-  additionalEnvVars: {} # @schema; description: Additional environment variables to add to the ConfigMap.
+    additionalEnvVars: {} # @schema; description: Additional environment variables to add to the ConfigMap.
 
   autoRegisterCluster: # @schema; description: Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
     enabled: false # @schema; description: Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
