@@ -32,11 +32,11 @@ spec:
       terminationGracePeriodSeconds: 10
       nodeSelectors:
         {{- with .Values.strongdm.deployment.nodeSelector }}
-        {{- toYaml . | nindent 2 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
       tolerations:
         {{- with .Values.strongdm.deployment.tolerations }}
-        {{- toYaml . | nindent 2 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
       topologySpreadConstraints:
         {{- range $k, $v := .Values.strongdm.deployment.topologySpreadConstraints }}
