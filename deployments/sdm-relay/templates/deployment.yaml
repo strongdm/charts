@@ -28,6 +28,14 @@ spec:
       serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
       {{- end }}
       terminationGracePeriodSeconds: 10
+      nodeSelectors:
+        {{- with .Values.strongdm.deployment.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      tolerations:
+        {{- with .Values.strongdm.deployment.tolerations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       containers:
         - name: sdm
           image: {{ template "strongdm.imageURI" . }}

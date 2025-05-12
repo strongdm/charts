@@ -128,21 +128,32 @@
                             "properties": {},
                             "type": "object"
                         },
+                        "nodeSelector": {
+                            "description": "Pod node selectors.",
+                            "properties": {},
+                            "type": "object"
+                        },
                         "replicaCount": {
                             "description": "Number of Pods to run in the deployment.",
                             "type": "integer"
                         },
+                        "tolerations": {
+                            "description": "Pod node tolerations.",
+                            "type": "array"
+                        },
                         "topologySpreadConstraints": {
-                            "description": "Pod spread constraints. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.",
+                            "description": "Pod spread constraints. Keys in this map are topology keys. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.",
                             "properties": {
-                                "maxSkew": {
-                                    "type": "integer"
-                                },
-                                "topologyKey": {
-                                    "type": "string"
-                                },
-                                "whenUnsatisfiable": {
-                                    "type": "string"
+                                "kubernetes.io/hostname": {
+                                    "properties": {
+                                        "maxSkew": {
+                                            "type": "integer"
+                                        },
+                                        "whenUnsatisfiable": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             },
                             "type": "object"

@@ -59,6 +59,8 @@ strongdm:
   deployment: # @schema; description: Deployment configuration.
     annotations: {} # @schema; description: Map of annotations to add to the Deployment.
     labels: {} # @schema; description: Map of labels to add to the Deployment.
+    nodeSelector: {} # @schema; description: Pod node selectors.
+    tolerations: [] # @schema; description: Pod node tolerations.
 
   pod: # @schema; description: Pod configuration.
     annotations: {} # @schema; description: Map of annotations to add to Pods.

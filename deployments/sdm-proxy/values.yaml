@@ -53,10 +53,12 @@ strongdm:
     annotations: {} # @schema; description: Map of annotations to add to the Deployment.
     labels: {} # @schema; description: Map of labels to add to the Deployment.
     replicaCount: 2 # @schema; description: Number of Pods to run in the deployment.
-    topologySpreadConstraints: # @schema; description: Pod spread constraints. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.
-      maxSkew: 1
-      topologyKey: topology.kubernetes.io/zone
-      whenUnsatisfiable: ScheduleAnyway
+    nodeSelector: {} # @schema; description: Pod node selectors.
+    tolerations: [] # @schema; description: Pod node tolerations.
+    topologySpreadConstraints: # @schema; description: Pod spread constraints. Keys in this map are topology keys. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.
+      kubernetes.io/hostname:
+        maxSkew: 1
+        whenUnsatisfiable: ScheduleAnyway
 
   pod: # @schema; description: Pod configuration.
     annotations: {} # @schema; description: Map of annotations to add to Pods.
