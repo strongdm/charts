@@ -27,3 +27,6 @@ data:
   SDM_TLS_CERT_FILE: /etc/sdm/tls.crt
   SDM_TLS_KEY_FILE: /etc/sdm/tls.key
   {{- end }}
+  {{- range $k, $v := .Values.strongdm.config.additionalEnvVars }}
+  {{ $k }}: {{ $v | quote }}
+  {{- end }}

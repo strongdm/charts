@@ -22,6 +22,11 @@
         },
         "strongdm": {
             "properties": {
+                "additionalEnvVars": {
+                    "description": "Additional environment variables to add to the ConfigMap.",
+                    "properties": {},
+                    "type": "object"
+                },
                 "auth": {
                     "description": "StrongDM authentication sources.",
                     "properties": {

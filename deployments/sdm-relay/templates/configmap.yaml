@@ -19,3 +19,6 @@ data:
   SDM_RELAY_LOG_ENCRYPTION: {{ .Values.strongdm.config.queryLogs.encryption }}
   SDM_ORCHESTRATOR_PROBES: :9090
   SDM_METRICS_LISTEN_ADDRESS: {{ .Values.strongdm.config.enableMetrics | ternary ":9999" "" }}
+  {{- range $k, $v := .Values.strongdm.config.additionalEnvVars }}
+  {{ $k }}: {{ $v | quote }}
+  {{- end }}

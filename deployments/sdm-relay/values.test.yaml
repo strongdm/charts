@@ -9,3 +9,8 @@ strongdm:
     create: true
   autoRegisterCluster:
     enabled: true
+  config:
+    additionalEnvVars:
+      foo: bar
+      bar: 2
+      baz: false
