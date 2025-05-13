@@ -128,7 +128,7 @@ spec:
       containers:
         - name: kubectl
           {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
-          image: public.ecr.aws/bitnami/kubectl:{{ $kubeVersion.Major }}.{{ $kubeVersion.Minor }}
+          image: bitnami/kubectl:{{ $kubeVersion.Major }}.{{ $kubeVersion.Minor }}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
