@@ -28,7 +28,7 @@ spec:
       serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
       {{- end }}
       terminationGracePeriodSeconds: 10
-      nodeSelectors:
+      nodeSelector:
         {{- with .Values.strongdm.deployment.nodeSelector }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
