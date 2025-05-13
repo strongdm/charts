@@ -25,7 +25,7 @@ spec:
     spec:
       restartPolicy: Always
       {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
-      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
+      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary (include "strongdm.name" .) .Values.strongdm.serviceAccount.name }}
       {{- end }}
       terminationGracePeriodSeconds: 10
       nodeSelector:
@@ -52,10 +52,10 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: SDM_RELAY_TOKEN
-                  name: {{ .Values.strongdm.autoCreateNode.enabled | ternary (printf "%s-relay-token" .Release.Name) (default (printf "%s-secrets" .Release.Name) .Values.strongdm.auth.secretName) }}
+                  name: {{ .Values.strongdm.autoCreateNode.enabled | ternary (printf "%s-relay-token" ( include "strongdm.name" . )) (default (printf "%s-secrets" ( include "strongdm.name" . )) .Values.strongdm.auth.secretName) }}
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-config
+                name: {{ include "strongdm.name" . }}-config
           ports:
             - name: healthcheck
               containerPort: 9090
