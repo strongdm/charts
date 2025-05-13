@@ -27,7 +27,7 @@ spec:
     spec:
       restartPolicy: Always
       {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
-      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary .Release.Name .Values.strongdm.serviceAccount.name }}
+      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary (include "strongdm.name" .) .Values.strongdm.serviceAccount.name }}
       {{- end }}
       terminationGracePeriodSeconds: 10
       nodeSelector:
@@ -53,7 +53,7 @@ spec:
         {{- end }}
       {{- if .Values.strongdm.service.tlsSecretName }}
       volumes:
-        - name: {{ .Release.Name }}-tls
+        - name: tls
           secret:
             secretName: {{ .Values.strongdm.service.tlsSecretName }}
       {{- end }}
@@ -73,12 +73,12 @@ spec:
             - name: SDM_PROXY_CLUSTER_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-secrets" .Release.Name) .Values.strongdm.auth.secretName }}
+                  name: {{ default (printf "%s-secrets" (include "strongdm.name" .)) .Values.strongdm.auth.secretName }}
                   key: SDM_PROXY_CLUSTER_ACCESS_KEY
             - name: SDM_PROXY_CLUSTER_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-secrets" .Release.Name) .Values.strongdm.auth.secretName }}
+                  name: {{ default (printf "%s-secrets" (include "strongdm.name" .)) .Values.strongdm.auth.secretName }}
                   key: SDM_PROXY_CLUSTER_SECRET_KEY
           envFrom:
             - configMapRef:
@@ -97,7 +97,7 @@ spec:
             {{- end }}
           {{- if .Values.strongdm.service.tlsSecretName }}
           volumeMounts:
-            - name: {{ .Release.Name }}-tls
+            - name: tls
               mountPath: /etc/sdm
               readOnly: true
           {{- end }}
