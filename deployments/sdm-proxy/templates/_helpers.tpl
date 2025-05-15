@@ -5,6 +5,10 @@
 {{- default .Release.Namespace .Values.strongdm.namespaceOverride }}
 {{- end }}
 
+{{- define "strongdm.appDomain" -}}
+{{- default (printf "app.%s" .Values.strongdm.config.domain) .Values.strongdm.config.appDomain }}
+{{- end }}
+
 # Args:
 # - addtl: (optional) map of annotations to add
 {{- define "strongdm.annotations" -}}
