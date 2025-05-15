@@ -121,15 +121,15 @@ spec:
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
             {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.autoCreateNode.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
             {{- if .Values.strongdm.gateway.enabled }}
-              SDM_RELAY_TOKEN=$(/sdm.linux admin node create-gateway {{ $commonArgs }} {{ .Values.strongdm.gateway.listenAddress }}:{{ .Values.strongdm.gateway.listenPort }})"
+              SDM_RELAY_TOKEN="$(/sdm.linux admin node create-gateway {{ $commonArgs }} {{ .Values.strongdm.gateway.listenAddress }}:{{ .Values.strongdm.gateway.listenPort }})"
             {{- else }}
-              SDM_RELAY_TOKEN=$(/sdm.linux admin node create {{ $commonArgs }})"
+              SDM_RELAY_TOKEN="$(/sdm.linux admin node create {{ $commonArgs }})"
             {{- end }}
               if [[ ! grep -qE "^[[:graph:]]+[.][[:graph:]]+[.][[:graph:]]+$" <<< "${SDM_RELAY_TOKEN}" ]]; then
                 echo "Error creating node: ${SDM_RELAY_TOKEN}"
                 exit 3;
               fi
-              echo "${SDM_RELAY_TOKEN}" /secrets/token
+              echo "${SDM_RELAY_TOKEN}" > /secrets/token
       containers:
         - name: kubectl
           {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
@@ -148,5 +148,6 @@ spec:
           command:
             - /bin/bash
             - -c
-            - kubectl create secret generic {{ include "strongdm.name" . }}-relay-token --from-literal=$(cat /secrets/token) --namespace {{ include "strongdm.namespace" . }} --dry-run=client -o yaml | kubectl apply -f -
+            - |
+              kubectl create secret generic {{ include "strongdm.name" . }}-relay-token --from-literal="$(cat /secrets/token)" --namespace {{ include "strongdm.namespace" . }} --dry-run=client -o yaml | kubectl apply -f -
 {{- end }}
