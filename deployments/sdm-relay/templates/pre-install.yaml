@@ -104,7 +104,7 @@ spec:
           env:
             # Reference these directly because we don't yet have access to the created Secret nor ConfigMap
             - name: SDM_APP_DOMAIN
-              value: {{ .Values.strongdm.config.appDomain | default (printf "app.%s" .Values.strongdm.config.domain) }}
+              value: {{ include "strongdm.appDomain" . }}
             - name: SDM_ADMIN_TOKEN
               {{- if .Values.strongdm.auth.secretName }}
               valueFrom:
