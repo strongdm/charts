@@ -103,8 +103,8 @@ spec:
               mountPath: /secrets
           env:
             # Reference these directly because we don't yet have access to the created Secret nor ConfigMap
-            - name: SDM_DOMAIN
-              value: {{ .Values.strongdm.config.domain }}
+            - name: SDM_APP_DOMAIN
+              value: {{ .Values.strongdm.config.appDomain | default (printf "app.%s" .Values.strongdm.config.domain) }}
             - name: SDM_ADMIN_TOKEN
               {{- if .Values.strongdm.auth.secretName }}
               valueFrom:
@@ -118,6 +118,7 @@ spec:
             - /bin/bash
             - -c
             - |
+              set -e -o pipefail
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
             {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.autoCreateNode.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
             {{- if .Values.strongdm.gateway.enabled }}
@@ -125,11 +126,11 @@ spec:
             {{- else }}
               SDM_RELAY_TOKEN="$(/sdm.linux admin node create {{ $commonArgs }})"
             {{- end }}
-              if [[ ! grep -qE "^[[:graph:]]+[.][[:graph:]]+[.][[:graph:]]+$" <<< "${SDM_RELAY_TOKEN}" ]]; then
-                echo "Error creating node: ${SDM_RELAY_TOKEN}"
-                exit 3;
+              if ! grep -qE "^[[:graph:]]+[.][[:graph:]]+[.][[:graph:]]+$" <<< "${SDM_RELAY_TOKEN}"; then
+                echo "${SDM_RELAY_TOKEN}"
+                exit 3
               fi
-              echo "${SDM_RELAY_TOKEN}" > /secrets/token
+              echo "SDM_RELAY_TOKEN=${SDM_RELAY_TOKEN}" > /secrets/token
       containers:
         - name: kubectl
           {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
