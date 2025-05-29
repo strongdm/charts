@@ -27,9 +27,6 @@
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 helm.sh/release: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.global.addDateLabel }}
-date: {{ now | htmlDate }}
-{{- end }}
 {{- range $k, $v := .Values.global.labels }}
 {{ $k }}: {{ $v | quote }}
 {{- end }}

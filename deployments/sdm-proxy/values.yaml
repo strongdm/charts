@@ -1,5 +1,4 @@
 global:
-  addDateLabel: true # @schema; description: Adds a `date: {{ now | htmlDate }}` label to all resources.
   annotations: {} # @schema; description: Map of annotations to add to all resources.
   labels: {} # @schema; description: Map of labels to add to all resources.
 
