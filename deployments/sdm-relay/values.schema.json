@@ -3,10 +3,6 @@
     "properties": {
         "global": {
             "properties": {
-                "addDateLabel": {
-                    "description": "Adds a `date: {{ now | htmlDate }}` label to all resources.",
-                    "type": "boolean"
-                },
                 "annotations": {
                     "description": "Map of annotations to add to all resources.",
                     "properties": {},
