@@ -170,7 +170,7 @@
                             "type": "string"
                         },
                         "listenPort": {
-                            "description": "Port on which the Service is expecting traffic.",
+                            "description": "Port on which the Gateway expects traffic.",
                             "type": "integer"
                         },
                         "service": {
@@ -181,25 +181,17 @@
                                     "properties": {},
                                     "type": "object"
                                 },
-                                "containerPort": {
-                                    "description": "Port on which the Service is expecting traffic.",
-                                    "type": "integer"
-                                },
                                 "labels": {
                                     "description": "Map of labels to apply to the Service.",
                                     "properties": {},
                                     "type": "object"
-                                },
-                                "listenPort": {
-                                    "description": "Port on which the container runs.",
-                                    "type": "integer"
                                 },
                                 "nodePort": {
                                     "description": "NodePort to which to bind this service, if desired.",
                                     "type": "integer"
                                 },
                                 "selectorLabels": {
-                                    "description": "Map of additional selector labels to apply to Pods and the Service.",
+                                    "description": "Service selector labels.",
                                     "properties": {},
                                     "type": "object"
                                 },

@@ -44,15 +44,13 @@ strongdm:
   gateway: # @schema; description: StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.
     enabled: false # @schema; description: Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.
     listenAddress: "" # @schema; description: Address at which the Gateway expects traffic. Ignored unless @strongdm.autoCreateNode.enabled.
-    listenPort: 5000 # @schema; description: Port on which the Service is expecting traffic.
+    listenPort: 5000 # @schema; description: Port on which the Gateway expects traffic.
     containerPort: 5000 # @schema; description: Port on which the container runs.
     service: # @schema; description: Service configuration. Ignored unless @strongdm.gateway.enabled.
       annotations: {} # @schema; description: Map of annotations to apply to the Service.
       labels: {} # @schema; description: Map of labels to apply to the Service.
-      selectorLabels: {} # @schema; description: Map of additional selector labels to apply to Pods and the Service.
+      selectorLabels: {} # @schema; description: Service selector labels.
       type: ClusterIP # @schema; description: Specify the type of Service to front the deployment.
-      listenPort: 443 # @schema; description: Port on which the container runs.
-      containerPort: 8443 # @schema; description: Port on which the Service is expecting traffic.
       nodePort: 0 # @schema; description: NodePort to which to bind this service, if desired.
 
   deployment: # @schema; description: Deployment configuration.
