@@ -62,8 +62,8 @@ resources:
 # - digest: (optional) image digest
 {{- define "strongdm.imageURI" -}}
 {{- if .Values.strongdm.image.digest -}}
-{{ printf "%s@sha256:%s" (default "public.ecr.aws/strongdm/relay" .repository) .Values.strongdm.image.digest }}
+{{ printf "%s@sha256:%s" .Values.strongdm.image.repository .Values.strongdm.image.digest }}
 {{- else -}}
-{{ printf "%s:%s" (default "public.ecr.aws/strongdm/relay" .repository) .Values.strongdm.image.tag }}
+{{ printf "%s:%s" .Values.strongdm.image.repository .Values.strongdm.image.tag }}
 {{- end -}}
 {{- end }}

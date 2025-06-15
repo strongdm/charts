@@ -134,7 +134,7 @@ spec:
       containers:
         - name: kubectl
           {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
-          image: bitnami/kubectl:{{ $kubeVersion.Major }}.{{ $kubeVersion.Minor }}
+          image: {{ default (printf "bitnami/kubectl:%s.%s" $kubeVersion.Major $kubeVersion.Minor) .Values.strongdm.autoCreateNode.kubectlImage }}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
