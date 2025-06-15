@@ -35,7 +35,7 @@ strongdm:
     name: "" # @schema; description: Name of the Node as it should appear in StrongDM.
     tags: "" # @schema; description: Tags to add to the created Node. Format 'key=value,key2=value2'.
     maintenanceWindows: '* * * * *' # @schema; description: Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
-    kubectlImage: "" # @schema; description: Full URI of the container with kubectl installed, used to create needed a k8s Secret. Defaults to a bitnami/kubectl image."
+    kubectlImage: "" # @schema; description: Full URI of the container with kubectl installed, used to create a k8s Secret. Defaults to a bitnami/kubectl image.
 
   auth: # @schema; description: StrongDM authentication sources.
     relayToken: "" # @schema; description: The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.

@@ -44,7 +44,7 @@
                             "type": "boolean"
                         },
                         "kubectlImage": {
-                            "description": "Full URI of the container with kubectl installed, used to create needed a k8s Secret. Defaults to a bitnami/kubectl image.\"",
+                            "description": "Full URI of the container with kubectl installed, used to create a k8s Secret. Defaults to a bitnami/kubectl image.",
                             "type": "string"
                         },
                         "maintenanceWindows": {
