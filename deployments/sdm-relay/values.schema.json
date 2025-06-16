@@ -43,6 +43,10 @@
                             "description": "Create this StrongDM Relay or Gateway automatically.",
                             "type": "boolean"
                         },
+                        "kubectlImage": {
+                            "description": "Full URI of the container with kubectl installed, used to create a k8s Secret. Defaults to a bitnami/kubectl image.",
+                            "type": "string"
+                        },
                         "maintenanceWindows": {
                             "description": "Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6",
                             "type": "string"
