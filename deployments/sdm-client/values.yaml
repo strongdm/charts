@@ -1,18 +1,43 @@
 global:
-  addDateLabel: true # adds timestamp label to all resources
-  service:
-    type: ClusterIP
-  secret:
-    # Use `echo -n token | base64` to base64 encode the Service token.
-    token:
-  deployment:
-    replicas: 1
+  annotations: {} # @schema; description: Map of annotations to add to all resources.
+  labels: {} # @schema; description: Map of labels to add to all resources.
+
+strongdm:
+  nameOverride: "" # @schema; description: Override resource names.
+  namespaceOverride: "" # @schema; description: Override the release namespace.
+
+  image: # @schema; description: Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.
+    pullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/client
     tag: latest
     digest: ""
-    imagePullPolicy: Always
-    ports:
-      - 15432
-      - 15433
-configMap:
-  SDM_DOCKERIZED: "true"
+
+  config: # @schema; description: General application configuration.
+    appDomain: app.strongdm.com # @schema; description: Control plane to which to connect. Format `uk.strongdm.com`, etc.
+    verboseLogs: false # @schema; description: Toggle debug logging.
+    additionalEnvVars: {} # @schema; description: Additional environment variables to add to the ConfigMap.
+
+  auth: # @schema; description: StrongDM authentication sources.
+    serviceToken: "" # @schema; description: The SDM_SERVICE_TOKEN with which to authenticate this StrongDM client. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+    secretName: "" # @schema; description: Name of the k8s Secret that contains SDM_SERVICE_TOKEN.
+
+  deployment: # @schema; description: Deployment configuration.
+    annotations: {} # @schema; description: Map of annotations to add to the Deployment.
+    labels: {} # @schema; description: Map of labels to add to the Deployment.
+    replicaCount: 1 # @schema; description: Number of Pods to run in the deployment.
+    nodeSelector: {} # @schema; description: Pod node selectors.
+    tolerations: [] # @schema; description: Pod node tolerations.
+    topologySpreadConstraints: # @schema; description: Pod spread constraints. Keys in this map are topology keys. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.
+      kubernetes.io/hostname:
+        maxSkew: 1
+        whenUnsatisfiable: ScheduleAnyway
+
+  pod: # @schema; description: Pod configuration.
+    annotations: {} # @schema; description: Map of annotations to add to Pods.
+    labels: {} # @schema; description: Map of labels to add to Pods.
+    resources: # @schema; description: Set the Pod resource requests and limits.
+      requests:
+        memory: 2Gi
+        cpu: 512m
+      limits:
+        memory: 2Gi

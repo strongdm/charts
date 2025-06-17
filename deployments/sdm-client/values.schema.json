@@ -1,35 +1,110 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "properties": {
-        "configMap": {
+        "global": {
             "properties": {
-                "SDM_DOCKERIZED": {
-                    "type": "string"
+                "annotations": {
+                    "description": "Map of annotations to add to all resources.",
+                    "properties": {},
+                    "type": "object"
+                },
+                "labels": {
+                    "description": "Map of labels to add to all resources.",
+                    "properties": {},
+                    "type": "object"
                 }
             },
             "type": "object"
         },
-        "global": {
+        "strongdm": {
             "properties": {
-                "addDateLabel": {
-                    "type": "boolean"
+                "auth": {
+                    "description": "StrongDM authentication sources.",
+                    "properties": {
+                        "secretName": {
+                            "description": "Name of the k8s Secret that contains SDM_SERVICE_TOKEN.",
+                            "type": "string"
+                        },
+                        "serviceToken": {
+                            "description": "The SDM_SERVICE_TOKEN with which to authenticate this StrongDM client. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "config": {
+                    "description": "General application configuration.",
+                    "properties": {
+                        "additionalEnvVars": {
+                            "description": "Additional environment variables to add to the ConfigMap.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "appDomain": {
+                            "description": "Control plane to which to connect. Format `uk.strongdm.com`, etc.",
+                            "type": "string"
+                        },
+                        "verboseLogs": {
+                            "description": "Toggle debug logging.",
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
                 },
                 "deployment": {
+                    "description": "Deployment configuration.",
+                    "properties": {
+                        "annotations": {
+                            "description": "Map of annotations to add to the Deployment.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "labels": {
+                            "description": "Map of labels to add to the Deployment.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "nodeSelector": {
+                            "description": "Pod node selectors.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "replicaCount": {
+                            "description": "Number of Pods to run in the deployment.",
+                            "type": "integer"
+                        },
+                        "tolerations": {
+                            "description": "Pod node tolerations.",
+                            "type": "array"
+                        },
+                        "topologySpreadConstraints": {
+                            "description": "Pod spread constraints. Keys in this map are topology keys. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.",
+                            "properties": {
+                                "kubernetes.io/hostname": {
+                                    "properties": {
+                                        "maxSkew": {
+                                            "type": "integer"
+                                        },
+                                        "whenUnsatisfiable": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "image": {
+                    "description": "Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.",
                     "properties": {
                         "digest": {
                             "type": "string"
                         },
-                        "imagePullPolicy": {
+                        "pullPolicy": {
                             "type": "string"
-                        },
-                        "ports": {
-                            "items": {
-                                "type": "integer"
-                            },
-                            "type": "array"
-                        },
-                        "replicas": {
-                            "type": "integer"
                         },
                         "repository": {
                             "type": "string"
@@ -40,18 +115,51 @@
                     },
                     "type": "object"
                 },
-                "secret": {
-                    "properties": {
-                        "token": {
-                            "type": "null"
-                        }
-                    },
-                    "type": "object"
+                "nameOverride": {
+                    "description": "Override resource names.",
+                    "type": "string"
                 },
-                "service": {
+                "namespaceOverride": {
+                    "description": "Override the release namespace.",
+                    "type": "string"
+                },
+                "pod": {
+                    "description": "Pod configuration.",
                     "properties": {
-                        "type": {
-                            "type": "string"
+                        "annotations": {
+                            "description": "Map of annotations to add to Pods.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "labels": {
+                            "description": "Map of labels to add to Pods.",
+                            "properties": {},
+                            "type": "object"
+                        },
+                        "resources": {
+                            "description": "Set the Pod resource requests and limits.",
+                            "properties": {
+                                "limits": {
+                                    "properties": {
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "requests": {
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
                         }
                     },
                     "type": "object"
