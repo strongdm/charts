@@ -1,41 +1,66 @@
-kind: Deployment
+---
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-deployment
+  name: {{ include "strongdm.name" . }}
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.deployment.annotations) .) | nindent 4 }}
   labels:
-    app: {{ .Release.Name }}-app
-{{- include "sdm.labels" . | indent 4 }}
+    {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.deployment.labels) .) | nindent 4 }}
 spec:
-  replicas: {{ .Values.global.deployment.replicas | default 1 }}
+  replicas: {{ .Values.strongdm.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-app
+      {{- include "strongdm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- include "strongdm.annotations" (merge (dict "addtl" .Values.strongdm.pod.annotations) .) | nindent 8 }}
       labels:
-        app: {{ .Release.Name }}-app
+        {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.pod.labels) .) | nindent 8 }}
     spec:
+      restartPolicy: Always
+      nodeSelector:
+        {{- with .Values.strongdm.deployment.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      tolerations:
+        {{- with .Values.strongdm.deployment.tolerations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      topologySpreadConstraints:
+        {{- range $k, $v := .Values.strongdm.deployment.topologySpreadConstraints }}
+        - topologyKey: {{ $k }}
+          maxSkew: {{ $v.maxSkew }}
+          whenUnsatisfiable: {{ $v.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              {{- include "strongdm.selectorLabels" $ | nindent 14 }}
+            {{- if semverCompare ">=1.27.0" $.Capabilities.KubeVersion.Version }}
+            matchLabelKeys:
+              - pod-template-hash
+            {{- end }}
+        {{- end }}
       containers:
-      - name: {{ .Release.Name }}-app
-        image: {{ template "sdm.imageURI" (merge (dict "name" "client") .Values.global.deployment) }}
-        imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
-        ports:
-        {{- range .Values.global.deployment.ports }}
-        - containerPort: {{ . }}
-          name: {{ . }}-port
-        {{- end }}
-        env:
-        - name: SDM_SERVICE_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: {{ $.Release.Name }}-secret
-              key: token
-        {{- with .Values.configMap }}
-        {{- if .SDM_DOCKERIZED }}
-        - name: SDM_DOCKERIZED
-          valueFrom:
-            configMapKeyRef:
-              name: {{ $.Release.Name }}-config
-              key: SDM_DOCKERIZED
-        {{- end }}
-        {{- end }}
+        - name: sdm
+          image: {{ template "strongdm.imageURI" . }}
+          imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
+          {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
+          livenessProbe:
+            exec:
+              command: ["/sdm.linux", "-v"]
+          readinessProbe:
+            initialDelaySeconds: 5
+            exec:
+              command: ["sdm", "status"]
+          env:
+            - name: SDM_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (printf "%s-secrets" (include "strongdm.name" .)) .Values.strongdm.auth.secretName }}
+                  key: SDM_SERVICE_TOKEN
+          envFrom:
+            - configMapRef:
+                name: {{ include "strongdm.name" . }}-config

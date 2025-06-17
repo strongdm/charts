@@ -1,0 +1,12 @@
+## Test file to be merged with values.yaml.
+##
+## Set all "create" flags to true to exhaust as many config options as possible.
+##
+strongdm:
+  auth:
+    serviceToken: foo
+  config:
+    additionalEnvVars:
+      foo: bar
+      bar: 2
+      baz: false
