@@ -1,26 +1,19 @@
-﻿# [![strongDM](../../sdm_icon.png)](https://strongdm.com/)
+﻿# [![StrongDM](../../sdm_icon.png)](https://strongdm.com/)
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Docs](https://img.shields.io/badge/docs-current-brightgreen.svg)](https://strongdm.com/docs)
 [![Twitter](https://img.shields.io/twitter/follow/strongdm.svg?style=social)](https://twitter.com/intent/follow?screen_name=strongdm)
 
-## strongDM Client
+## StrongDM Client
 
-This repo provides an implementation of a strongDM Client Container inside Kubernetes using Helm.
-
-[Learn more about deploying strongDM's cliet container inside Kubernetes on our docs site.](https://www.strongdm.com/docs/automation/containers/client-container)
+This repo provides an implementation of a StrongDM relay or gateway inside Kubernetes using Helm.
 
 ## Prerequisites
 
 * A Kubernetes Cluster v1.16+
-
 * Helm 3.0+
-
 * Git
-
-* If you are going to use [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/), then you will need to manually patch your [services to allow TCP and UDP traffic](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/)
-
-* [A strongDM Service Token](https://www.strongdm.com/docs/admin-ui-guide/access/service-accounts)
+* A [StrongDM Service Token](https://www.strongdm.com/docs/admin-ui-guide/access/service-accounts)
 
 ## Installing the Chart
 
@@ -37,7 +30,7 @@ _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documen
 ## Upgrading the Chart
 
 ```shell
-helm upgrade [RELEASE_NAME] strongdm/sdm-client --install
+helm upgrade [RELEASE_NAME] strongdm/sdm-client
 ```
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
@@ -54,15 +47,20 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 
 ## Configuration
 
-The following table lists the configurable parameters of the strongDM relay/gateway chart and their default values.
+Please view [values.yaml](./values.yaml) for descriptions on supported Helm values.
 
-| Parameter | Description | Default | Required |
-| --- | --- | --- | --- |
-| .global.service.type | The kind of service you'd like to run for the gateway. E.G. `ClusterIP` or `Loadbalancer` | `ClusterIP` | &#9744; |
-| .global.secret.token | The `base64` encoded value of the relay or gateway token generated in the Admin UI. | None | &#9745; |
-| .global.deployment.replicas | The number of container replicas you'd like to run for the deployment. | 1 | &#9744; |
-| .global.deployment.repository | The image you'd like to use for the strongDM client. | public.ecr.aws/strongdm/client | &#9745; |
-| .global.deployment.tag | The tag for the image you'd like to use for the strongDM client. | latest | &#9745; |
-| .global.deployment.imagePullPolicy | The policy for pulling a new image from the repo. | Always | &#9745; |
-| .global.deployment.ports | A list of ports you'd like to have the service listening on. The ports will coincide with the SDM port you are exposing from SDM. | None | &#9744; |
-| .configmap.SDM_DOCKERIZED | Setting this will automatically send logs to STDOUT overriding settings in AdminUI. | true | &#9744; |
+## Examples
+
+Provide `SDM_SERVICE_TOKEN` directly to create this node during installation:
+```yaml
+strongdm:
+  auth:
+    serviceToken: foo.bar.baz # take care when setting this value directly
+```
+
+Use an existing secret that contains `SDM_SERVICE_TOKEN`:
+```yaml
+strongdm:
+  auth:
+    secretName: my-service-token-secret
+```

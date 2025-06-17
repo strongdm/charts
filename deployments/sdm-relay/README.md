@@ -34,7 +34,7 @@ _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documen
 ## Upgrading the Chart
 
 ```shell
-helm upgrade [RELEASE_NAME] strongdm/sdm-relay --install
+helm upgrade [RELEASE_NAME] strongdm/sdm-relay
 ```
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
