@@ -1,0 +1,136 @@
+# ###
+# Health
+# ###
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "strongdm.name" . }}-health
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - list
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "strongdm.name" . }}-health
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "strongdm.serviceAccountName" . }}
+    namespace: {{ include "strongdm.namespace" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "strongdm.name" . }}-health
+  apiGroup: rbac.authorization.k8s.io
+
+
+# ###
+# Discovery
+# ###
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "strongdm.name" . }}-discovery
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - serviceaccounts
+    verbs:
+      - list
+      - get
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+      - clusterroles
+      - clusterrolebindings
+    verbs:
+      - list
+      - get
+      - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "strongdm.name" . }}-discovery
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "strongdm.serviceAccountName" . }}
+    namespace: {{ include "strongdm.namespace" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "strongdm.name" . }}-discovery
+  apiGroup: rbac.authorization.k8s.io
+
+
+# ###
+# Impersonation
+# ###
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "strongdm.name" . }}-impersonate
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - users
+      - groups
+    verbs:
+      - impersonate
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "strongdm.name" . }}-impersonate
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "strongdm.serviceAccountName" . }}
+    namespace: {{ include "strongdm.namespace" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "strongdm.name" . }}-impersonate
+  apiGroup: rbac.authorization.k8s.io
