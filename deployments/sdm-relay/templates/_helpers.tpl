@@ -71,3 +71,7 @@ resources:
 {{ printf "%s:%s" .Values.strongdm.image.repository .Values.strongdm.image.tag }}
 {{- end -}}
 {{- end }}
+
+{{- define "strongdm.serviceAccountName" -}}
+{{ .Values.strongdm.serviceAccount.create | ternary (include "strongdm.name" .) .Values.strongdm.serviceAccount.name }}
+{{- end }}
