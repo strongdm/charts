@@ -25,7 +25,7 @@ spec:
     spec:
       restartPolicy: Always
       {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
-      serviceAccountName: {{ .Values.strongdm.serviceAccount.create | ternary (include "strongdm.name" .) .Values.strongdm.serviceAccount.name }}
+      serviceAccountName: {{ include "strongdm.serviceAccountName" . }}
       {{- end }}
       terminationGracePeriodSeconds: 10
       nodeSelector:

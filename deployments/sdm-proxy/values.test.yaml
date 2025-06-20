@@ -2,6 +2,12 @@
 ##
 ## Set all "create" flags to true to exhaust as many config options as possible.
 ##
+global:
+  labels:
+    foo: bar
+  annotations:
+    foo.com/bar: baz
+
 strongdm:
   auth:
     adminToken: foo

@@ -9,6 +9,10 @@
 {{- default (printf "app.%s" .Values.strongdm.config.domain) .Values.strongdm.config.appDomain }}
 {{- end }}
 
+{{- define "strongdm.serviceAccountName" -}}
+{{ .Values.strongdm.serviceAccount.create | ternary (include "strongdm.name" .) .Values.strongdm.serviceAccount.name }}
+{{- end }}
+
 # Args:
 # - addtl: (optional) map of annotations to add
 {{- define "strongdm.annotations" -}}

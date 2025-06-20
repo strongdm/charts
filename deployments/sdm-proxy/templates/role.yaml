@@ -1,0 +1,44 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "strongdm.name" . }}-health
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - namespaces
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - list
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "strongdm.name" . }}-health
+  namespace: {{ include "strongdm.namespace" . }}
+  annotations:
+    {{- include "strongdm.annotations" . | nindent 4 }}
+  labels:
+    {{- include "strongdm.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "strongdm.serviceAccountName" . }}
+    namespace: {{ include "strongdm.namespace" . }}
+roleRef:
+  kind: Role
+  name: {{ include "strongdm.name" . }}-health
+  apiGroup: rbac.authorization.k8s.io
