@@ -53,6 +53,7 @@ spec:
               command: ["/sdm.linux", "-v"]
           readinessProbe:
             initialDelaySeconds: 5
+            timeoutSeconds: 10
             exec:
               command: ["sdm", "status"]
           env:
