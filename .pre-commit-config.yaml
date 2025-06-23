@@ -23,44 +23,44 @@ repos:
 -   repo: local
     hooks:
     # Basic rendering tests
-    -   id: template-install-relay
-        name: Helm template | install | relay
+    -   id: install-relay
+        name: Helm install | relay
+        entry: helm install deployments/sdm-relay --dry-run=client --generate-name -f deployments/sdm-relay/values.test.yaml
+        language: system
+        pass_filenames: false
+    -   id: install-gateway
+        name: Helm install | gateway
+        entry: helm install deployments/sdm-relay --dry-run=client --generate-name -f deployments/sdm-relay/values.test.yaml --set strongdm.gateway.enabled=true
+        language: system
+        pass_filenames: false
+    -   id: install-proxy
+        name: Helm install | proxy
+        entry: helm install deployments/sdm-proxy --dry-run=client --generate-name -f deployments/sdm-proxy/values.test.yaml
+        language: system
+        pass_filenames: false
+    -   id: install-client
+        name: Helm install | client
+        entry: helm install deployments/sdm-client --dry-run=client --generate-name -f deployments/sdm-client/values.test.yaml
+        language: system
+        pass_filenames: false
+    -   id: upgrade-relay
+        name: Helm upgrade | relay
         entry: /bin/bash -c 'helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml | kubectl apply --dry-run=client -f -'
         language: system
         pass_filenames: false
-    -   id: template-install-gateway
-        name: Helm template | install | gateway
+    -   id: upgrade-gateway
+        name: Helm upgrade | gateway
         entry: /bin/bash -c 'helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.gateway.enabled=true | kubectl apply --dry-run=client -f -'
         language: system
         pass_filenames: false
-    -   id: template-install-proxy
-        name: Helm template | install | proxy
+    -   id: upgrade-proxy
+        name: Helm upgrade | proxy
         entry: /bin/bash -c 'helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml | kubectl apply --dry-run=client -f -'
         language: system
         pass_filenames: false
-    -   id: template-install-client
-        name: Helm template | install | client
+    -   id: upgrade-client
+        name: Helm upgrade | client
         entry: /bin/bash -c 'helm template deployments/sdm-client -f deployments/sdm-client/values.test.yaml | kubectl apply --dry-run=client -f -'
-        language: system
-        pass_filenames: false
-    -   id: template-upgrade-relay
-        name: Helm template | upgrade | relay
-        entry: /bin/bash -c 'helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --is-upgrade | kubectl apply --dry-run=client -f -'
-        language: system
-        pass_filenames: false
-    -   id: template-upgrade-gateway
-        name: Helm template | upgrade | gateway
-        entry: /bin/bash -c 'helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --is-upgrade --set strongdm.gateway.enabled=true | kubectl apply --dry-run=client -f -'
-        language: system
-        pass_filenames: false
-    -   id: template-upgrade-proxy
-        name: Helm template | upgrade | proxy
-        entry: /bin/bash -c 'helm template deployments/sdm-proxy --is-upgrade -f deployments/sdm-proxy/values.test.yaml | kubectl apply --dry-run=client -f -'
-        language: system
-        pass_filenames: false
-    -   id: template-upgrade-client
-        name: Helm template | upgrade | client
-        entry: /bin/bash -c 'helm template deployments/sdm-client -f deployments/sdm-client/values.test.yaml --is-upgrade | kubectl apply --dry-run=client -f -'
         language: system
         pass_filenames: false
 
