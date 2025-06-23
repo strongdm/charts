@@ -70,7 +70,7 @@ strongdm:
         memory: 2560Mi
 
   serviceAccount: # @schema; description: ServiceAccount configuration.
-    create: false # @schema; description: Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.
+    create: true # @schema; description: Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not use a ServiceAccount.
     name: "" # @schema; description: Name of an existing ServiceAccount to use.
     annotations: {} # @schema; description: Map of annotations to add to the ServiceAccount, should one be created.
     labels: {} # @schema; description: Map of labels to add to the ServiceAccount, should one be created.

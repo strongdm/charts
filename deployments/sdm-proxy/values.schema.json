@@ -282,7 +282,7 @@
                             "type": "object"
                         },
                         "create": {
-                            "description": "Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not create a ServiceAccount.",
+                            "description": "Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not use a ServiceAccount.",
                             "type": "boolean"
                         },
                         "labels": {
