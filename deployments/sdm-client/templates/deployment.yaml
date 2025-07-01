@@ -49,11 +49,13 @@ spec:
           imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
           {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
           livenessProbe:
+            {{- if (eq (include "strongdm.disableAutoUpdate" .) "true") }}
+            initialDelaySeconds: 60
+            {{- end }}
             exec:
-              command: ["/sdm.linux", "-v"]
+              command: ["sdm", "ready"]
           readinessProbe:
             initialDelaySeconds: 5
-            timeoutSeconds: 10
             exec:
               command: ["sdm", "ready"]
           env:
