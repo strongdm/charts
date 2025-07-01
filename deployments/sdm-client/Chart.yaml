@@ -1,7 +1,7 @@
 apiVersion: v2
 name: sdm-client
 kubeVersion: '>= 1.16.0-0'
-version: 1.0.2
+version: 1.1.0
 description: StrongDM Client Container
 type: application
 icon: https://raw.githubusercontent.com/strongdm/charts/main/sdm_icon.png
