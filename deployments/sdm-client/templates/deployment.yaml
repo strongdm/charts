@@ -55,7 +55,7 @@ spec:
             initialDelaySeconds: 5
             timeoutSeconds: 10
             exec:
-              command: ["sdm", "status"]
+              command: ["sdm", "ready"]
           env:
             - name: SDM_SERVICE_TOKEN
               valueFrom:
