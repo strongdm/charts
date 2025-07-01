@@ -1,6 +1,6 @@
 repos:
 -   repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
-    rev: v0.7.0
+    rev: v0.8.0
     hooks:
     -   id: pre-commit-update
 
@@ -25,42 +25,55 @@ repos:
     # Basic rendering tests
     -   id: install-relay
         name: Helm install | relay
-        entry: helm install deployments/sdm-relay --dry-run=client --generate-name -f deployments/sdm-relay/values.test.yaml
+        entry: helm install deployments/sdm-relay --dry-run=client
+          --generate-name -f deployments/sdm-relay/values.test.yaml
         language: system
         pass_filenames: false
     -   id: install-gateway
         name: Helm install | gateway
-        entry: helm install deployments/sdm-relay --dry-run=client --generate-name -f deployments/sdm-relay/values.test.yaml --set strongdm.gateway.enabled=true
+        entry: helm install deployments/sdm-relay --dry-run=client
+          --generate-name -f deployments/sdm-relay/values.test.yaml --set
+          strongdm.gateway.enabled=true
         language: system
         pass_filenames: false
     -   id: install-proxy
         name: Helm install | proxy
-        entry: helm install deployments/sdm-proxy --dry-run=client --generate-name -f deployments/sdm-proxy/values.test.yaml
+        entry: helm install deployments/sdm-proxy --dry-run=client
+          --generate-name -f deployments/sdm-proxy/values.test.yaml
         language: system
         pass_filenames: false
     -   id: install-client
         name: Helm install | client
-        entry: helm install deployments/sdm-client --dry-run=client --generate-name -f deployments/sdm-client/values.test.yaml
+        entry: helm install deployments/sdm-client --dry-run=client
+          --generate-name -f deployments/sdm-client/values.test.yaml
         language: system
         pass_filenames: false
     -   id: upgrade-relay
         name: Helm upgrade | relay
-        entry: /bin/bash -c 'helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml | kubectl apply --dry-run=client -f -'
+        entry: /bin/bash -c 'helm template deployments/sdm-relay -f
+          deployments/sdm-relay/values.test.yaml | kubectl apply
+          --dry-run=client -f -'
         language: system
         pass_filenames: false
     -   id: upgrade-gateway
         name: Helm upgrade | gateway
-        entry: /bin/bash -c 'helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.gateway.enabled=true | kubectl apply --dry-run=client -f -'
+        entry: /bin/bash -c 'helm template deployments/sdm-relay -f
+          deployments/sdm-relay/values.test.yaml --set
+          strongdm.gateway.enabled=true | kubectl apply --dry-run=client -f -'
         language: system
         pass_filenames: false
     -   id: upgrade-proxy
         name: Helm upgrade | proxy
-        entry: /bin/bash -c 'helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml | kubectl apply --dry-run=client -f -'
+        entry: /bin/bash -c 'helm template deployments/sdm-proxy -f
+          deployments/sdm-proxy/values.test.yaml | kubectl apply
+          --dry-run=client -f -'
         language: system
         pass_filenames: false
     -   id: upgrade-client
         name: Helm upgrade | client
-        entry: /bin/bash -c 'helm template deployments/sdm-client -f deployments/sdm-client/values.test.yaml | kubectl apply --dry-run=client -f -'
+        entry: /bin/bash -c 'helm template deployments/sdm-client -f
+          deployments/sdm-client/values.test.yaml | kubectl apply
+          --dry-run=client -f -'
         language: system
         pass_filenames: false
 
@@ -82,8 +95,9 @@ repos:
         pass_filenames: false
     -   id: template-proxy-invalid-tls-failure
         name: Helm template | no tlsSecretName when tlsSource=file | proxy
-        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml
-          --set strongdm.service.tlsSource=file'
+        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f
+          deployments/sdm-proxy/values.test.yaml --set
+          strongdm.service.tlsSource=file'
         language: system
         pass_filenames: false
 
@@ -91,7 +105,8 @@ repos:
     -   id: template-tag-pin-relay
         name: Helm template | tag pin should disable SDM_DISABLE_UPDATE | relay
         entry: >
-          bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.image.tag=100.10.0
+          bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml
+          --set strongdm.image.tag=100.10.0
           | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
           == "true" ]]'
         language: system
@@ -99,23 +114,28 @@ repos:
     -   id: template-tag-pin-proxy
         name: Helm template | tag pin should disable SDM_DISABLE_UPDATE | proxy
         entry: >
-          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.image.tag=100.10.0
+          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml
+          --set strongdm.image.tag=100.10.0
           | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
           == "true" ]]'
         language: system
         pass_filenames: false
     -   id: template-digest-pin-relay
-        name: Helm template | digest pin should disable SDM_DISABLE_UPDATE | relay
+        name: Helm template | digest pin should disable SDM_DISABLE_UPDATE |
+          relay
         entry: >
-          bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.image.digest=aaa
+          bash -c '[[ "$(helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml
+          --set strongdm.image.digest=aaa
           | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
           == "true" ]]'
         language: system
         pass_filenames: false
     -   id: template-digest-pin-proxy
-        name: Helm template | digest pin should disable SDM_DISABLE_UPDATE | proxy
+        name: Helm template | digest pin should disable SDM_DISABLE_UPDATE |
+          proxy
         entry: >
-          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.image.digest=aaa
+          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml
+          --set strongdm.image.digest=aaa
           | yq -r ". | select(.kind == \"ConfigMap\") | .data.SDM_DISABLE_UPDATE")"
           == "true" ]]'
         language: system
