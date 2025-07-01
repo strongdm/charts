@@ -44,6 +44,14 @@
                             "description": "Control plane to which to connect. Format `uk.strongdm.com`, etc.",
                             "type": "string"
                         },
+                        "disableAutoUpdate": {
+                            "description": "Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.",
+                            "type": "boolean"
+                        },
+                        "maintenanceWindowStart": {
+                            "description": "Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.",
+                            "type": "integer"
+                        },
                         "verboseLogs": {
                             "description": "Toggle debug logging.",
                             "type": "boolean"

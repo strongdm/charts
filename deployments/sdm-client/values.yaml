@@ -14,6 +14,8 @@ strongdm:
 
   config: # @schema; description: General application configuration.
     appDomain: app.strongdm.com # @schema; description: Control plane to which to connect. Format `uk.strongdm.com`, etc.
+    disableAutoUpdate: false # @schema; description: Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.
+    maintenanceWindowStart: 0 # @schema; description: Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
     verboseLogs: false # @schema; description: Toggle debug logging.
     additionalEnvVars: {} # @schema; description: Additional environment variables to add to the ConfigMap.
 
