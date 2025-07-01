@@ -5,8 +5,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "strongdm.name" . }}-health
-  namespace: {{ include "strongdm.namespace" . }}
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-health
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
@@ -23,8 +22,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "strongdm.name" . }}-health
-  namespace: {{ include "strongdm.namespace" . }}
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-health
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
@@ -46,8 +44,7 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "strongdm.name" . }}-discovery
-  namespace: {{ include "strongdm.namespace" . }}
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-discovery
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
@@ -78,8 +75,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "strongdm.name" . }}-discovery
-  namespace: {{ include "strongdm.namespace" . }}
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-discovery
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
@@ -101,8 +97,7 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "strongdm.name" . }}-impersonate
-  namespace: {{ include "strongdm.namespace" . }}
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-impersonate
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
@@ -120,8 +115,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "strongdm.name" . }}-impersonate
-  namespace: {{ include "strongdm.namespace" . }}
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-impersonate
   annotations:
     {{- include "strongdm.annotations" . | nindent 4 }}
   labels:
