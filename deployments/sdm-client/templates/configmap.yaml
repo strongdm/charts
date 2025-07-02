@@ -10,8 +10,7 @@ metadata:
 data:
   SDM_APP_DOMAIN: {{ include "strongdm.appDomain" . }}
   SDM_VERBOSE: {{ .Values.strongdm.config.verboseLogs | quote }}
-  SDM_DISABLE_UPDATE: {{ include "strongdm.disableAutoUpdate" . }}
-  SDM_MAINTENANCE_WINDOW_START: {{ .Values.strongdm.config.maintenanceWindowStart | quote }}
+  SDM_DISABLE_UPDATE: "true"
   {{- range $k, $v := .Values.strongdm.config.additionalEnvVars }}
   {{ $k }}: {{ $v | quote }}
   {{- end }}

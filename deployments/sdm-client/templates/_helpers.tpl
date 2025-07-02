@@ -9,10 +9,6 @@
 {{- default (printf "app.%s" .Values.strongdm.config.domain) .Values.strongdm.config.appDomain }}
 {{- end }}
 
-{{- define "strongdm.disableAutoUpdate" -}}
-{{ (or .Values.strongdm.config.disableAutoUpdate (not (empty .Values.strongdm.image.digest)) (ne .Values.strongdm.image.tag "latest")) | quote }}
-{{- end }}
-
 # Args:
 # - addtl: (optional) map of annotations to add
 {{- define "strongdm.annotations" -}}
