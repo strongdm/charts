@@ -33,7 +33,7 @@ subjects:
     namespace: {{ include "strongdm.namespace" . }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "strongdm.name" . }}-health
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-health
   apiGroup: rbac.authorization.k8s.io
 
 
@@ -86,7 +86,7 @@ subjects:
     namespace: {{ include "strongdm.namespace" . }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "strongdm.name" . }}-discovery
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-discovery
   apiGroup: rbac.authorization.k8s.io
 
 
@@ -126,5 +126,5 @@ subjects:
     namespace: {{ include "strongdm.namespace" . }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "strongdm.name" . }}-impersonate
+  name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-impersonate
   apiGroup: rbac.authorization.k8s.io
