@@ -15,7 +15,7 @@ repos:
     -   id: trailing-whitespace
 
 -   repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.29
+    rev: v0.1.30
     hooks:
     -   id: helmlint
     -   id: shellcheck
@@ -161,7 +161,7 @@ repos:
         pass_filenames: false
 
 -   repo: https://github.com/losisin/helm-values-schema-json
-    rev: v2.1.0
+    rev: v2.2.0
     hooks:
     -   id: helm-schema
         name: helm-schema | relay
