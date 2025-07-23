@@ -2,6 +2,16 @@
 {{- if not (or .Values.strongdm.auth.secretName .Values.strongdm.auth.adminToken) }}
 {{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoRegisterCluster.enabled during installation." }}
 {{- end }}
+
+{{- if .Values.strongdm.autoRegisterCluster.identitySet || .Values.strongdm.autoRegisterCluster.identitySetName }}
+{{- if not .Values.strongdm.autoRegisterCluster.healthcheckUsername }}
+{{- fail "@strongdm.autoRegisterCluster.healthcheckUsername must be set when either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set during installation." }}
+{{- end }}
+{{- if .Values.strongdm.autoRegisterCluster.discoveryEnabled && not .Values.strongdm.autoRegisterCluster.discoveryUsername }}
+{{- fail "@strongdm.autoRegisterCluster.discoveryUsername must be set when @strongdm.autoRegisterCluster.discoveryEnabled and either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set during installation." }}
+{{- end }}
+{{- end }}
+
 ---
 apiVersion: batch/v1
 kind: Job
@@ -53,6 +63,18 @@ spec:
             - |
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
               /sdm.linux admin clusters add k8spodidentity \
+                {{ if .Values.strongdm.autoRegisterCluster.discoveryEnabled }} \
+                  --discovery-enabled \
+                {{ end }}
+                {{ if .Values.strongdm.autoRegisterCluster.identitySet || .Values.strongdm.autoRegisterCluster.identitySetName }}
+                  {{ if .Values.strongdm.autoRegisterCluster.identitySetName }}
+                    --identity-set-name {{ .Values.strongdm.autoRegisterCluster.identitySetName }} \
+                  {{ else if .Values.strongdm.autoRegisterCluster.identitySet }} \
+                    --identity-set {{ .Values.strongdm.autoRegisterCluster.identitySet }} \
+                  {{ end }} \
+                  --discovery-username {{ .Values.strongdm.autoRegisterCluster.discoveryUsername }} \
+                  --healthcheck-username {{ .Values.strongdm.autoRegisterCluster.healthcheckUsername }} \
+                {{ end }} \
                 --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
                 {{ .Values.strongdm.autoRegisterCluster.extraArgs }} \
                 {{ default (printf "%s-cluster-%s" (include "strongdm.name" .) (randAlpha 5)) .Values.strongdm.autoRegisterCluster.resourceName }}

@@ -28,6 +28,16 @@ strongdm:
   autoRegisterCluster: # @schema; description: Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
     enabled: false # @schema; description: Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
     resourceName: "" # @schema; description: Name of the StrongDM Pod Identity Cluster resource to create.
+    healthcheckNamespace: "" # @schema; description: Namespace to poll to check if the resource is healthy.
+    # discovery:
+    #   enabled: false # @schema; description: Enable active discovery of objects in the cluster.
+    # identityAlias:
+      # enabled: false # @schema; description: Enable identity alias for the StrongDM Pod Identity Cluster resource to create.
+    discoveryEnabled: false # @schema; description: Enable active discovery of objects in the cluster.
+    identitySet: "" # @schema; description: Alias of the StrongDM Pod Identity Cluster resource to create.
+    identitySetName: "" # @schema; description: Name of the StrongDM Pod Identity Cluster resource to create.
+    discoveryUsername: "" # @schema; description: Username for the StrongDM Pod Identity Cluster resource to create.
+    healthcheckUsername: "" # @schema; description: Username for the StrongDM Pod Identity Cluster resource to create.
     extraArgs: "" # @schema; description: Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
 
   autoCreateNode: # @schema; description: Auto creation configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
