@@ -100,6 +100,26 @@ repos:
           strongdm.service.tlsSource=file'
         language: system
         pass_filenames: false
+    -   id: template-relay-missing-healthcheck-username
+        name: Helm template | no healthcheck username when using Identity Aliases | relay
+        entry: /bin/bash -c '! helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.discoveryUsername=foobar --set strongdm.autoRegisterCluster.identitySetName=foobar'
+        language: system
+        pass_filenames: false
+    -   id: template-relay-missing-discovery-username
+        name: Helm template | no discovery username when using Identity Aliases | relay
+        entry: /bin/bash -c '! helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.healthcheckUsername=foobar --set strongdm.autoRegisterCluster.identitySetName=foobar'
+        language: system
+        pass_filenames: false
+    -   id: template-proxy-missing-healthcheck-username
+        name: Helm template | no healthcheck username when using Identity Aliases | proxy
+        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.discoveryUsername=foobar --set strongdm.autoRegisterCluster.identitySetName=foobar'
+        language: system
+        pass_filenames: false
+    -   id: template-proxy-missing-discovery-username
+        name: Helm template | no discovery username when using Identity Aliases | proxy
+        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.healthcheckUsername=foobar --set strongdm.autoRegisterCluster.identitySetName=foobar'
+        language: system
+        pass_filenames: false
 
     # Check version pin paths
     -   id: template-tag-pin-relay

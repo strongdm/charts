@@ -73,6 +73,14 @@
                             "description": "Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.",
                             "type": "string"
                         },
+                        "identitySet": {
+                            "description": "ID of the Identity Set with which to register this cluster.",
+                            "type": "string"
+                        },
+                        "identitySetName": {
+                            "description": "Name of the Identity Set with which to register this cluster.",
+                            "type": "string"
+                        },
                         "resourceName": {
                             "description": "Name of the StrongDM Pod Identity Cluster resource to create.",
                             "type": "string"
@@ -158,6 +166,10 @@
                     },
                     "type": "object"
                 },
+                "discoveryUsername": {
+                    "description": "Username for StrongDM discovery. Also creates the RBAC resources required for this feature. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.",
+                    "type": "string"
+                },
                 "gateway": {
                     "description": "StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.",
                     "properties": {
@@ -208,6 +220,14 @@
                         }
                     },
                     "type": "object"
+                },
+                "healthcheckNamespace": {
+                    "description": "Namespace in which StrongDM resource health checks are to occur. Associated/required RBAC resources are created in this namespace.",
+                    "type": "string"
+                },
+                "healthcheckUsername": {
+                    "description": "Username for StrongDM resource health checks. Used in the RBAC resources that facilitate said health checks. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.",
+                    "type": "string"
                 },
                 "image": {
                     "description": "Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.",

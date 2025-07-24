@@ -10,7 +10,7 @@ global:
 
 strongdm:
   auth:
-    adminToken: foo
+    adminToken: foo.bar.baz
   serviceAccount:
     create: true
   autoRegisterCluster:

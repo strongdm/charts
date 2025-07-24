@@ -75,3 +75,21 @@ resources:
 {{ printf "%s:%s" .Values.strongdm.image.repository .Values.strongdm.image.tag }}
 {{- end -}}
 {{- end }}
+
+{{- define "strongdm.autoRegisterClusterArgs" -}}
+--healthcheck-namespace {{ .Values.strongdm.healthcheckNamespace }} \
+{{ if .Values.strongdm.discoveryUsername -}}
+--discovery-enabled \
+{{- end }}
+{{- with .Values.strongdm.autoRegisterCluster }}
+{{ if (or .identitySet .identitySetName) -}}
+--discovery-username {{ $.Values.strongdm.discoveryUsername }} \
+--identity-alias-healthcheck-username {{ $.Values.strongdm.healthcheckUsername }} \
+{{ if .identitySet -}}
+--identity-set {{ .identitySet }}
+{{- else if .identitySetName -}}
+--identity-set-name {{ .identitySetName }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end }}
