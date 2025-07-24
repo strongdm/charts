@@ -1,4 +1,3 @@
-{{- if .Values.strongdm.discoveryUsername }}
 # ###
 # Health
 # ###
@@ -42,7 +41,7 @@ roleRef:
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-health
   apiGroup: rbac.authorization.k8s.io
 
-
+{{- if .Values.strongdm.discoveryUsername }}
 # ###
 # Discovery
 # ###
@@ -100,7 +99,6 @@ roleRef:
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-discovery
   apiGroup: rbac.authorization.k8s.io
 
-{{- end }}
 
 # ###
 # Impersonation (Privilege Levels)
@@ -140,3 +138,5 @@ roleRef:
   kind: ClusterRole
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-impersonate
   apiGroup: rbac.authorization.k8s.io
+
+{{- end }}
