@@ -74,11 +74,11 @@
                             "type": "string"
                         },
                         "identitySet": {
-                            "description": "Alias of the StrongDM Pod Identity Cluster resource to create.",
+                            "description": "ID of the Identity Set with which to register this cluster.",
                             "type": "string"
                         },
                         "identitySetName": {
-                            "description": "Name of the StrongDM Pod Identity Cluster resource to create.",
+                            "description": "Name of the Identity Set with which to register this cluster.",
                             "type": "string"
                         },
                         "resourceName": {
@@ -222,11 +222,11 @@
                     "type": "object"
                 },
                 "healthcheckNamespace": {
-                    "description": "Namespace in which StrongDM resource health checks are to occur. Used in RBAC resources that allow health checks to occur.",
+                    "description": "Namespace in which StrongDM resource health checks are to occur. Associated/required RBAC resources are created in this namespace.",
                     "type": "string"
                 },
                 "healthcheckUsername": {
-                    "description": "Username for StrongDM resource health checks. Used in RBAC resources that allow health checks to occur. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.",
+                    "description": "Username for StrongDM resource health checks. Used in the RBAC resources that facilitate said health checks. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.",
                     "type": "string"
                 },
                 "image": {

@@ -33,9 +33,11 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "strongdm.serviceAccountName" . }}
     namespace: {{ include "strongdm.namespace" . }}
+  {{- if (or .Values.strongdm.autoRegisterCluster.identitySet .Values.strongdm.autoRegisterCluster.identitySetName) }}
   - kind: User
     name: {{ .Values.strongdm.healthcheckUsername }}
     apiGroup: rbac.authorization.k8s.io
+  {{- end }}
 roleRef:
   kind: ClusterRole
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-health
@@ -89,6 +91,11 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "strongdm.serviceAccountName" . }}
     namespace: {{ include "strongdm.namespace" . }}
+  {{- if (or .Values.strongdm.autoRegisterCluster.identitySet .Values.strongdm.autoRegisterCluster.identitySetName) }}
+  - kind: User
+    name: {{ .Values.strongdm.discoveryUsername }}
+    apiGroup: rbac.authorization.k8s.io
+  {{- end }}
 roleRef:
   kind: ClusterRole
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-discovery
