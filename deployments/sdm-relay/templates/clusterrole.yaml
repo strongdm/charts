@@ -99,7 +99,7 @@ roleRef:
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-discovery
   apiGroup: rbac.authorization.k8s.io
 
-{{- if .Values.strongdm.discoveryUsername }}
+{{- if (or .Values.strongdm.autoRegisterCluster.identitySet .Values.strongdm.autoRegisterCluster.identitySetName) }}
 # ###
 # Impersonation (Privilege Levels)
 # ###
@@ -138,5 +138,4 @@ roleRef:
   kind: ClusterRole
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-impersonate
   apiGroup: rbac.authorization.k8s.io
-
 {{- end }}
