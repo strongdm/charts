@@ -13,11 +13,8 @@ strongdm:
     adminToken: foo.bar.baz
   serviceAccount:
     create: true
-  discoveryUsername: sdm-discovery
-  healthcheckUsername: sdm-healthchecks
   autoRegisterCluster:
     enabled: true
-    identitySet: i-abcd1234
   config:
     additionalEnvVars:
       foo: bar
