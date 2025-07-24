@@ -77,13 +77,14 @@ resources:
 {{- end }}
 
 {{- define "strongdm.autoRegisterClusterArgs" -}}
-{{- if .Values.strongdm.discoveryUsername -}}
+--healthcheck-namespace {{ .Values.strongdm.healthcheckNamespace }} \
+{{ if .Values.strongdm.discoveryUsername -}}
 --discovery-enabled \
 {{- end }}
 {{- with .Values.strongdm.autoRegisterCluster }}
 {{ if (or .identitySet .identitySetName) -}}
 --discovery-username {{ $.Values.strongdm.discoveryUsername }} \
---healthcheck-username {{ $.Values.strongdm.healthcheckUsername }} \
+--identity-alias-healthcheck-username {{ $.Values.strongdm.healthcheckUsername }} \
 {{ if .identitySet -}}
 {{ printf "--identity-set %s" .identitySet }}
 {{- else if .identitySetName -}}
