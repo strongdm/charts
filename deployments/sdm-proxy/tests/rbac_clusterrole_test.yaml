@@ -1,6 +1,9 @@
 suite: test sdm-proxy clusterrole RBAC conditions
 templates:
   - clusterrole.yaml
+release:
+  name: test-release
+  namespace: test-namespace
 tests:
   # Basic RBAC without identity aliases
   - it: should create basic health and discovery RBAC without identity aliases
@@ -12,19 +15,19 @@ tests:
           count: 4
       - containsDocument:
           kind: ClusterRole
-          name: NAMESPACE-RELEASE-NAME-health
+          name: test-namespace-test-release-health
           apiVersion: rbac.authorization.k8s.io/v1
       - containsDocument:
           kind: ClusterRoleBinding
-          name: NAMESPACE-RELEASE-NAME-health
+          name: test-namespace-test-release-health
           apiVersion: rbac.authorization.k8s.io/v1
       - containsDocument:
           kind: ClusterRole
-          name: NAMESPACE-RELEASE-NAME-discovery
+          name: test-namespace-test-release-discovery
           apiVersion: rbac.authorization.k8s.io/v1
       - containsDocument:
           kind: ClusterRoleBinding
-          name: NAMESPACE-RELEASE-NAME-discovery
+          name: test-namespace-test-release-discovery
           apiVersion: rbac.authorization.k8s.io/v1
 
 
@@ -46,8 +49,8 @@ tests:
           path: subjects
           value:
             - kind: ServiceAccount
-              name: RELEASE-NAME
-              namespace: NAMESPACE
+              name: test-release
+              namespace: test-namespace
 
   - it: should contain the user subject with identity aliases
     set:
@@ -79,17 +82,17 @@ tests:
           count: 6
       - containsDocument:
           kind: ClusterRole
-          name: NAMESPACE-RELEASE-NAME-health
+          name: test-namespace-test-release-health
           apiVersion: rbac.authorization.k8s.io/v1
       - containsDocument:
           kind: ClusterRoleBinding
-          name: NAMESPACE-RELEASE-NAME-health
+          name: test-namespace-test-release-health
           apiVersion: rbac.authorization.k8s.io/v1
       - containsDocument:
           kind: ClusterRole
-          name: NAMESPACE-RELEASE-NAME-discovery
+          name: test-namespace-test-release-discovery
           apiVersion: rbac.authorization.k8s.io/v1
       - containsDocument:
           kind: ClusterRoleBinding
-          name: NAMESPACE-RELEASE-NAME-discovery
+          name: test-namespace-test-release-discovery
           apiVersion: rbac.authorization.k8s.io/v1
