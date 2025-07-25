@@ -7,9 +7,6 @@
 {{- if (not .Values.strongdm.healthcheckUsername) }}
 {{- fail "@strongdm.healthcheckUsername must be set when either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set during installation." }}
 {{- end }}
-{{ if (not .Values.strongdm.discoveryUsername) }}
-{{- fail "@strongdm.discoveryUsername must be set when either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set during installation." }}
-{{- end }}
 {{- end }}
 ---
 apiVersion: batch/v1
