@@ -1,4 +1,4 @@
-suite: test sdm-proxy clusterrole RBAC conditions
+suite: test sdm-proxy post-install conditions
 templates:
   - post-install.yaml
 tests:
@@ -7,10 +7,21 @@ tests:
     set:
       strongdm.auth.clusterKey: "test-key"
       strongdm.auth.clusterSecret: "test-secret"
-      strongdm.auth.adminToken: "test-token"
       strongdm.autoRegisterCluster.enabled: false
       strongdm.autoRegisterCluster.identitySetName: "test-identity-set"
       strongdm.healthcheckUsername: "test-healthcheck-user"
     asserts:
         - hasDocuments:
-          count: 0
+            count: 0
+  
+  - it: should not require a discoveryUsername with identity aliases are used.
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+      strongdm.auth.adminToken: "test-token"
+      strongdm.autoRegisterCluster.enabled: true
+      strongdm.autoRegisterCluster.identitySetName: "test-identity-set"
+      strongdm.healthcheckUsername: "test-healthcheck-user"
+    asserts:
+        - hasDocuments:
+            count: 1
