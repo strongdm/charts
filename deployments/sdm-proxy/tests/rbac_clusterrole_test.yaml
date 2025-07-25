@@ -109,4 +109,3 @@ tests:
           name: NAMESPACE-RELEASE-NAME-impersonate
           apiVersion: rbac.authorization.k8s.io/v1
           any: true
-          
