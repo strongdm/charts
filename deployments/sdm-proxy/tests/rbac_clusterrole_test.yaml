@@ -53,6 +53,8 @@ tests:
     set:
       strongdm.auth.clusterKey: "test-key"
       strongdm.auth.clusterSecret: "test-secret"
+      strongdm.auth.adminToken: "test-token"
+      strongdm.autoRegisterCluster.enabled: true
       strongdm.autoRegisterCluster.identitySet: "test-identity-set"
       strongdm.healthcheckUsername: "test-healthcheck-user"
     documentIndex: 1  # health ClusterRoleBinding
@@ -63,3 +65,32 @@ tests:
       - equal:
           path: subjects[1].kind
           value: User
+
+  - it: should create basic health and discovery RBAC without identity aliases
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+      strongdm.auth.adminToken: "test-token"
+      strongdm.autoRegisterCluster.enabled: true
+      strongdm.autoRegisterCluster.identitySetName: "test-identity-set"
+      strongdm.healthcheckUsername: "test-healthcheck-user"
+    asserts:
+      - hasDocuments:
+          count: 6
+      - containsDocument:
+          kind: ClusterRole
+          name: NAMESPACE-RELEASE-NAME-health
+          apiVersion: rbac.authorization.k8s.io/v1
+      - containsDocument:
+          kind: ClusterRoleBinding
+          name: NAMESPACE-RELEASE-NAME-health
+          apiVersion: rbac.authorization.k8s.io/v1
+      - containsDocument:
+          kind: ClusterRole
+          name: NAMESPACE-RELEASE-NAME-discovery
+          apiVersion: rbac.authorization.k8s.io/v1
+      - containsDocument:
+          kind: ClusterRoleBinding
+          name: NAMESPACE-RELEASE-NAME-discovery
+          apiVersion: rbac.authorization.k8s.io/v1
+
