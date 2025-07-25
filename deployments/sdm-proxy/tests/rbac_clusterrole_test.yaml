@@ -1,0 +1,65 @@
+suite: test sdm-proxy clusterrole RBAC conditions
+templates:
+  - clusterrole.yaml
+tests:
+  # Basic RBAC without identity aliases
+  - it: should create basic health and discovery RBAC without identity aliases
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+    asserts:
+      - hasDocuments:
+          count: 4
+      - containsDocument:
+          kind: ClusterRole
+          name: NAMESPACE-RELEASE-NAME-health
+          apiVersion: rbac.authorization.k8s.io/v1
+      - containsDocument:
+          kind: ClusterRoleBinding
+          name: NAMESPACE-RELEASE-NAME-health
+          apiVersion: rbac.authorization.k8s.io/v1
+      - containsDocument:
+          kind: ClusterRole
+          name: NAMESPACE-RELEASE-NAME-discovery
+          apiVersion: rbac.authorization.k8s.io/v1
+      - containsDocument:
+          kind: ClusterRoleBinding
+          name: NAMESPACE-RELEASE-NAME-discovery
+          apiVersion: rbac.authorization.k8s.io/v1
+
+
+  - it: should not create impersonation RBAC without identity set
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+    asserts:
+      - hasDocuments:
+          count: 4
+
+  - it: should only include service account in subjects without identity aliases
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+    documentIndex: 1  # health ClusterRoleBinding
+    asserts:
+      - equal:
+          path: subjects
+          value:
+            - kind: ServiceAccount
+              name: RELEASE-NAME
+              namespace: NAMESPACE
+
+  - it: should contain the user subject with identity aliases
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+      strongdm.autoRegisterCluster.identitySet: "test-identity-set"
+      strongdm.healthcheckUsername: "test-healthcheck-user"
+    documentIndex: 1  # health ClusterRoleBinding
+    asserts:
+      - equal:
+          path: subjects[0].kind
+          value: ServiceAccount
+      - equal:
+          path: subjects[1].kind
+          value: User
