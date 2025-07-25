@@ -79,8 +79,10 @@ resources:
 {{- end }}
 {{- with .Values.strongdm.autoRegisterCluster }}
 {{ if (or .identitySet .identitySetName) -}}
---discovery-username {{ $.Values.strongdm.discoveryUsername }} \
 --identity-alias-healthcheck-username {{ $.Values.strongdm.healthcheckUsername }} \
+{{ if $.Values.strongdm.discoveryUsername -}}
+--discovery-username {{ $.Values.strongdm.discoveryUsername }}
+{{- end -}}
 {{ if .identitySet -}}
 --identity-set {{ .identitySet }}
 {{- else if .identitySetName -}}
