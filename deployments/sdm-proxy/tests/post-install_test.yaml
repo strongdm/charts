@@ -13,7 +13,7 @@ tests:
     asserts:
         - hasDocuments:
             count: 0
-  
+
   - it: should not require a discoveryUsername with identity aliases are used.
     set:
       strongdm.auth.clusterKey: "test-key"
