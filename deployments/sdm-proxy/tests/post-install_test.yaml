@@ -25,3 +25,30 @@ tests:
     asserts:
         - hasDocuments:
             count: 1
+
+  - it: a command for creating a cluster is with identity aliases only
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+      strongdm.auth.adminToken: "test-token"
+      strongdm.autoRegisterCluster.enabled: true
+      strongdm.autoRegisterCluster.identitySetName: "test-identity-set"
+      strongdm.healthcheckUsername: "test-healthcheck-user"
+    asserts:
+        - hasDocuments:
+            count: 1
+        - equal:
+            path: spec.template.spec.containers[0].name
+            value: sdm
+        - matchRegex:
+            path: spec.template.spec.containers[0].command[2]
+            pattern: '--identity-set-name test-identity-set'
+        - matchRegex:
+            path: spec.template.spec.containers[0].command[2]
+            pattern: '--identity-alias-healthcheck-username test-healthcheck-user'
+        - notMatchRegex:
+            path: spec.template.spec.containers[0].command[2]
+            pattern: '--discovery-enabled'
+        - notMatchRegex:
+            path: spec.template.spec.containers[0].command[2]
+            pattern: '--discovery-username'
