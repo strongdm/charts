@@ -79,3 +79,20 @@ tests:
         - matchRegex:
             path: spec.template.spec.containers[0].command[2]
             pattern: '--discovery-username\ test-discovery-user \\'
+  - it: should have command with discovery enabled only
+    set:
+      strongdm.auth.clusterKey: "test-key"
+      strongdm.auth.clusterSecret: "test-secret"
+      strongdm.auth.adminToken: "test-token"
+      strongdm.autoRegisterCluster.enabled: true
+      strongdm.discoveryUsername: "test-discovery-user"
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: '--discovery-enabled'
+      - notMatchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: '--discovery-username'
+      - notMatchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: '--identity-set'  
