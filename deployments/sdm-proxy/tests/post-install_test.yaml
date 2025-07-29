@@ -95,4 +95,4 @@ tests:
           pattern: '--discovery-username'
       - notMatchRegex:
           path: spec.template.spec.containers[0].command[2]
-          pattern: '--identity-set'  
+          pattern: '--identity-set'
