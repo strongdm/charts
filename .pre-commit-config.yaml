@@ -116,7 +116,6 @@ repos:
         language: system
         pass_filenames: false
 
-
     # Check version pin paths
     -   id: template-tag-pin-relay
         name: Helm template | tag pin should disable SDM_DISABLE_UPDATE | relay
