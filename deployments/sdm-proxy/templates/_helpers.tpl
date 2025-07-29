@@ -81,7 +81,7 @@ resources:
 {{ if (or .identitySet .identitySetName) -}}
 --identity-alias-healthcheck-username {{ $.Values.strongdm.healthcheckUsername }} \
 {{ if $.Values.strongdm.discoveryUsername -}}
---discovery-username {{ $.Values.strongdm.discoveryUsername }}
+--discovery-username {{ $.Values.strongdm.discoveryUsername }} \
 {{- end -}}
 {{ if .identitySet -}}
 --identity-set {{ .identitySet }}
