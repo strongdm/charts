@@ -49,6 +49,10 @@ tests:
             - kind: ServiceAccount
               name: RELEASE-NAME
               namespace: NAMESPACE
+      - notContains:
+          path: subjects
+          value:
+            - kind: User
 
   - it: should contain the user subject with identity aliases
     set:
