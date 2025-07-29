@@ -54,7 +54,7 @@ tests:
           value:
             - kind: User
 
-  - it: should contain the user subject with identity aliases
+  - it: should allow admins to specify users with identity aliases
     set:
       strongdm.auth.clusterKey: "test-key"
       strongdm.auth.clusterSecret: "test-secret"
