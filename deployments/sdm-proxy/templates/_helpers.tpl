@@ -74,20 +74,21 @@ resources:
 
 {{- define "strongdm.autoRegisterClusterArgs" -}}
 --healthcheck-namespace {{ .Values.strongdm.healthcheckNamespace }} \
-{{ if .Values.strongdm.discoveryUsername -}}
+{{- if .Values.strongdm.discoveryUsername }}
 --discovery-enabled \
-{{- end }}
+{{- end -}}
 {{- with .Values.strongdm.autoRegisterCluster }}
 {{ if (or .identitySet .identitySetName) -}}
 --identity-alias-healthcheck-username {{ $.Values.strongdm.healthcheckUsername }} \
-{{ if $.Values.strongdm.discoveryUsername -}}
+{{- if $.Values.strongdm.discoveryUsername }}
 --discovery-username {{ $.Values.strongdm.discoveryUsername }} \
-{{- end -}}
+{{- end }}
 {{ if .identitySet -}}
---identity-set {{ .identitySet }}
+--identity-set {{ .identitySet }} \
 {{- else if .identitySetName -}}
---identity-set-name {{ .identitySetName }}
+--identity-set-name {{ .identitySetName }} \
 {{- end -}}
 {{- end -}}
-{{- end -}}
+{{- end }}
+{{ .Values.strongdm.autoRegisterCluster.extraArgs }}
 {{- end }}

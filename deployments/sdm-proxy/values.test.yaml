@@ -6,17 +6,19 @@ global:
   labels:
     foo: bar
   annotations:
-    foo.com/bar: baz
+    foo.bar/baz: sure
 
 strongdm:
+  discoveryUsername: bar
   auth:
-    adminToken: foo
-    clusterKey: foo
-    clusterSecret: foo
+    adminToken: foo.bar.baz
+    clusterKey: foo.bar.baz
+    clusterSecret: foo.bar.baz
   serviceAccount:
     create: true
   autoRegisterCluster:
     enabled: true
+    extraArgs: '--foo bar --bar=baz -f -b'
   config:
     additionalEnvVars:
       foo: bar
