@@ -6,9 +6,10 @@ global:
   labels:
     foo: bar
   annotations:
-    foo.com/bar: baz
+    foo.bar/baz: sure
 
 strongdm:
+  discoveryUsername: bar
   auth:
     adminToken: foo.bar.baz
   serviceAccount:

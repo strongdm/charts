@@ -61,6 +61,5 @@ spec:
               /sdm.linux admin clusters add k8spodidentity \
                 --certificate-authority /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
                 {{- include "strongdm.autoRegisterClusterArgs" . | nindent 16 }} \
-                {{ .Values.strongdm.autoRegisterCluster.extraArgs }} \
                 {{ default (printf "%s-cluster-%s" (include "strongdm.name" .) (randAlpha 5)) .Values.strongdm.autoRegisterCluster.resourceName }}
 {{- end}}
