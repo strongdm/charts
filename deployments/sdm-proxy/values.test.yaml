@@ -18,7 +18,6 @@ strongdm:
     create: true
   autoRegisterCluster:
     enabled: true
-    extraArgs: '--foo bar --bar=baz -f -b'
   config:
     additionalEnvVars:
       foo: bar
