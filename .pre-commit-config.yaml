@@ -5,7 +5,7 @@ repos:
     -   id: pre-commit-update
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
     -   id: check-added-large-files
     -   id: check-case-conflict
@@ -101,13 +101,19 @@ repos:
         language: system
         pass_filenames: false
     -   id: template-relay-missing-healthcheck-username
-        name: Helm template | no healthcheck username when using Identity Aliases | relay
-        entry: /bin/bash -c '! helm template deployments/sdm-relay -f deployments/sdm-relay/values.test.yaml --set strongdm.autoRegisterCluster.identitySetName=foobar'
+        name: Helm template | no healthcheck username when using Identity
+          Aliases | relay
+        entry: /bin/bash -c '! helm template deployments/sdm-relay -f
+          deployments/sdm-relay/values.test.yaml --set
+          strongdm.autoRegisterCluster.identitySetName=foobar'
         language: system
         pass_filenames: false
     -   id: template-proxy-missing-healthcheck-username
-        name: Helm template | no healthcheck username when using Identity Aliases | proxy
-        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml --set strongdm.autoRegisterCluster.identitySetName=foobar'
+        name: Helm template | no healthcheck username when using Identity
+          Aliases | proxy
+        entry: /bin/bash -c '! helm template deployments/sdm-proxy -f
+          deployments/sdm-proxy/values.test.yaml --set
+          strongdm.autoRegisterCluster.identitySetName=foobar'
         language: system
         pass_filenames: false
 
@@ -152,7 +158,7 @@ repos:
         pass_filenames: false
 
 -   repo: https://github.com/losisin/helm-values-schema-json
-    rev: v2.2.0
+    rev: v2.2.1
     hooks:
     -   id: helm-schema
         name: helm-schema | relay

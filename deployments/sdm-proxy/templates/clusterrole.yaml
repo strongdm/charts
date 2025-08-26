@@ -89,7 +89,7 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "strongdm.serviceAccountName" . }}
     namespace: {{ include "strongdm.namespace" . }}
-  {{- if (or .Values.strongdm.autoRegisterCluster.identitySet .Values.strongdm.autoRegisterCluster.identitySetName) }}
+  {{- if and (or .Values.strongdm.autoRegisterCluster.identitySet .Values.strongdm.autoRegisterCluster.identitySetName) .Values.strongdm.discoveryUsername }}
   - kind: User
     name: {{ .Values.strongdm.discoveryUsername }}
     apiGroup: rbac.authorization.k8s.io
