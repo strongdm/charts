@@ -158,7 +158,7 @@ repos:
         pass_filenames: false
 
 -   repo: https://github.com/losisin/helm-values-schema-json
-    rev: v2.2.1
+    rev: v2.3.0
     hooks:
     -   id: helm-schema
         name: helm-schema | relay
