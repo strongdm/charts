@@ -1,6 +1,6 @@
 repos:
 -   repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
-    rev: v0.8.0
+    rev: v0.9.0
     hooks:
     -   id: pre-commit-update
 
@@ -158,7 +158,7 @@ repos:
         pass_filenames: false
 
 -   repo: https://github.com/losisin/helm-values-schema-json
-    rev: v2.2.1
+    rev: v2.3.1
     hooks:
     -   id: helm-schema
         name: helm-schema | relay
