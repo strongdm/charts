@@ -53,6 +53,7 @@ strongdm:
     loadBalancerIP: "" # @schema; description: IP address to which to pin a LoadBalancer Service.
     tlsSource: "" # @schema; description: How this service is expected to terminate TLS, if at all. Set to `file` and supply @strongdm.service.tlsSecretName to terminate with a user-provided certificate. Set to `none` if terminating TLS before these containers, e.g. with a load balancer. Leave empty to terminate TLS with a StrongDM-signed certificate built into the software.
     tlsSecretName: "" # @schema; description: kubernetes.io/tls Secret with which containers will terminate TLS.
+    tlsClientAuth: "" # @schema; description: How this service is expected to validate TLS client certificates, if at all. Set this to `none` if the load balancer is terminating TLS and re-establishing a new TLS connection to the worker.
 
   deployment: # @schema; description: Deployment configuration.
     annotations: {} # @schema; description: Map of annotations to add to the Deployment.
