@@ -1,25 +1,26 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
     "properties": {
         "global": {
+            "type": "object",
             "properties": {
                 "annotations": {
                     "description": "Map of annotations to add to all resources.",
-                    "properties": {},
                     "type": "object"
                 },
                 "labels": {
                     "description": "Map of labels to add to all resources.",
-                    "properties": {},
                     "type": "object"
                 }
-            },
-            "type": "object"
+            }
         },
         "strongdm": {
+            "type": "object",
             "properties": {
                 "auth": {
                     "description": "StrongDM authentication sources.",
+                    "type": "object",
                     "properties": {
                         "adminToken": {
                             "description": "The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.",
@@ -37,11 +38,11 @@
                             "description": "Name of the k8s Secret that contains SDM_PROXY_CLUSTER_ACCESS_KEY and SDM_PROXY_CLUSTER_SECRET_KEY, and/or SDM_ADMIN_TOKEN.",
                             "type": "string"
                         }
-                    },
-                    "type": "object"
+                    }
                 },
                 "autoRegisterCluster": {
                     "description": "Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.",
+                    "type": "object",
                     "properties": {
                         "enabled": {
                             "description": "Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.",
@@ -63,15 +64,14 @@
                             "description": "Name of the StrongDM Pod Identity Cluster resource to create.",
                             "type": "string"
                         }
-                    },
-                    "type": "object"
+                    }
                 },
                 "config": {
                     "description": "General application configuration.",
+                    "type": "object",
                     "properties": {
                         "additionalEnvVars": {
                             "description": "Additional environment variables to add to the ConfigMap.",
-                            "properties": {},
                             "type": "object"
                         },
                         "appDomain": {
@@ -96,45 +96,42 @@
                         },
                         "queryLogs": {
                             "description": "Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.",
+                            "type": "object",
                             "properties": {
                                 "encoding": {
-                                    "description": "Query log encoding",
+                                    "description": "Query log encoding - options: 'plaintext', 'publickey'.",
                                     "type": "string"
                                 },
                                 "format": {
-                                    "description": "Query log format",
+                                    "description": "Query log format - options: 'json', 'csv'.",
                                     "type": "string"
                                 },
                                 "storage": {
-                                    "description": "Query log storage location",
+                                    "description": "Query log storage location - options: 'stdout', 'tcp', 'syslog', 'socket', 'file'. The default is to disable the additional audit logs.",
                                     "type": "string"
                                 }
-                            },
-                            "type": "object"
+                            }
                         },
                         "verboseLogs": {
                             "description": "Toggle debug logging.",
                             "type": "boolean"
                         }
-                    },
-                    "type": "object"
+                    }
                 },
                 "deployment": {
                     "description": "Deployment configuration.",
+                    "type": "object",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to add to the Deployment.",
-                            "properties": {},
                             "type": "object"
                         },
                         "labels": {
                             "description": "Map of labels to add to the Deployment.",
-                            "properties": {},
                             "type": "object"
                         },
                         "nodeSelector": {
                             "description": "Pod node selectors.",
-                            "properties": {},
                             "type": "object"
                         },
                         "replicaCount": {
@@ -147,8 +144,10 @@
                         },
                         "topologySpreadConstraints": {
                             "description": "Pod spread constraints. Keys in this map are topology keys. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.",
+                            "type": "object",
                             "properties": {
                                 "kubernetes.io/hostname": {
+                                    "type": "object",
                                     "properties": {
                                         "maxSkew": {
                                             "type": "integer"
@@ -156,14 +155,11 @@
                                         "whenUnsatisfiable": {
                                             "type": "string"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
-                            },
-                            "type": "object"
+                            }
                         }
-                    },
-                    "type": "object"
+                    }
                 },
                 "discoveryUsername": {
                     "description": "Username for StrongDM discovery. Also creates the RBAC resources required for this feature. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.",
@@ -179,6 +175,7 @@
                 },
                 "image": {
                     "description": "Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.",
+                    "type": "object",
                     "properties": {
                         "digest": {
                             "type": "string"
@@ -192,8 +189,7 @@
                         "tag": {
                             "type": "string"
                         }
-                    },
-                    "type": "object"
+                    }
                 },
                 "nameOverride": {
                     "description": "Override resource names.",
@@ -205,29 +201,30 @@
                 },
                 "pod": {
                     "description": "Pod configuration.",
+                    "type": "object",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to add to Pods.",
-                            "properties": {},
                             "type": "object"
                         },
                         "labels": {
                             "description": "Map of labels to add to Pods.",
-                            "properties": {},
                             "type": "object"
                         },
                         "resources": {
                             "description": "Set the Pod resource requests and limits.",
+                            "type": "object",
                             "properties": {
                                 "limits": {
+                                    "type": "object",
                                     "properties": {
                                         "memory": {
                                             "type": "string"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 },
                                 "requests": {
+                                    "type": "object",
                                     "properties": {
                                         "cpu": {
                                             "type": "string"
@@ -235,21 +232,28 @@
                                         "memory": {
                                             "type": "string"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
-                            },
-                            "type": "object"
+                            }
                         }
-                    },
-                    "type": "object"
+                    }
+                },
+                "rbac": {
+                    "description": "RBAC configuration.",
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "description": "Create a Role/ClusterRole. Set to true, or manage RBAC externally.",
+                            "type": "boolean"
+                        }
+                    }
                 },
                 "service": {
                     "description": "Service configuration.",
+                    "type": "object",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to apply to the Service.",
-                            "properties": {},
                             "type": "object"
                         },
                         "containerPort": {
@@ -258,7 +262,6 @@
                         },
                         "labels": {
                             "description": "Map of labels to apply to the Service.",
-                            "properties": {},
                             "type": "object"
                         },
                         "listenPort": {
@@ -275,8 +278,11 @@
                         },
                         "selectorLabels": {
                             "description": "Map of additional selector labels to apply to Pods and the Service.",
-                            "properties": {},
                             "type": "object"
+                        },
+                        "tlsClientAuth": {
+                            "description": "How this service is expected to validate TLS client certificates, if at all. Set this to `none` if the load balancer is terminating TLS and re-establishing a new TLS connection to the worker.",
+                            "type": "string"
                         },
                         "tlsSecretName": {
                             "description": "kubernetes.io/tls Secret with which containers will terminate TLS.",
@@ -290,15 +296,14 @@
                             "description": "Specify the type of Service to front the deployment.",
                             "type": "string"
                         }
-                    },
-                    "type": "object"
+                    }
                 },
                 "serviceAccount": {
                     "description": "ServiceAccount configuration.",
+                    "type": "object",
                     "properties": {
                         "annotations": {
                             "description": "Map of annotations to add to the ServiceAccount, should one be created.",
-                            "properties": {},
                             "type": "object"
                         },
                         "create": {
@@ -307,19 +312,15 @@
                         },
                         "labels": {
                             "description": "Map of labels to add to the ServiceAccount, should one be created.",
-                            "properties": {},
                             "type": "object"
                         },
                         "name": {
                             "description": "Name of an existing ServiceAccount to use.",
                             "type": "string"
                         }
-                    },
-                    "type": "object"
+                    }
                 }
-            },
-            "type": "object"
+            }
         }
-    },
-    "type": "object"
+    }
 }
