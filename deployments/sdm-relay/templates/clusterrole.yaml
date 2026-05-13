@@ -1,6 +1,7 @@
 # ###
 # Health
 # ###
+{{- if .Values.strongdm.rbac.create }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -138,4 +139,5 @@ roleRef:
   kind: ClusterRole
   name: {{ include "strongdm.namespace" . }}-{{ include "strongdm.name" . }}-impersonate
   apiGroup: rbac.authorization.k8s.io
+{{- end }}
 {{- end }}

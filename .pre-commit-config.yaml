@@ -162,10 +162,10 @@ repos:
     hooks:
     -   id: helm-schema
         name: helm-schema | relay
-        args: ["-input", "deployments/sdm-relay/values.yaml", "-output", "deployments/sdm-relay/values.schema.json"]
+        args: ["-f", "deployments/sdm-relay/values.yaml", "-o", "deployments/sdm-relay/values.schema.json"]
     -   id: helm-schema
         name: helm-schema | proxy
-        args: ["-input", "deployments/sdm-proxy/values.yaml", "-output", "deployments/sdm-proxy/values.schema.json"]
+        args: ["-f", "deployments/sdm-proxy/values.yaml", "-o", "deployments/sdm-proxy/values.schema.json"]
     -   id: helm-schema
         name: helm-schema | client
-        args: ["-input", "deployments/sdm-client/values.yaml", "-output", "deployments/sdm-client/values.schema.json"]
+        args: ["-f", "deployments/sdm-client/values.yaml", "-o", "deployments/sdm-client/values.schema.json"]
