@@ -157,6 +157,28 @@ repos:
         language: system
         pass_filenames: false
 
+    # Check allocateLoadBalancerNodePorts paths
+    -   id: template-proxy-allocate-lb-nodeports-disabled
+        name: Helm template | allocateLoadBalancerNodePorts=false renders on a
+          LoadBalancer Service | proxy
+        entry: >
+          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml
+          --set strongdm.service.type=LoadBalancer --set strongdm.service.allocateLoadBalancerNodePorts=false
+          | yq -r ". | select(.kind == \"Service\") | .spec.allocateLoadBalancerNodePorts")"
+          == "false" ]]'
+        language: system
+        pass_filenames: false
+    -   id: template-proxy-allocate-lb-nodeports-clusterip
+        name: Helm template | allocateLoadBalancerNodePorts is omitted when the
+          Service is not a LoadBalancer | proxy
+        entry: >
+          bash -c '[[ "$(helm template deployments/sdm-proxy -f deployments/sdm-proxy/values.test.yaml
+          --set strongdm.service.allocateLoadBalancerNodePorts=false
+          | yq -r ". | select(.kind == \"Service\") | .spec.allocateLoadBalancerNodePorts")"
+          == "null" ]]'
+        language: system
+        pass_filenames: false
+
     # Server side checks
     -   id: server-side-proxy-check
         name: Kubectl apply | proxy

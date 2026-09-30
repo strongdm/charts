@@ -50,6 +50,7 @@ strongdm:
     listenPort: 443 # @schema description: Port on which the container runs.
     containerPort: 8443 # @schema description: Port on which the Service is expecting traffic.
     nodePort: 0 # @schema description: NodePort to which to bind this service, if desired.
+    allocateLoadBalancerNodePorts: true # @schema description: Set to `false` to stop Kubernetes allocating a node port for a `LoadBalancer` Service. Use this when the load balancer sends traffic straight to Pod IPs (for example an AWS NLB in IP target mode), where the node port is never used but still listens on every node. Only applies when @strongdm.service.type is `LoadBalancer`. A non-zero @strongdm.service.nodePort is still allocated. On an existing Service, Kubernetes 1.30 and later release the auto-allocated node port on the upgrade that sets this to `false`, while older versions keep it until the Service is recreated.
     loadBalancerIP: "" # @schema description: IP address to which to pin a LoadBalancer Service.
     tlsSource: "" # @schema description: How this service is expected to terminate TLS, if at all. Set to `file` and supply @strongdm.service.tlsSecretName to terminate with a user-provided certificate. Set to `none` if terminating TLS before these containers, e.g. with a load balancer. Leave empty to terminate TLS with a StrongDM-signed certificate built into the software.
     tlsSecretName: "" # @schema description: kubernetes.io/tls Secret with which containers will terminate TLS.

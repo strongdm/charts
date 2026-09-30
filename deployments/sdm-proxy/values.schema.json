@@ -252,6 +252,10 @@
                     "description": "Service configuration.",
                     "type": "object",
                     "properties": {
+                        "allocateLoadBalancerNodePorts": {
+                            "description": "Set to `false` to stop Kubernetes allocating a node port for a `LoadBalancer` Service. Use this when the load balancer sends traffic straight to Pod IPs (for example an AWS NLB in IP target mode), where the node port is never used but still listens on every node. Only applies when @strongdm.service.type is `LoadBalancer`. A non-zero @strongdm.service.nodePort is still allocated. On an existing Service, Kubernetes 1.30 and later release the auto-allocated node port on the upgrade that sets this to `false`, while older versions keep it until the Service is recreated.",
+                            "type": "boolean"
+                        },
                         "annotations": {
                             "description": "Map of annotations to apply to the Service.",
                             "type": "object"
