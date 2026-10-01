@@ -66,6 +66,7 @@ strongdm:
     labels: {} # @schema description: Map of labels to add to the Deployment.
     nodeSelector: {} # @schema description: Pod node selectors.
     tolerations: [] # @schema description: Pod node tolerations.
+    priorityClassName: "" # @schema description: PriorityClass name for the Pod. Empty (the default) leaves it unset, so the Pod schedules at the cluster's global-default priority.
 
   pod: # @schema description: Pod configuration.
     annotations: {} # @schema description: Map of annotations to add to Pods.

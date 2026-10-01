@@ -158,6 +158,10 @@
                                     }
                                 }
                             }
+                        },
+                        "priorityClassName": {
+                            "description": "PriorityClass name for the Pod. Empty (the default) leaves it unset, so the Pod schedules at the cluster's global-default priority.",
+                            "type": "string"
                         }
                     }
                 },

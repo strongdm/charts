@@ -28,6 +28,9 @@ spec:
       serviceAccountName: {{ include "strongdm.serviceAccountName" . }}
       {{- end }}
       terminationGracePeriodSeconds: 10
+      {{- with .Values.strongdm.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
       nodeSelector:
         {{- with .Values.strongdm.deployment.nodeSelector }}
         {{- toYaml . | nindent 8 }}

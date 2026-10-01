@@ -25,3 +25,5 @@ strongdm:
       baz: false
   rbac:
     create: true
+  deployment:
+    priorityClassName: system-cluster-critical

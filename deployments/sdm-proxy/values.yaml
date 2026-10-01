@@ -62,6 +62,7 @@ strongdm:
     replicaCount: 2 # @schema description: Number of Pods to run in the deployment.
     nodeSelector: {} # @schema description: Pod node selectors.
     tolerations: [] # @schema description: Pod node tolerations.
+    priorityClassName: "" # @schema description: PriorityClass name for the Pod. Empty (the default) leaves it unset, so the Pod schedules at the cluster's global-default priority.
     topologySpreadConstraints: # @schema description: Pod spread constraints. Keys in this map are topology keys. See https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ for more info.
       kubernetes.io/hostname:
         maxSkew: 1
