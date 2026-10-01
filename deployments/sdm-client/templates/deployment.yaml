@@ -48,6 +48,11 @@ spec:
           image: {{ template "strongdm.imageURI" . }}
           imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
           {{- include "strongdm.resources" (dict "resources" .Values.strongdm.pod.resources) | nindent 10 }}
+          {{- if .Values.strongdm.config.vnmEnabled }}
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          {{- end }}
           livenessProbe:
             exec:
               command: ["sdm", "ready"]

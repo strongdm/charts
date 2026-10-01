@@ -41,7 +41,7 @@
                             "type": "object"
                         },
                         "appDomain": {
-                            "description": "Control plane to which to connect. Format `uk.strongdm.com`, etc.",
+                            "description": "Control plane to which to connect. Format `app.uk.strongdm.com`, etc.",
                             "type": "string"
                         },
                         "disableAutoUpdate": {
@@ -54,6 +54,10 @@
                         },
                         "verboseLogs": {
                             "description": "Toggle debug logging.",
+                            "type": "boolean"
+                        },
+                        "vnmEnabled": {
+                            "description": "Whether Virtual Networking Mode is enabled on this StrongDM organization. Adds required Linux capabilities.",
                             "type": "boolean"
                         }
                     }
