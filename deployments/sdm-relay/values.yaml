@@ -59,6 +59,7 @@ strongdm:
       selectorLabels: {} # @schema description: Service selector labels.
       type: ClusterIP # @schema description: Specify the type of Service to front the deployment.
       nodePort: 0 # @schema description: NodePort to which to bind this service, if desired.
+      allocateLoadBalancerNodePorts: true # @schema description: Whether to allocate node ports for the Service. Only applicable when @strongdm.gateway.service.type is `LoadBalancer`. See https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation for more information.
 
   deployment: # @schema description: Deployment configuration.
     annotations: {} # @schema description: Map of annotations to add to the Deployment.
