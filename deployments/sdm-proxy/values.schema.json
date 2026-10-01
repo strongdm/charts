@@ -252,6 +252,10 @@
                     "description": "Service configuration.",
                     "type": "object",
                     "properties": {
+                        "allocateLoadBalancerNodePorts": {
+                            "description": "Whether to allocate node ports for the Service. Only applicable when @strongdm.service.type is `LoadBalancer`. See https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation for more information.",
+                            "type": "boolean"
+                        },
                         "annotations": {
                             "description": "Map of annotations to apply to the Service.",
                             "type": "object"

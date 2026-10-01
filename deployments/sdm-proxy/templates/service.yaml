@@ -10,6 +10,9 @@ metadata:
     {{- include "strongdm.labels" (merge (dict "addtl" .Values.strongdm.service.labels) .) | nindent 4 }}
 spec:
   type: {{ .Values.strongdm.service.type }}
+  {{- if eq .Values.strongdm.service.type "LoadBalancer" }}
+  allocateLoadBalancerNodePorts: {{ .Values.strongdm.service.allocateLoadBalancerNodePorts }}
+  {{- end }}
   loadBalancerIP: {{ .Values.strongdm.service.loadBalancerIP }}
   selector:
      {{- include "strongdm.selectorLabels" . | nindent 4 }}
