@@ -46,10 +46,10 @@ spec:
           labelSelector:
             matchLabels:
               {{- include "strongdm.selectorLabels" $ | nindent 14 }}
-            {{- if semverCompare ">=1.27.0" $.Capabilities.KubeVersion.Version }}
-            matchLabelKeys:
-              - pod-template-hash
-            {{- end }}
+          {{- if semverCompare ">=1.27.0" $.Capabilities.KubeVersion.Version }}
+          matchLabelKeys:
+            - pod-template-hash
+          {{- end }}
         {{- end }}
       {{- if .Values.strongdm.service.tlsSecretName }}
       volumes:

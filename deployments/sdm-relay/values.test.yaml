@@ -21,3 +21,5 @@ strongdm:
       foo: bar
       bar: 2
       baz: false
+  rbac:
+    create: true

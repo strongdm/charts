@@ -1,6 +1,6 @@
 repos:
 -   repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
-    rev: v0.8.0
+    rev: v0.9.0
     hooks:
     -   id: pre-commit-update
 
@@ -157,15 +157,38 @@ repos:
         language: system
         pass_filenames: false
 
+    # Server side checks
+    -   id: server-side-proxy-check
+        name: Kubectl apply | proxy
+        entry: /bin/bash -c 'helm -n default template deployments/sdm-proxy --set
+          strongdm.auth.secretName=foo | kubectl --context docker-desktop apply -f - --dry-run=server
+          --server-side'
+        language: system
+        pass_filenames: false
+    -   id: server-side-relay-check
+        name: Kubectl apply | relay
+        entry: /bin/bash -c 'helm -n default template deployments/sdm-relay --set
+          strongdm.auth.secretName=foo | kubectl --context docker-desktop apply -f - --dry-run=server
+          --server-side'
+        language: system
+        pass_filenames: false
+    -   id: server-side-client-check
+        name: Kubectl apply | client
+        entry: /bin/bash -c 'helm -n default template deployments/sdm-client --set
+          strongdm.auth.secretName=foo | kubectl --context docker-desktop apply -f - --dry-run=server
+          --server-side'
+        language: system
+        pass_filenames: false
+
 -   repo: https://github.com/losisin/helm-values-schema-json
-    rev: v2.3.0
+    rev: v2.6.0
     hooks:
     -   id: helm-schema
         name: helm-schema | relay
-        args: ["-input", "deployments/sdm-relay/values.yaml", "-output", "deployments/sdm-relay/values.schema.json"]
+        args: ["-f", "deployments/sdm-relay/values.yaml", "-o", "deployments/sdm-relay/values.schema.json"]
     -   id: helm-schema
         name: helm-schema | proxy
-        args: ["-input", "deployments/sdm-proxy/values.yaml", "-output", "deployments/sdm-proxy/values.schema.json"]
+        args: ["-f", "deployments/sdm-proxy/values.yaml", "-o", "deployments/sdm-proxy/values.schema.json"]
     -   id: helm-schema
         name: helm-schema | client
-        args: ["-input", "deployments/sdm-client/values.yaml", "-output", "deployments/sdm-client/values.schema.json"]
+        args: ["-f", "deployments/sdm-client/values.yaml", "-o", "deployments/sdm-client/values.schema.json"]

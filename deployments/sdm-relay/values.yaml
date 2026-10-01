@@ -1,83 +1,86 @@
 global:
-  annotations: {} # @schema; description: Map of annotations to add to all resources.
-  labels: {} # @schema; description: Map of labels to add to all resources.
+  annotations: {} # @schema description: Map of annotations to add to all resources.
+  labels: {} # @schema description: Map of labels to add to all resources.
 
 strongdm:
-  nameOverride: "" # @schema; description: Override resource names.
-  namespaceOverride: "" # @schema; description: Override the release namespace.
+  nameOverride: "" # @schema description: Override resource names.
+  namespaceOverride: "" # @schema description: Override the release namespace.
 
-  image: # @schema; description: Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.
+  image: # @schema description: Container repository and pull config. If @strongdm.image.tag or @strongdm.image.digest are set, SDM_DISABLE_UPDATE is set to `true`.
     pullPolicy: IfNotPresent
     repository: public.ecr.aws/strongdm/relay
     tag: latest
     digest: ""
 
-  config: # @schema; description: General application configuration.
-    domain: strongdm.com # @schema; description: (DEPRECATED) control plane to which to connect. Format `uk.strongdm.com`, etc.
-    appDomain: app.strongdm.com # @schema; description: Control plane to which to connect. Format `uk.strongdm.com`, etc.
-    disableAutoUpdate: false # @schema; description: Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.
-    maintenanceWindowStart: 0 # @schema; description: Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
-    enableMetrics: false # @schema; description: Enable Prometheus metrics on port 9999.
-    verboseLogs: false # @schema; description: Toggle debug logging.
-    queryLogs: # @schema; description: Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.
-      storage: "" # @schema; description: Query log storage location; options: 'stdout', 'tcp', 'syslog', 'socket', 'file'.
-      format: "" # @schema; description: Query log format; options: 'json', 'csv'.
-      encoding: "" # @schema; description: Query log encoding; options: 'plaintext', 'publickey'
-    additionalEnvVars: {} # @schema; description: Additional environment variables to add to the ConfigMap.
+  config: # @schema description: General application configuration.
+    domain: strongdm.com # @schema description: (DEPRECATED) control plane to which to connect. Format `uk.strongdm.com`, etc.
+    appDomain: app.strongdm.com # @schema description: Control plane to which to connect. Format `uk.strongdm.com`, etc.
+    disableAutoUpdate: false # @schema description: Disable automatically checking for and applying updates. Implicitly set to `true` if @strongdm.image.tag or @strongdm.image.digest are supplied.
+    maintenanceWindowStart: 0 # @schema description: Hour of the day (0-23 UTC) to terminate connections and restart when applying updates.
+    enableMetrics: false # @schema description: Enable Prometheus metrics on port 9999.
+    verboseLogs: false # @schema description: Toggle debug logging.
+    queryLogs: # @schema description: Query logging options, disabled by default. See https://www.strongdm.com/docs/admin/logs for more information.
+      storage: "" # @schema description: Query log storage location - options: 'stdout', 'tcp', 'syslog', 'socket', 'file'.
+      format: "" # @schema description: Query log format - options: 'json', 'csv'.
+      encoding: "" # @schema description: Query log encoding - options: 'plaintext', 'publickey'
+    additionalEnvVars: {} # @schema description: Additional environment variables to add to the ConfigMap.
 
-  discoveryUsername: "" # @schema; description: Username for StrongDM discovery. Also creates the RBAC resources required for this feature. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.
-  healthcheckUsername: "" # @schema; description: Username for StrongDM resource health checks. Used in the RBAC resources that facilitate said health checks. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.
-  healthcheckNamespace: default # @schema; description: Namespace in which StrongDM resource health checks are to occur. Associated/required RBAC resources are created in this namespace.
+  discoveryUsername: "" # @schema description: Username for StrongDM discovery. Also creates the RBAC resources required for this feature. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.
+  healthcheckUsername: "" # @schema description: Username for StrongDM resource health checks. Used in the RBAC resources that facilitate said health checks. Required if either @strongdm.autoRegisterCluster.identitySet or @strongdm.autoRegisterCluster.identitySetName are set.
+  healthcheckNamespace: default # @schema description: Namespace in which StrongDM resource health checks are to occur. Associated/required RBAC resources are created in this namespace.
 
-  autoRegisterCluster: # @schema; description: Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
-    enabled: false # @schema; description: Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
-    resourceName: "" # @schema; description: Name of the StrongDM Pod Identity Cluster resource to create.
-    identitySet: "" # @schema; description: ID of the Identity Set with which to register this cluster.
-    identitySetName: "" # @schema; description: Name of the Identity Set with which to register this cluster.
-    extraArgs: "" # @schema; description: Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
+  autoRegisterCluster: # @schema description: Cluster auto-registration configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
+    enabled: false # @schema description: Register this k8s cluster as a StrongDM Pod Identity Cluster. See https://www.strongdm.com/docs/admin/resources/clusters/kubernetes-podidentity/ for more information.
+    resourceName: "" # @schema description: Name of the StrongDM Pod Identity Cluster resource to create.
+    identitySet: "" # @schema description: ID of the Identity Set with which to register this cluster.
+    identitySetName: "" # @schema description: Name of the Identity Set with which to register this cluster.
+    extraArgs: "" # @schema description: Space-separated string of args to pass to the `sdm admin clusters add k8spodidentity` command.
 
-  autoCreateNode: # @schema; description: Auto creation configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
-    enabled: true # @schema; description: Create this StrongDM Relay or Gateway automatically.
-    name: "" # @schema; description: Name of the Node as it should appear in StrongDM.
-    tags: "" # @schema; description: Tags to add to the created Node. Format 'key=value,key2=value2'.
-    maintenanceWindows: '* * * * *' # @schema; description: Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. '* 7 * * 0,6;* * * * *'.
-    kubectlImage: "" # @schema; description: Full URI of the container with kubectl installed, used to create a k8s Secret. Defaults to a bitnami/kubectl image.
+  autoCreateNode: # @schema description: Auto creation configuration. Requires SDM_ADMIN_TOKEN be provided via one of the supported @strongdm.auth methods.
+    enabled: true # @schema description: Create this StrongDM Relay or Gateway automatically.
+    name: "" # @schema description: Name of the Node as it should appear in StrongDM.
+    tags: "" # @schema description: Tags to add to the created Node. Format 'key=value,key2=value2'.
+    maintenanceWindows: '* * * * *' # @schema description: Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. "* 7 * * 0,6","* * * * *".
+    kubectlImage: "" # @schema description: Full URI of the container with kubectl installed, used to create a k8s Secret. Defaults to a bitnami/kubectl image.
 
-  auth: # @schema; description: StrongDM authentication sources.
-    relayToken: "" # @schema; description: The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
-    adminToken: "" # @schema; description: The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
-    secretName: "" # @schema; description: Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.
+  auth: # @schema description: StrongDM authentication sources.
+    relayToken: "" # @schema description: The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+    adminToken: "" # @schema description: The SDM_ADMIN_TOKEN with which to create StrongDM resources. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
+    secretName: "" # @schema description: Name of the k8s Secret that contains SDM_RELAY_TOKEN and/or SDM_ADMIN_TOKEN.
 
-  gateway: # @schema; description: StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.
-    enabled: false # @schema; description: Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.
-    listenAddress: "" # @schema; description: Address at which the Gateway expects traffic. Ignored unless @strongdm.autoCreateNode.enabled.
-    listenPort: 5000 # @schema; description: Port on which the Gateway expects traffic.
-    containerPort: 5000 # @schema; description: Port on which the container runs.
-    service: # @schema; description: Service configuration. Ignored unless @strongdm.gateway.enabled.
-      annotations: {} # @schema; description: Map of annotations to apply to the Service.
-      labels: {} # @schema; description: Map of labels to apply to the Service.
-      selectorLabels: {} # @schema; description: Service selector labels.
-      type: ClusterIP # @schema; description: Specify the type of Service to front the deployment.
-      nodePort: 0 # @schema; description: NodePort to which to bind this service, if desired.
+  gateway: # @schema description: StrongDM Gateway configuration. See https://www.strongdm.com/docs/admin/nodes for more information.
+    enabled: false # @schema description: Whether this is to be a StrongDM Gateway. If false, a Relay is created, and all other @strongdm.gateway values are ignored.
+    listenAddress: "" # @schema description: Address at which the Gateway expects traffic. Ignored unless @strongdm.autoCreateNode.enabled.
+    listenPort: 5000 # @schema description: Port on which the Gateway expects traffic.
+    containerPort: 5000 # @schema description: Port on which the container runs.
+    service: # @schema description: Service configuration. Ignored unless @strongdm.gateway.enabled.
+      annotations: {} # @schema description: Map of annotations to apply to the Service.
+      labels: {} # @schema description: Map of labels to apply to the Service.
+      selectorLabels: {} # @schema description: Service selector labels.
+      type: ClusterIP # @schema description: Specify the type of Service to front the deployment.
+      nodePort: 0 # @schema description: NodePort to which to bind this service, if desired.
 
-  deployment: # @schema; description: Deployment configuration.
-    annotations: {} # @schema; description: Map of annotations to add to the Deployment.
-    labels: {} # @schema; description: Map of labels to add to the Deployment.
-    nodeSelector: {} # @schema; description: Pod node selectors.
-    tolerations: [] # @schema; description: Pod node tolerations.
+  deployment: # @schema description: Deployment configuration.
+    annotations: {} # @schema description: Map of annotations to add to the Deployment.
+    labels: {} # @schema description: Map of labels to add to the Deployment.
+    nodeSelector: {} # @schema description: Pod node selectors.
+    tolerations: [] # @schema description: Pod node tolerations.
 
-  pod: # @schema; description: Pod configuration.
-    annotations: {} # @schema; description: Map of annotations to add to Pods.
-    labels: {} # @schema; description: Map of labels to add to Pods.
-    resources: # @schema; description: Set the Pod resource requests and limits.
+  pod: # @schema description: Pod configuration.
+    annotations: {} # @schema description: Map of annotations to add to Pods.
+    labels: {} # @schema description: Map of labels to add to Pods.
+    resources: # @schema description: Set the Pod resource requests and limits.
       requests:
         memory: 2560Mi
         cpu: 1024m
       limits:
         memory: 2560Mi
 
-  serviceAccount: # @schema; description: ServiceAccount configuration.
-    create: true # @schema; description: Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not use a ServiceAccount.
-    name: "" # @schema; description: Name of an existing ServiceAccount to use.
-    annotations: {} # @schema; description: Map of annotations to add to the ServiceAccount, should one be created.
-    labels: {} # @schema; description: Map of labels to add to the ServiceAccount, should one be created.
+  serviceAccount: # @schema description: ServiceAccount configuration.
+    create: true # @schema description: Create a ServiceAccount. Set to true, or specify and existing ServiceAccount with @strongdm.serviceAccount.name. Do neither to not use a ServiceAccount.
+    name: "" # @schema description: Name of an existing ServiceAccount to use.
+    annotations: {} # @schema description: Map of annotations to add to the ServiceAccount, should one be created.
+    labels: {} # @schema description: Map of labels to add to the ServiceAccount, should one be created.
+
+  rbac: # @schema description: RBAC configuration.
+    create: true # @schema description: Create a Role/ClusterRole. Set to true, or manage RBAC externally

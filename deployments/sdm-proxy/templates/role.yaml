@@ -1,3 +1,4 @@
+{{- if .Values.strongdm.rbac.create }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -42,3 +43,4 @@ roleRef:
   kind: Role
   name: {{ include "strongdm.name" . }}-health
   apiGroup: rbac.authorization.k8s.io
+{{- end }}

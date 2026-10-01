@@ -4,5 +4,5 @@ agents:
 
 steps:
   - label: ":helm: package"
-    if: build.branch == "main" && build.author.email =~ /noreply.github.com/
+    if: build.branch == "main" && build.author.email != "infra+sdmrelease@strongdm.com"
     command: .buildkite/package.sh
