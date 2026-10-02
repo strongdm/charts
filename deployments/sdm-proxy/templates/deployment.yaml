@@ -29,7 +29,7 @@ spec:
       {{- if or .Values.strongdm.serviceAccount.create .Values.strongdm.serviceAccount.name }}
       serviceAccountName: {{ include "strongdm.serviceAccountName" . }}
       {{- end }}
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: {{ .Values.strongdm.deployment.terminationGracePeriodSeconds }}
       nodeSelector:
         {{- with .Values.strongdm.deployment.nodeSelector }}
         {{- toYaml . | nindent 8 }}
