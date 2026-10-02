@@ -269,7 +269,7 @@
                             "type": "integer"
                         },
                         "externalTrafficPolicy": {
-                            "description": "Set the Service's externalTrafficPolicy (`Cluster` or `Local`) for NodePort and LoadBalancer Services. Leave empty to use the Kubernetes default (`Cluster`). `Local` routes load balancer traffic only to nodes running a proxy Pod, so node churn elsewhere in the cluster cannot sever long-lived client connections.",
+                            "description": "Set the Service's external traffic policy (`Cluster` or `Local`) for NodePort and LoadBalancer Services. Leave empty to use the Kubernetes default (`Cluster`). It must stay empty for a ClusterIP Service, which rejects the field. `Local` preserves client source IPs and avoids routing through nodes without a Pod, but can spread traffic unevenly unless @strongdm.deployment.topologySpreadConstraints balances Pods across nodes. See https://kubernetes.io/docs/reference/networking/virtual-ips/#external-traffic-policy for more information.",
                             "type": "string"
                         },
                         "labels": {
