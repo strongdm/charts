@@ -138,6 +138,10 @@
                             "description": "Number of Pods to run in the deployment.",
                             "type": "integer"
                         },
+                        "terminationGracePeriodSeconds": {
+                            "description": "Seconds Kubernetes waits after SIGTERM before killing a Pod. Raise this to give load balancers time to stop routing to a terminating worker.",
+                            "type": "integer"
+                        },
                         "tolerations": {
                             "description": "Pod node tolerations.",
                             "type": "array"
@@ -263,6 +267,10 @@
                         "containerPort": {
                             "description": "Port on which the Service is expecting traffic.",
                             "type": "integer"
+                        },
+                        "externalTrafficPolicy": {
+                            "description": "Set the Service's external traffic policy (`Cluster` or `Local`) for NodePort and LoadBalancer Services. Leave empty to use the Kubernetes default (`Cluster`). It must stay empty for a ClusterIP Service, which rejects the field. `Local` preserves client source IPs and avoids routing through nodes without a Pod, but can spread traffic unevenly unless @strongdm.deployment.topologySpreadConstraints balances Pods across nodes. See https://kubernetes.io/docs/reference/networking/virtual-ips/#external-traffic-policy for more information.",
+                            "type": "string"
                         },
                         "labels": {
                             "description": "Map of labels to apply to the Service.",
