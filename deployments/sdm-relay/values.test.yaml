@@ -21,5 +21,23 @@ strongdm:
       foo: bar
       bar: 2
       baz: false
+  pod:
+    extraEnv:
+      - name: SECRET_VALUE
+        valueFrom:
+          secretKeyRef:
+            name: external-secret
+            key: secret-value
+    extraEnvFrom:
+      - secretRef:
+          name: external-environment
+    extraVolumeMounts:
+      - name: external-config
+        mountPath: /etc/external
+        readOnly: true
+    extraVolumes:
+      - name: external-config
+        configMap:
+          name: external-config
   rbac:
     create: true

@@ -260,6 +260,22 @@
                             "description": "Map of annotations to add to Pods.",
                             "type": "object"
                         },
+                        "extraEnv": {
+                            "description": "Additional environment variables for the StrongDM container. Supports Kubernetes EnvVar fields such as valueFrom.secretKeyRef.",
+                            "type": "array"
+                        },
+                        "extraEnvFrom": {
+                            "description": "Additional environment variable sources for the StrongDM container.",
+                            "type": "array"
+                        },
+                        "extraVolumeMounts": {
+                            "description": "Additional volume mounts for the StrongDM container.",
+                            "type": "array"
+                        },
+                        "extraVolumes": {
+                            "description": "Additional volumes for the Pod.",
+                            "type": "array"
+                        },
                         "labels": {
                             "description": "Map of labels to add to Pods.",
                             "type": "object"

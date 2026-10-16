@@ -70,6 +70,10 @@ strongdm:
   pod: # @schema description: Pod configuration.
     annotations: {} # @schema description: Map of annotations to add to Pods.
     labels: {} # @schema description: Map of labels to add to Pods.
+    extraEnv: [] # @schema description: Additional environment variables for the StrongDM container. Supports Kubernetes EnvVar fields such as valueFrom.secretKeyRef.
+    extraEnvFrom: [] # @schema description: Additional environment variable sources for the StrongDM container.
+    extraVolumeMounts: [] # @schema description: Additional volume mounts for the StrongDM container.
+    extraVolumes: [] # @schema description: Additional volumes for the Pod.
     resources: # @schema description: Set the Pod resource requests and limits.
       requests:
         memory: 2560Mi

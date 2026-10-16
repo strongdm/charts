@@ -77,6 +77,26 @@ strongdm:
     enabled: true
 ```
 
+Provide an additional secret-backed environment variable and mount a ConfigMap in the StrongDM container:
+```yaml
+strongdm:
+  pod:
+    extraEnv:
+      - name: OKTA_CLIENT_PRIVATEKEY
+        valueFrom:
+          secretKeyRef:
+            name: sdm-okta
+            key: OKTA_CLIENT_PRIVATEKEY
+    extraVolumeMounts:
+      - name: okta-config
+        mountPath: /root/.okta
+        readOnly: true
+    extraVolumes:
+      - name: okta-config
+        configMap:
+          name: sdm-okta
+```
+
 Provide `SDM_RELAY_TOKEN` directly:
 ```yaml
 strongdm:

@@ -53,9 +53,19 @@ spec:
                 secretKeyRef:
                   key: SDM_RELAY_TOKEN
                   name: {{ .Values.strongdm.autoCreateNode.enabled | ternary (printf "%s-relay-token" ( include "strongdm.name" . )) (default (printf "%s-secrets" ( include "strongdm.name" . )) .Values.strongdm.auth.secretName) }}
+            {{- with .Values.strongdm.pod.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "strongdm.name" . }}-config
+            {{- with .Values.strongdm.pod.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.strongdm.pod.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: healthcheck
               containerPort: 9090
@@ -78,3 +88,7 @@ spec:
             timeoutSeconds: 10
             periodSeconds: 15
             failureThreshold: 5
+      {{- with .Values.strongdm.pod.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
