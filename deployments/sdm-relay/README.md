@@ -77,6 +77,18 @@ strongdm:
     enabled: true
 ```
 
+Keep node creation enabled under Argo CD, which runs the creation hook as a PreSync hook on every sync. The first sync creates the node and the `<name>-relay-token` Secret; later syncs find the Secret and skip creation:
+```yaml
+strongdm:
+  auth:
+    secretName: my-admin-token-secret
+  autoCreateNode:
+    enabled: true
+    name: my-relay
+    skipIfTokenExists: true
+```
+To re-create the node, delete it in StrongDM and delete the `<name>-relay-token` Secret, then sync.
+
 Provide `SDM_RELAY_TOKEN` directly:
 ```yaml
 strongdm:

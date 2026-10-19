@@ -56,6 +56,10 @@
                             "description": "Name of the Node as it should appear in StrongDM.",
                             "type": "string"
                         },
+                        "skipIfTokenExists": {
+                            "description": "Skip node creation when the relay token Secret already exists, so the hook can run on every sync (e.g. Argo CD PreSync) without failing on a name conflict.",
+                            "type": "boolean"
+                        },
                         "tags": {
                             "description": "Tags to add to the created Node. Format 'key=value,key2=value2'.",
                             "type": "string"

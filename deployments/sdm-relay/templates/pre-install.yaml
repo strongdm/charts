@@ -3,6 +3,10 @@
 {{- fail "one of @strongdm.auth.adminToken or @strongdm.auth.secretName must be set when @strongdm.autoCreateNode.enabled during installation." }}
 {{- end }}
 {{ $name := printf "%s-auto-create-node-%s" (include "strongdm.name" .) (randAlpha 5 | lower) }}
+{{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
+{{- $kubectlImage := default (printf "alpine/k8s:%d.%d.%d" $kubeVersion.Major $kubeVersion.Minor $kubeVersion.Patch) .Values.strongdm.autoCreateNode.kubectlImage }}
+{{- $tokenSecretName := printf "%s-relay-token" (include "strongdm.name" .) }}
+{{- $skipIfTokenExists := .Values.strongdm.autoCreateNode.skipIfTokenExists }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -89,6 +93,31 @@ spec:
         - name: secrets
           emptyDir: {}
       initContainers:
+        {{- if $skipIfTokenExists }}
+        - name: check-token
+          image: {{ $kubectlImage }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 256m
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -e -o pipefail
+              # Fails the Job on API errors rather than creating a duplicate node.
+              existing="$(kubectl get secret {{ $tokenSecretName }} --namespace {{ include "strongdm.namespace" . }} --ignore-not-found -o name)"
+              if [ -n "${existing}" ]; then
+                echo "Secret {{ $tokenSecretName }} already exists; skipping node creation."
+                touch /secrets/skip
+              fi
+        {{- end }}
         - name: sdm
           image: {{ template "strongdm.imageURI" . }}
           imagePullPolicy: {{ .Values.strongdm.image.pullPolicy }}
@@ -119,6 +148,9 @@ spec:
             - -c
             - |
               set -e -o pipefail
+              {{- if $skipIfTokenExists }}
+              if [ -f /secrets/skip ]; then exit 0; fi
+              {{- end }}
               /sdm.linux login --admin-token="${SDM_ADMIN_TOKEN}"
             {{- $commonArgs := printf "--maintenance-windows %s --name %s --tags %s" (squote .Values.strongdm.autoCreateNode.maintenanceWindows) (squote .Values.strongdm.autoCreateNode.name) (squote .Values.strongdm.autoCreateNode.tags) }}
             {{- if .Values.strongdm.gateway.enabled }}
@@ -133,8 +165,7 @@ spec:
               echo "SDM_RELAY_TOKEN=${SDM_RELAY_TOKEN}" > /secrets/token
       containers:
         - name: kubectl
-          {{- $kubeVersion := semver .Capabilities.KubeVersion.Version }}
-          image: {{ default (printf "alpine/k8s:%d.%d.%d" $kubeVersion.Major $kubeVersion.Minor $kubeVersion.Patch) .Values.strongdm.autoCreateNode.kubectlImage }}
+          image: {{ $kubectlImage }}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -150,5 +181,8 @@ spec:
             - /bin/bash
             - -c
             - |
-              kubectl create secret generic {{ include "strongdm.name" . }}-relay-token --from-literal="$(cat /secrets/token)" --namespace {{ include "strongdm.namespace" . }} --dry-run=client -o yaml | kubectl apply -f -
+              {{- if $skipIfTokenExists }}
+              if [ -f /secrets/skip ]; then exit 0; fi
+              {{- end }}
+              kubectl create secret generic {{ $tokenSecretName }} --from-literal="$(cat /secrets/token)" --namespace {{ include "strongdm.namespace" . }} --dry-run=client -o yaml | kubectl apply -f -
 {{- end }}

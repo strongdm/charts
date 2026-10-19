@@ -42,6 +42,7 @@ strongdm:
     tags: "" # @schema description: Tags to add to the created Node. Format 'key=value,key2=value2'.
     maintenanceWindows: '* * * * *' # @schema description: Semicolon-separated cron schedules, the first group being the hard-cutoff group e.g. "* 7 * * 0,6","* * * * *".
     kubectlImage: "" # @schema description: Full URI of the container with kubectl installed, used to create a k8s Secret. Defaults to a bitnami/kubectl image.
+    skipIfTokenExists: false # @schema description: Skip node creation when the relay token Secret already exists, so the hook can run on every sync (e.g. Argo CD PreSync) without failing on a name conflict.
 
   auth: # @schema description: StrongDM authentication sources.
     relayToken: "" # @schema description: The SDM_RELAY_TOKEN with which this relay should authenticate itself. Specify this directly, or provide an existing secret to @strongdm.auth.secretName.
